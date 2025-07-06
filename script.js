@@ -133,15 +133,21 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
 
+        // Autocompletar la unidad si el producto ya existe
+        const productName = productInput.value;
+        if (productUnits[productName]) {
+            unitSelect.value = productUnits[productName];
+        }
+
         const rawPrice = document.getElementById('precio').value;
         const parsedPrice = parsePrice(rawPrice);
         const quantity = parseFloat(document.getElementById('cantidad').value);
-        const unit = document.getElementById('unidad').value;
+        const unit = unitSelect.value; // Usar el valor potencialmente autocompletado
 
         const { value: pricePerUnitValue, unit: pricePerUnitUnit } = calculatePricePerUnit(parsedPrice, quantity, unit);
 
         const newItem = {
-            producto: productInput.value,
+            producto: productName,
             supermercado: supermarketSelect.value, // Leer del select oculto
             precio: rawPrice, // Guardamos el precio original como string
             cantidad: quantity,
@@ -162,17 +168,14 @@ document.addEventListener('DOMContentLoaded', () => {
         supermarketButtons.forEach(btn => btn.classList.remove('selected'));
     });
 
-    // Determinar el tipo de evento a usar (táctil o clic)
-    const eventType = 'ontouchstart' in window ? 'touchstart' : 'click';
-
     // Lógica para mostrar/ocultar el formulario
-    toggleFormBtn.addEventListener(eventType, () => {
+    toggleFormBtn.addEventListener('click', () => {
         addItemCard.style.display = 'block'; // Siempre abre el formulario
         toggleFormBtn.style.display = 'none'; // Oculta el botón FAB
     });
 
     // Lógica para cerrar el formulario con el botón 'x'
-    closeFormBtn.addEventListener(eventType, () => {
+    closeFormBtn.addEventListener('click', () => {
         addItemCard.style.display = 'none';
         toggleFormBtn.style.display = 'flex'; // Muestra el botón FAB
         // Deseleccionar el botón de supermercado
@@ -191,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Lógica para los botones de supermercado
     supermarketButtons.forEach(button => {
-        button.addEventListener(eventType, () => {
+        button.addEventListener('click', () => {
             const selectedSupermarket = button.dataset.supermercado;
             supermarketSelect.value = selectedSupermarket; // Actualizar el select
 
@@ -207,16 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Lógica de autocompletado de producto y relleno de unidad
-    const handleProductInput = () => {
-        const selectedProduct = productInput.value;
-        if (productUnits[selectedProduct]) {
-            unitSelect.value = productUnits[selectedProduct];
-        }
-    };
-
-    productInput.addEventListener('input', handleProductInput);
-    productInput.addEventListener('change', handleProductInput);
+    
 
     // Lógica para la navegación con Enter en el formulario
     form.addEventListener('keydown', (e) => {
