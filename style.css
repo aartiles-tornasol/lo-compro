@@ -142,3 +142,9 @@ body {
     border-top-left-radius: 0.25rem !important;
     border-bottom-left-radius: 0.25rem !important;
 }
+
+/* Estilo para el botón de cierre del formulario (la 'x') */
+.card-header .btn-close {
+    font-size: 0.6rem; /* Tamaño más pequeño para la 'x' */
+    padding: 0.5rem;
+}
