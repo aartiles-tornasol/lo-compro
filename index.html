@@ -90,9 +90,18 @@
             </div>
         </div>
 
-        <ul id="item-list" class="list-group">
-            <li class="list-group-item">Cargando...</li>
-        </ul>
+        <div id="product-list-container" class="mb-3">
+            <div class="product-table-header d-flex">
+                <div class="header-cell header-name" data-sort="producto">Nombre</div>
+                <div class="header-cell header-price" data-sort="precio">Precio</div>
+                <div class="header-cell header-price-per-unit" data-sort="precioPorUnidad">€/unidd</div>
+                <div class="header-cell header-avg-price" data-sort="precioMedio">€⊘</div>
+            </div>
+            <div id="item-list" class="product-table-body">
+                <!-- Product rows will be rendered here by JavaScript -->
+                <div class="product-row loading-row">Cargando...</div>
+            </div>
+        </div>
     </main>
 
     <button class="fab-button" id="toggle-form-btn">Añadir</button>
