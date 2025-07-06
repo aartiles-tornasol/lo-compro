@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (lowerCaseUnit === 'ml') {
             pricePerUnit = price / (quantity / 1000);
             unitPerUnit = '€/l';
-        } else if (lowerCaseUnit === 'gr') {
+        } else if (lowerCaseUnit === 'g') {
             pricePerUnit = price / (quantity / 1000);
             unitPerUnit = '€/kg';
         } else if (lowerCaseUnit === 'l') {
@@ -51,11 +51,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (lowerCaseUnit === 'kg') {
             pricePerUnit = price / quantity;
             unitPerUnit = '€/kg';
-        } else if (lowerCaseUnit === 'ud' || lowerCaseUnit === 'uds' || lowerCaseUnit === 'paq') {
+        } else if (lowerCaseUnit === 'ud' || lowerCaseUnit === 'uds' || lowerCaseUnit === 'paq' || lowerCaseUnit === 'lata' || lowerCaseUnit === 'caja') {
             pricePerUnit = price / quantity;
             unitPerUnit = '€/ud';
         } else {
-            // Para otras unidades, simplemente dividimos, pero la unidad por unidad puede no ser estándar
+            // Para otras unidades no estándar, simplemente dividimos
             pricePerUnit = price / quantity;
             unitPerUnit = `€/${unit || '?'}`;
         }
