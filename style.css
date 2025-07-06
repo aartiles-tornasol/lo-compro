@@ -118,12 +118,14 @@ body {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 80px; /* Más grande */
-    height: 80px; /* Más grande */
-    border-radius: 50%;
+    width: auto; /* Ancho automático para el texto */
+    min-width: 100px; /* Ancho mínimo */
+    height: 56px; /* Altura estándar para FABs rectangulares */
+    border-radius: 28px; /* La mitad de la altura para esquinas redondeadas */
     background-color: #007bff;
     color: white;
-    font-size: 1.5rem; /* Tamaño de fuente ajustado para el texto */
+    font-size: 1.2rem; /* Tamaño de fuente ajustado */
+    padding: 0 20px; /* Espaciado interno */
     display: flex;
     justify-content: center;
     align-items: center;
