@@ -201,12 +201,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Lógica de autocompletado de producto y relleno de unidad
-    productInput.addEventListener('input', () => {
+    const handleProductInput = () => {
         const selectedProduct = productInput.value;
         if (productUnits[selectedProduct]) {
             unitSelect.value = productUnits[selectedProduct];
         }
-    });
+    };
+
+    productInput.addEventListener('input', handleProductInput);
+    productInput.addEventListener('change', handleProductInput);
 
     // Lógica para la navegación con Enter en el formulario
     form.addEventListener('keydown', (e) => {
