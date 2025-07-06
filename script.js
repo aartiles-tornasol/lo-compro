@@ -141,11 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Lógica para mostrar/ocultar el formulario
     toggleFormBtn.addEventListener('click', () => {
-        if (addItemCard.style.display === 'none') {
-            addItemCard.style.display = 'block';
-        } else {
-            addItemCard.style.display = 'none';
-        }
+        addItemCard.style.display = 'block'; // Siempre abre el formulario
     });
 
     // Lógica para cerrar el formulario con el botón 'x'
