@@ -159,13 +159,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Lógica para mostrar/ocultar el formulario
-    toggleFormBtn.addEventListener('click', () => {
+    toggleFormBtn.addEventListener('touchstart', () => {
         addItemCard.style.display = 'block'; // Siempre abre el formulario
         toggleFormBtn.style.display = 'none'; // Oculta el botón FAB
     });
 
     // Lógica para cerrar el formulario con el botón 'x'
-    closeFormBtn.addEventListener('click', () => {
+    closeFormBtn.addEventListener('touchstart', () => {
         addItemCard.style.display = 'none';
         toggleFormBtn.style.display = 'flex'; // Muestra el botón FAB
         // Deseleccionar el botón de supermercado
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Lógica para los botones de supermercado
     supermarketButtons.forEach(button => {
-        button.addEventListener('click', () => {
+        button.addEventListener('touchstart', () => {
             const selectedSupermarket = button.dataset.supermercado;
             supermarketSelect.value = selectedSupermarket; // Actualizar el select
 
