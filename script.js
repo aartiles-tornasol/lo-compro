@@ -219,20 +219,33 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter') {
             e.preventDefault(); // Prevenir el envío del formulario por defecto
             
-            // Seleccionar solo los campos de entrada, selectores y áreas de texto visibles y no deshabilitados
-            const formElements = Array.from(form.querySelectorAll('input:not([type="hidden"]), select, textarea')).filter(el => 
-                !el.disabled && el.offsetParent !== null // offsetParent !== null verifica si el elemento es visible
-            );
-            
             const currentElement = document.activeElement;
-            const currentIndex = formElements.indexOf(currentElement);
 
-            if (currentIndex > -1 && currentIndex < formElements.length - 1) {
-                // Mover el foco al siguiente campo
-                formElements[currentIndex + 1].focus();
-            } else if (currentIndex === formElements.length - 1) {
-                // Si es el último campo, enviar el formulario
-                form.requestSubmit();
+            // Si el foco está en el campo de precio
+            if (currentElement.id === 'precio') {
+                const selectedProduct = productInput.value;
+                if (productUnits[selectedProduct]) {
+                    // Si la unidad se autocompletó, pasar a Cantidad
+                    document.getElementById('cantidad').focus();
+                } else {
+                    // Si no se autocompletó, pasar a Unidad
+                    document.getElementById('unidad').focus();
+                }
+            } else {
+                // Para otros campos, seguir la lógica existente de mover al siguiente
+                const formElements = Array.from(form.querySelectorAll('input:not([type="hidden"]), select, textarea')).filter(el => 
+                    !el.disabled && el.offsetParent !== null // offsetParent !== null verifica si el elemento es visible
+                );
+                
+                const currentIndex = formElements.indexOf(currentElement);
+
+                if (currentIndex > -1 && currentIndex < formElements.length - 1) {
+                    // Mover el foco al siguiente campo
+                    formElements[currentIndex + 1].focus();
+                } else if (currentIndex === formElements.length - 1) {
+                    // Si es el último campo, enviar el formulario
+                    form.requestSubmit();
+                }
             }
         }
     });
