@@ -9,11 +9,7 @@
 </head>
 <body>
     <main class="container">
-        <h1 class="my-4 text-center">Mi Lista de Compras</h1>
-
-        <div class="d-grid gap-2 mb-3">
-            <button class="btn btn-primary" type="button" id="toggle-form-btn">Añadir Producto</button>
-        </div>
+        <h1 class="my-4 text-center">¿Lo compro?</h1>
 
         <div class="card mb-4" id="add-item-card" style="display: none;">
             <div class="card-body">
@@ -28,8 +24,8 @@
                             <button type="button" class="supermarket-btn btn-primor" data-supermercado="Primor">P</button>
                             <button type="button" class="supermarket-btn btn-druni" data-supermercado="Druni">D</button>
                         </div>
-                        <!-- El select de supermercado se mantiene oculto para la lógica -->
-                        <select class="form-select d-none" id="supermercado">
+                        <!-- El select de supermercado se mantiene visible pero deshabilitado para referencia -->
+                        <select class="form-select" id="supermercado" disabled>
                             <option value="">Seleccionar Supermercado</option>
                             <option value="Mercadona">Mercadona</option>
                             <option value="Hiperdino">Hiperdino</option>
@@ -58,7 +54,7 @@
                         <div class="col-6">
                             <label for="unidad" class="form-label visually-hidden">Unidad</label>
                             <select class="form-select" id="unidad">
-                                <option value="">Seleccionar Unidad</option>
+                                <option value="">Unidad</option>
                                 <option value="ml">ml (mililitros)</option>
                                 <option value="l">l (litros)</option>
                                 <option value="g">g (gramos)</option>
@@ -71,7 +67,7 @@
                         <div class="col-6">
                             <label for="categoria" class="form-label visually-hidden">Categoría</label>
                             <select class="form-select" id="categoria">
-                                <option value="">Seleccionar Categoría</option>
+                                <option value="">Categoría</option>
                                 <option value="Bebidas">Bebidas</option>
                                 <option value="Carnes">Carnes</option>
                                 <option value="Congelados">Congelados</option>
@@ -86,7 +82,7 @@
                             </select>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success mt-3 w-100">Guardar Producto</button>
+                    <button type="submit" class="btn btn-success mt-3 w-100">Añadir</button>
                 </form>
             </div>
         </div>
@@ -101,6 +97,8 @@
             <li class="list-group-item">Cargando...</li>
         </ul>
     </main>
+
+    <button class="fab-button" id="toggle-form-btn">+</button>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
