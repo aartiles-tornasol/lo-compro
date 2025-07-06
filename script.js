@@ -19,6 +19,50 @@ document.addEventListener('DOMContentLoaded', () => {
         return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'numeric', day: 'numeric' });
     };
 
+    // Función para parsear el precio de string a número
+    const parsePrice = (priceString) => {
+        if (!priceString) return null;
+        // Reemplazar coma por punto para el parsing decimal y eliminar el símbolo €
+        const cleanedPrice = priceString.replace(',', '.').replace('€', '').trim();
+        const parsed = parseFloat(cleanedPrice);
+        return isNaN(parsed) ? null : parsed;
+    };
+
+    // Función para calcular el precio por unidad
+    const calculatePricePerUnit = (price, quantity, unit) => {
+        if (price === null || quantity === null || quantity === 0) {
+            return { value: null, unit: null };
+        }
+
+        let pricePerUnit = null;
+        let unitPerUnit = null;
+
+        const lowerCaseUnit = unit ? unit.toLowerCase() : '';
+
+        if (lowerCaseUnit === 'ml') {
+            pricePerUnit = price / (quantity / 1000);
+            unitPerUnit = '€/l';
+        } else if (lowerCaseUnit === 'gr') {
+            pricePerUnit = price / (quantity / 1000);
+            unitPerUnit = '€/kg';
+        } else if (lowerCaseUnit === 'l') {
+            pricePerUnit = price / quantity;
+            unitPerUnit = '€/l';
+        } else if (lowerCaseUnit === 'kg') {
+            pricePerUnit = price / quantity;
+            unitPerUnit = '€/kg';
+        } else if (lowerCaseUnit === 'ud' || lowerCaseUnit === 'uds' || lowerCaseUnit === 'paq') {
+            pricePerUnit = price / quantity;
+            unitPerUnit = '€/ud';
+        } else {
+            // Para otras unidades, simplemente dividimos, pero la unidad por unidad puede no ser estándar
+            pricePerUnit = price / quantity;
+            unitPerUnit = `€/${unit || '?'}`;
+        }
+        // Redondear a 3 decimales para precisión
+        return { value: pricePerUnit ? parseFloat(pricePerUnit.toFixed(3)) : null, unit: unitPerUnit };
+    };
+
     // Función para mostrar los productos en la lista
     const renderItems = (itemsToRender) => {
         itemList.innerHTML = ''; // Limpiar la lista actual
@@ -38,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <strong>${item.producto}</strong> - ${item.cantidad} ${item.unidad || ''}
                     <br>
                     <small>${item.supermercado || 'N/A'} - ${item.precio ? item.precio + '€' : 'Sin precio'}</small>
+                    ${item.precioPorUnidad ? `<br><small>(${item.precioPorUnidad} ${item.unidadPrecioPorUnidad || ''})</small>` : ''}
                 </div>
                 <div class="item-date">${formatDisplayDate(item.fecha)}</div>
             `;
@@ -61,14 +106,23 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
 
+        const rawPrice = document.getElementById('precio').value;
+        const parsedPrice = parsePrice(rawPrice);
+        const quantity = parseFloat(document.getElementById('cantidad').value);
+        const unit = document.getElementById('unidad').value;
+
+        const { value: pricePerUnitValue, unit: pricePerUnitUnit } = calculatePricePerUnit(parsedPrice, quantity, unit);
+
         const newItem = {
             producto: document.getElementById('producto').value,
             supermercado: document.getElementById('supermercado').value,
-            precio: document.getElementById('precio').value,
-            cantidad: document.getElementById('cantidad').value,
-            unidad: document.getElementById('unidad').value,
+            precio: rawPrice, // Guardamos el precio original como string
+            cantidad: quantity,
+            unidad: unit,
             categoria: document.getElementById('categoria').value,
-            fecha: new Date().toISOString() // Fecha en formato ISO
+            fecha: new Date().toISOString(), // Fecha en formato ISO
+            precioPorUnidad: pricePerUnitValue,
+            unidadPrecioPorUnidad: pricePerUnitUnit
         };
 
         // Guardar el nuevo item en Firebase
