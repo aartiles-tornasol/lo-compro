@@ -18,24 +18,34 @@
         <div class="card mb-4" id="add-item-card" style="display: none;">
             <div class="card-body">
                 <form id="add-item-form">
+                    <div class="mb-3 text-center">
+                        <div class="supermarket-buttons-container">
+                            <button type="button" class="supermarket-btn btn-mercadona" data-supermercado="Mercadona">M</button>
+                            <button type="button" class="supermarket-btn btn-hiperdino" data-supermercado="Hiperdino">H</button>
+                            <button type="button" class="supermarket-btn btn-alcampo" data-supermercado="Alcampo">A</button>
+                            <button type="button" class="supermarket-btn btn-lidl" data-supermercado="Lidl">L</button>
+                            <button type="button" class="supermarket-btn btn-spar" data-supermercado="Spar">S</button>
+                            <button type="button" class="supermarket-btn btn-primor" data-supermercado="Primor">P</button>
+                            <button type="button" class="supermarket-btn btn-druni" data-supermercado="Druni">D</button>
+                        </div>
+                        <!-- El select de supermercado se mantiene oculto para la lógica -->
+                        <select class="form-select d-none" id="supermercado">
+                            <option value="">Seleccionar Supermercado</option>
+                            <option value="Mercadona">Mercadona</option>
+                            <option value="Hiperdino">Hiperdino</option>
+                            <option value="Lidl">Lidl</option>
+                            <option value="Spar">Spar</option>
+                            <option value="Carrefour">Carrefour</option>
+                            <option value="Alcampo">Alcampo</option>
+                            <option value="Druni">Druni</option>
+                            <option value="Primor">Primor</option>
+                        </select>
+                    </div>
+
                     <div class="row g-3">
                         <div class="col-12">
                             <label for="producto" class="form-label visually-hidden">Producto</label>
                             <input type="text" class="form-control" id="producto" placeholder="Producto" required>
-                        </div>
-                        <div class="col-12">
-                            <label for="supermercado" class="form-label visually-hidden">Supermercado</label>
-                            <select class="form-select" id="supermercado">
-                                <option value="">Seleccionar Supermercado</option>
-                                <option value="Mercadona">Mercadona</option>
-                                <option value="Hiperdino">Hiperdino</option>
-                                <option value="Lidl">Lidl</option>
-                                <option value="Spar">Spar</option>
-                                <option value="Carrefour">Carrefour</option>
-                                <option value="Alcampo">Alcampo</option>
-                                <option value="Druni">Druni</option>
-                                <option value="Primor">Primor</option>
-                            </select>
                         </div>
                         <div class="col-6">
                             <label for="precio" class="form-label visually-hidden">Precio</label>
@@ -60,7 +70,20 @@
                         </div>
                         <div class="col-6">
                             <label for="categoria" class="form-label visually-hidden">Categoría</label>
-                            <input type="text" class="form-control" id="categoria" placeholder="Categoría">
+                            <select class="form-select" id="categoria">
+                                <option value="">Seleccionar Categoría</option>
+                                <option value="Bebidas">Bebidas</option>
+                                <option value="Carnes">Carnes</option>
+                                <option value="Congelados">Congelados</option>
+                                <option value="Conservas">Conservas</option>
+                                <option value="Desayunos">Desayunos</option>
+                                <option value="Frutas y verduras">Frutas y verduras</option>
+                                <option value="Lacteos">Lácteos</option>
+                                <option value="Limpieza">Limpieza</option>
+                                <option value="Otros">Otros</option>
+                                <option value="Postres">Postres</option>
+                                <option value="Snacks">Snacks</option>
+                            </select>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-success mt-3 w-100">Guardar Producto</button>

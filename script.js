@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleFormBtn = document.getElementById('toggle-form-btn');
     const addItemCard = document.getElementById('add-item-card');
     const searchInput = document.getElementById('search-input');
+    const supermarketSelect = document.getElementById('supermercado');
+    const categorySelect = document.getElementById('categoria');
+    const supermarketButtons = document.querySelectorAll('.supermarket-btn');
 
     let allItems = []; // Para guardar todos los items y poder filtrar
 
@@ -115,11 +118,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const newItem = {
             producto: document.getElementById('producto').value,
-            supermercado: document.getElementById('supermercado').value,
+            supermercado: supermarketSelect.value, // Leer del select oculto
             precio: rawPrice, // Guardamos el precio original como string
             cantidad: quantity,
             unidad: unit,
-            categoria: document.getElementById('categoria').value,
+            categoria: categorySelect.value, // Leer del select de categoría
             fecha: new Date().toISOString(), // Fecha en formato ISO
             precioPorUnidad: pricePerUnitValue,
             unidadPrecioPorUnidad: pricePerUnitUnit
@@ -130,6 +133,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         form.reset(); // Limpiamos el formulario
         addItemCard.style.display = 'none'; // Ocultar el formulario después de añadir
+
+        // Deseleccionar el botón de supermercado
+        supermarketButtons.forEach(btn => btn.classList.remove('selected'));
     });
 
     // Lógica para mostrar/ocultar el formulario
@@ -153,4 +159,31 @@ document.addEventListener('DOMContentLoaded', () => {
         );
         renderItems(filteredItems);
     });
+
+    // Lógica para los botones de supermercado
+    supermarketButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const selectedSupermarket = button.dataset.supermercado;
+            supermarketSelect.value = selectedSupermarket; // Actualizar el select oculto
+
+            // Marcar el botón seleccionado
+            supermarketButtons.forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+
+            // Guardar en localStorage
+            localStorage.setItem('lastSupermarket', selectedSupermarket);
+        });
+    });
+
+    // Cargar el último supermercado seleccionado al iniciar
+    const lastSupermarket = localStorage.getItem('lastSupermarket');
+    if (lastSupermarket) {
+        supermarketSelect.value = lastSupermarket;
+        // Marcar el botón correspondiente
+        supermarketButtons.forEach(btn => {
+            if (btn.dataset.supermercado === lastSupermarket) {
+                btn.classList.add('selected');
+            }
+        });
+    }
 });
