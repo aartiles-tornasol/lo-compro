@@ -56,3 +56,53 @@ body {
         overflow: visible;
     }
 }
+
+/* Estilos para los botones de supermercado */
+.supermarket-buttons-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.supermarket-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: white;
+    border: 2px solid transparent;
+    transition: all 0.2s ease-in-out;
+}
+
+.supermarket-btn.selected {
+    border-color: #007bff; /* Color de borde para el seleccionado */
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
+
+.btn-mercadona {
+    background-color: #008000; /* Verde */
+}
+.btn-hiperdino {
+    background-color: #FFD700; /* Amarillo */
+    color: #333; /* Texto oscuro para contraste */
+}
+.btn-alcampo {
+    background-color: #FF0000; /* Rojo */
+}
+.btn-lidl {
+    background-color: #0000FF; /* Azul */
+}
+.btn-spar {
+    background-color: #808080; /* Gris */
+}
+.btn-primor {
+    background-color: #8A2BE2; /* Malva (BlueViolet) */
+}
+.btn-druni {
+    background-color: #00CED1; /* Celeste (DarkTurquoise) */
+}
