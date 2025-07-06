@@ -70,30 +70,39 @@ document.addEventListener('DOMContentLoaded', () => {
         return { value: pricePerUnit ? parseFloat(pricePerUnit.toFixed(2)) : null, unit: unitPerUnit };
     };
 
+    // Mapeo de supermercados a clases CSS para colores
+    const supermarketColorClasses = {
+        'Mercadona': 'color-mercadona',
+        'Hiperdino': 'color-hiperdino',
+        'Alcampo': 'color-alcampo',
+        'Lidl': 'color-lidl',
+        'Spar': 'color-spar',
+        'Primor': 'color-primor',
+        'Druni': 'color-druni',
+    };
+
     // Función para mostrar los productos en la lista
     const renderItems = (itemsToRender) => {
         itemList.innerHTML = ''; // Limpiar la lista actual
         if (!itemsToRender || itemsToRender.length === 0) {
-            itemList.innerHTML = '<li class="list-group-item">No hay productos en la lista.</li>';
+            itemList.innerHTML = '<div class="product-row loading-row">No hay productos en la lista.</div>';
             return;
         }
 
-        // Ordenar por fecha (más reciente primero)
-        itemsToRender.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-
         itemsToRender.forEach(item => {
-            const li = document.createElement('li');
-            li.className = 'list-group-item';
-            li.innerHTML = `
-                <div class="item-details">
-                    <strong>${item.producto}</strong> - ${item.cantidad} ${item.unidad || ''}
-                    <br>
-                    <small>${item.supermercado || 'N/A'} - ${item.precio ? item.precio + '€' : 'Sin precio'}</small>
-                    ${item.precioPorUnidad ? `<br><small>(${item.precioPorUnidad} ${item.unidadPrecioPorUnidad || ''})</small>` : ''}
-                </div>
-                <div class="item-date">${formatDisplayDate(item.fecha)}</div>
+            const productRow = document.createElement('div');
+            productRow.className = 'product-row';
+
+            const colorClass = supermarketColorClasses[item.supermercado] || '';
+
+            productRow.innerHTML = `
+                <div class="product-row-color-indicator ${colorClass}"></div>
+                <div class="product-cell name">${item.producto}</div>
+                <div class="product-cell price">${item.precio ? item.precio + '€' : '-'}</div>
+                <div class="product-cell price-per-unit">${item.precioPorUnidad ? item.precioPorUnidad + item.unidadPrecioPorUnidad : '-'}</div>
+                <div class="product-cell avg-price">-</div> <!-- Placeholder para precio medio -->
             `;
-            itemList.appendChild(li);
+            itemList.appendChild(productRow);
         });
     };
 
@@ -263,9 +272,69 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Mostrar el hash del commit
-    const commitHash = 'ea16462'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
+    const commitHash = 'bdbc393'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
     const commitHashDisplay = document.getElementById('commit-hash-display');
     if (commitHashDisplay) {
         commitHashDisplay.textContent = `v: ${commitHash}`;
     }
+
+    // Lógica de ordenación
+    let currentSortColumn = 'fecha'; // Por defecto, ordenar por fecha
+    let currentSortDirection = 'desc'; // Por defecto, descendente
+
+    const headerCells = document.querySelectorAll('.header-cell');
+    headerCells.forEach(header => {
+        header.addEventListener('click', () => {
+            const sortColumn = header.dataset.sort;
+
+            // Si se hace clic en la misma columna, invertir la dirección
+            if (sortColumn === currentSortColumn) {
+                currentSortDirection = (currentSortDirection === 'asc') ? 'desc' : 'asc';
+            } else {
+                // Si se hace clic en una nueva columna, establecerla como ascendente
+                currentSortColumn = sortColumn;
+                currentSortDirection = 'asc';
+            }
+
+            // Eliminar clases de ordenación de todas las cabeceras
+            headerCells.forEach(h => {
+                h.classList.remove('asc', 'desc');
+            });
+
+            // Añadir clase de ordenación a la cabecera actual
+            header.classList.add(currentSortDirection);
+
+            // Re-renderizar los items con la nueva ordenación
+            sortAndRenderItems();
+        });
+    });
+
+    // Función para ordenar y renderizar los items
+    const sortAndRenderItems = () => {
+        const sortedItems = [...allItems].sort((a, b) => {
+            let valA = a[currentSortColumn];
+            let valB = b[currentSortColumn];
+
+            // Manejar valores numéricos para ordenación correcta
+            if (typeof valA === 'string' && !isNaN(parseFloat(valA))) {
+                valA = parseFloat(valA);
+            }
+            if (typeof valB === 'string' && !isNaN(parseFloat(valB))) {
+                valB = parseFloat(valB);
+            }
+
+            if (valA < valB) {
+                return currentSortDirection === 'asc' ? -1 : 1;
+            }
+            if (valA > valB) {
+                return currentSortDirection === 'asc' ? 1 : -1;
+            }
+            return 0;
+        });
+        renderItems(sortedItems);
+    };
+
+    // Llamar a sortAndRenderItems inicialmente para aplicar la ordenación por defecto
+    sortAndRenderItems();
+
 });

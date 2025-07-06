@@ -1,152 +1,94 @@
-/* Estilos básicos */
-body {
-    font-family: sans-serif;
-    padding: 20px;
-    padding-bottom: 80px; /* Espacio para el FAB */
+
+/* Nuevos estilos para la tabla de productos */
+#product-list-container {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    overflow: hidden;
 }
 
-/* Ajustes para móviles */
-@media (max-width: 767.98px) {
-    .container {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-    h1 {
-        font-size: 1.8rem;
-    }
-    h2 {
-        font-size: 1.5rem;
-    }
-}
-
-.list-group-item {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    border-bottom: 1px solid #eee;
-}
-
-.item-details {
-    flex-grow: 1;
-    margin-right: 10px;
-}
-
-.item-date {
-    font-size: 0.8em;
-    color: #666;
-    margin-top: 5px;
-    width: 100%; /* Ocupa todo el ancho en móvil */
-    text-align: right;
-}
-
-/* Ocultar labels en móvil para ahorrar espacio */
-.form-label.visually-hidden {
-    display: none;
-}
-
-/* Mostrar labels en pantallas más grandes si es necesario */
-@media (min-width: 768px) {
-    .form-label.visually-hidden {
-        display: block;
-        clip: auto;
-        height: auto;
-        width: auto;
-        margin: 0;
-        overflow: visible;
-    }
-}
-
-/* Estilos para los botones de supermercado */
-.supermarket-buttons-container {
-    display: flex;
-    justify-content: flex-start; /* Alinear a la izquierda */
-    flex-wrap: nowrap; /* No envolver */
-    gap: 8px; /* Espacio más pequeño */
-    margin-bottom: 15px;
-    overflow-x: auto; /* Scroll horizontal */
-    padding-bottom: 5px; /* Espacio para la barra de scroll */
-    -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
-}
-
-.supermarket-btn {
-    flex-shrink: 0; /* No encoger */
-    width: 30px; /* Aún más pequeños */
-    height: 30px; /* Aún más pequeños */
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.product-table-header {
+    background-color: #f8f9fa;
     font-weight: bold;
-    color: white;
-    border: 2px solid transparent;
-    transition: all 0.2s ease-in-out;
-    font-size: 0.7rem; /* Tamaño de fuente ajustado */
-}
-
-.supermarket-btn.selected {
-    border-color: #007bff; /* Color de borde para el seleccionado */
-    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
-}
-
-.btn-mercadona {
-    background-color: #008000; /* Verde */
-}
-.btn-hiperdino {
-    background-color: #FFD700; /* Amarillo */
-    color: #333; /* Texto oscuro para contraste */
-}
-.btn-alcampo {
-    background-color: #FF0000; /* Rojo */
-}
-.btn-lidl {
-    background-color: #0000FF; /* Azul */
-}
-.btn-spar {
-    background-color: #808080; /* Gris */
-}
-.btn-primor {
-    background-color: #8A2BE2; /* Malva (BlueViolet) */
-}
-.btn-druni {
-    background-color: #00CED1; /* Celeste (DarkTurquoise) */
-}
-
-/* Estilos para el botón flotante (FAB) */
-.fab-button {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: auto; /* Ancho automático para el texto */
-    min-width: 100px; /* Ancho mínimo */
-    height: 56px; /* Altura estándar para FABs rectangulares */
-    border-radius: 28px; /* La mitad de la altura para esquinas redondeadas */
-    background-color: #007bff;
-    color: white;
-    font-size: 1.2rem; /* Tamaño de fuente ajustado */
-    padding: 0 20px; /* Espaciado interno */
+    border-bottom: 1px solid #dee2e6;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 0.5rem 0;
+}
+
+.header-cell {
+    padding: 0.5rem 0.75rem;
+    text-align: left;
     cursor: pointer;
-    z-index: 1000;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 }
 
-/* Estilos para el campo de búsqueda redondeado */
-.input-group .form-control.rounded-end {
-    border-top-right-radius: 0.25rem !important;
-    border-bottom-right-radius: 0.25rem !important;
-}
-.input-group .input-group-text {
-    border-top-left-radius: 0.25rem !important;
-    border-bottom-left-radius: 0.25rem !important;
+.header-cell:hover {
+    background-color: #e9ecef;
 }
 
-/* Estilo para el botón de cierre del formulario (la 'x') */
-.card-header .btn-close {
-    font-size: 0.6rem; /* Tamaño más pequeño para la 'x' */
-    padding: 0.5rem;
+.header-cell.asc::after {
+    content: ' \25B2'; /* Triángulo hacia arriba */
+    margin-left: 5px;
 }
+
+.header-cell.desc::after {
+    content: ' \25BC'; /* Triángulo hacia abajo */
+    margin-left: 5px;
+}
+
+/* Anchos de columna */
+.header-name { flex: 4; }
+.header-price { flex: 2; text-align: right; }
+.header-price-per-unit { flex: 2; text-align: right; }
+.header-avg-price { flex: 2; text-align: right; }
+
+.product-row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding: 0.5rem 0;
+    background-color: #fff;
+}
+
+.product-row:last-child {
+    border-bottom: none;
+}
+
+.product-row-color-indicator {
+    width: 8px; /* Ancho de la barra de color */
+    height: 100%;
+    min-height: 2.5rem; /* Asegura que la barra tenga una altura mínima */
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+}
+
+.product-cell {
+    padding: 0 0.75rem;
+    text-align: left;
+    flex-grow: 1;
+    white-space: nowrap; /* Evita que el texto se envuelva */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Añade puntos suspensivos si el texto es demasiado largo */
+}
+
+.product-cell.name { flex: 4; }
+.product-cell.price { flex: 2; text-align: right; }
+.product-cell.price-per-unit { flex: 2; text-align: right; }
+.product-cell.avg-price { flex: 2; text-align: right; }
+
+.loading-row {
+    text-align: center;
+    padding: 1rem;
+    color: #6c757d;
+}
+
+/* Colores de supermercado para el indicador */
+.color-mercadona { background-color: #008000; }
+.color-hiperdino { background-color: #FFD700; }
+.color-alcampo { background-color: #FF0000; }
+.color-lidl { background-color: #0000FF; }
+.color-spar { background-color: #808080; }
+.color-primor { background-color: #8A2BE2; }
+.color-druni { background-color: #00CED1; }
