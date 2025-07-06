@@ -2,6 +2,7 @@
 body {
     font-family: sans-serif;
     padding: 20px;
+    padding-bottom: 80px; /* Espacio para el FAB */
 }
 
 /* Ajustes para móviles */
@@ -60,15 +61,19 @@ body {
 /* Estilos para los botones de supermercado */
 .supermarket-buttons-container {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
+    justify-content: flex-start; /* Alinear a la izquierda */
+    flex-wrap: nowrap; /* No envolver */
+    gap: 8px; /* Espacio más pequeño */
     margin-bottom: 15px;
+    overflow-x: auto; /* Scroll horizontal */
+    padding-bottom: 5px; /* Espacio para la barra de scroll */
+    -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
 }
 
 .supermarket-btn {
-    width: 50px;
-    height: 50px;
+    flex-shrink: 0; /* No encoger */
+    width: 40px; /* Más pequeños */
+    height: 40px; /* Más pequeños */
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -77,6 +82,7 @@ body {
     color: white;
     border: 2px solid transparent;
     transition: all 0.2s ease-in-out;
+    font-size: 0.9rem; /* Tamaño de fuente ajustado */
 }
 
 .supermarket-btn.selected {
@@ -105,4 +111,24 @@ body {
 }
 .btn-druni {
     background-color: #00CED1; /* Celeste (DarkTurquoise) */
+}
+
+/* Estilos para el botón flotante (FAB) */
+.fab-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    font-size: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 1000;
 }

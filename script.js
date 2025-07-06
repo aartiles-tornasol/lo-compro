@@ -142,10 +142,10 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleFormBtn.addEventListener('click', () => {
         if (addItemCard.style.display === 'none') {
             addItemCard.style.display = 'block';
-            toggleFormBtn.textContent = 'Ocultar Formulario';
+            toggleFormBtn.textContent = '-'; // Cambiar a '-' cuando está abierto
         } else {
             addItemCard.style.display = 'none';
-            toggleFormBtn.textContent = 'Añadir Producto';
+            toggleFormBtn.textContent = '+'; // Cambiar a '+' cuando está cerrado
         }
     });
 
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     supermarketButtons.forEach(button => {
         button.addEventListener('click', () => {
             const selectedSupermarket = button.dataset.supermercado;
-            supermarketSelect.value = selectedSupermarket; // Actualizar el select oculto
+            supermarketSelect.value = selectedSupermarket; // Actualizar el select
 
             // Marcar el botón seleccionado
             supermarketButtons.forEach(btn => btn.classList.remove('selected'));
