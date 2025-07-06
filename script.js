@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const supermarketSelect = document.getElementById('supermercado');
     const categorySelect = document.getElementById('categoria');
     const supermarketButtons = document.querySelectorAll('.supermarket-btn');
+    const closeFormBtn = document.getElementById('close-form-btn');
 
     let allItems = []; // Para guardar todos los items y poder filtrar
 
@@ -142,11 +143,16 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleFormBtn.addEventListener('click', () => {
         if (addItemCard.style.display === 'none') {
             addItemCard.style.display = 'block';
-            toggleFormBtn.textContent = '-'; // Cambiar a '-' cuando está abierto
         } else {
             addItemCard.style.display = 'none';
-            toggleFormBtn.textContent = '+'; // Cambiar a '+' cuando está cerrado
         }
+    });
+
+    // Lógica para cerrar el formulario con el botón 'x'
+    closeFormBtn.addEventListener('click', () => {
+        addItemCard.style.display = 'none';
+        // Deseleccionar el botón de supermercado
+        supermarketButtons.forEach(btn => btn.classList.remove('selected'));
     });
 
     // Lógica de búsqueda/filtrado
