@@ -6,12 +6,17 @@
     <title>Lo Compro</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
+    <!-- Iconos de Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
     <main class="container">
         <h1 class="my-4 text-center">¿Lo compro?</h1>
 
         <div class="card mb-4" id="add-item-card" style="display: none;">
+            <div class="card-header d-flex justify-content-end">
+                <button type="button" class="btn-close" aria-label="Close" id="close-form-btn"></button>
+            </div>
             <div class="card-body">
                 <form id="add-item-form">
                     <div class="mb-3 text-center">
@@ -89,10 +94,12 @@
 
         <div class="mb-3">
             <label for="search-input" class="form-label visually-hidden">Buscar</label>
-            <input type="text" class="form-control" id="search-input" placeholder="Buscar producto...">
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control rounded-end" id="search-input" placeholder="Buscar producto...">
+            </div>
         </div>
 
-        <h2>Lista de Compras</h2>
         <ul id="item-list" class="list-group">
             <li class="list-group-item">Cargando...</li>
         </ul>

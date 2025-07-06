@@ -72,8 +72,8 @@ body {
 
 .supermarket-btn {
     flex-shrink: 0; /* No encoger */
-    width: 40px; /* Más pequeños */
-    height: 40px; /* Más pequeños */
+    width: 35px; /* Más pequeños */
+    height: 35px; /* Más pequeños */
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -82,7 +82,7 @@ body {
     color: white;
     border: 2px solid transparent;
     transition: all 0.2s ease-in-out;
-    font-size: 0.9rem; /* Tamaño de fuente ajustado */
+    font-size: 0.8rem; /* Tamaño de fuente ajustado */
 }
 
 .supermarket-btn.selected {
@@ -131,4 +131,14 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     z-index: 1000;
+}
+
+/* Estilos para el campo de búsqueda redondeado */
+.input-group .form-control.rounded-end {
+    border-top-right-radius: 0.25rem !important;
+    border-bottom-right-radius: 0.25rem !important;
+}
+.input-group .input-group-text {
+    border-top-left-radius: 0.25rem !important;
+    border-bottom-left-radius: 0.25rem !important;
 }
