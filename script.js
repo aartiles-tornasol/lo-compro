@@ -101,13 +101,16 @@ document.addEventListener('DOMContentLoaded', () => {
     itemsRef.on('value', (snapshot) => {
         const data = snapshot.val();
         if (data) {
-            allItems = Object.values(data); // Convertir objeto a array
+            // Convertir objeto a array y ordenar por fecha para obtener la unidad más reciente
+            allItems = Object.values(data).sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+            
             // Actualizar sugerencias de productos y unidades
             productUnits = {};
             const productNames = new Set();
             allItems.forEach(item => {
                 productNames.add(item.producto);
-                if (item.unidad) {
+                // Guardar la unidad solo si no ha sido guardada antes (la primera que encuentra es la más reciente)
+                if (item.unidad && !productUnits[item.producto]) {
                     productUnits[item.producto] = item.unidad;
                 }
             });
@@ -153,19 +156,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         form.reset(); // Limpiamos el formulario
         addItemCard.style.display = 'none'; // Ocultar el formulario después de añadir
+        toggleFormBtn.style.display = 'flex'; // Mostrar el botón FAB
 
         // Deseleccionar el botón de supermercado
         supermarketButtons.forEach(btn => btn.classList.remove('selected'));
     });
 
+    // Determinar el tipo de evento a usar (táctil o clic)
+    const eventType = 'ontouchstart' in window ? 'touchstart' : 'click';
+
     // Lógica para mostrar/ocultar el formulario
-    toggleFormBtn.addEventListener('touchstart', () => {
+    toggleFormBtn.addEventListener(eventType, () => {
         addItemCard.style.display = 'block'; // Siempre abre el formulario
         toggleFormBtn.style.display = 'none'; // Oculta el botón FAB
     });
 
     // Lógica para cerrar el formulario con el botón 'x'
-    closeFormBtn.addEventListener('touchstart', () => {
+    closeFormBtn.addEventListener(eventType, () => {
         addItemCard.style.display = 'none';
         toggleFormBtn.style.display = 'flex'; // Muestra el botón FAB
         // Deseleccionar el botón de supermercado
@@ -184,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Lógica para los botones de supermercado
     supermarketButtons.forEach(button => {
-        button.addEventListener('touchstart', () => {
+        button.addEventListener(eventType, () => {
             const selectedSupermarket = button.dataset.supermercado;
             supermarketSelect.value = selectedSupermarket; // Actualizar el select
 
@@ -196,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('lastSupermarket', selectedSupermarket);
 
             // Mover el foco al siguiente campo (producto)
-            document.getElementById('producto').focus();
+            productInput.focus();
         });
     });
 
