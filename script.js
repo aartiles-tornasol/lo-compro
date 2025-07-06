@@ -186,13 +186,17 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             e.preventDefault(); // Prevenir el envío del formulario por defecto
-            const formElements = Array.from(form.elements).filter(el => 
-                !el.disabled && !el.hidden && el.type !== 'submit' && el.type !== 'button'
+            
+            // Seleccionar solo los campos de entrada, selectores y áreas de texto visibles y no deshabilitados
+            const formElements = Array.from(form.querySelectorAll('input:not([type="hidden"]), select, textarea')).filter(el => 
+                !el.disabled && el.offsetParent !== null // offsetParent !== null verifica si el elemento es visible
             );
+            
             const currentElement = document.activeElement;
             const currentIndex = formElements.indexOf(currentElement);
 
             if (currentIndex > -1 && currentIndex < formElements.length - 1) {
+                // Mover el foco al siguiente campo
                 formElements[currentIndex + 1].focus();
             } else if (currentIndex === formElements.length - 1) {
                 // Si es el último campo, enviar el formulario
