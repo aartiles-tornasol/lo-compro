@@ -10,11 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const addItemCard = document.getElementById('add-item-card');
     const searchInput = document.getElementById('search-input');
     const supermarketSelect = document.getElementById('supermercado');
-    const categorySelect = document.getElementById('categoria');
     const supermarketButtons = document.querySelectorAll('.supermarket-btn');
     const closeFormBtn = document.getElementById('close-form-btn');
+    const productInput = document.getElementById('producto');
+    const productSuggestions = document.getElementById('product-suggestions');
+    const unitSelect = document.getElementById('unidad');
 
     let allItems = []; // Para guardar todos los items y poder filtrar
+    let productUnits = {}; // Para guardar la última unidad usada por producto
 
     // Función para formatear la fecha para mostrar
     const formatDisplayDate = (isoDateString) => {
@@ -99,8 +102,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = snapshot.val();
         if (data) {
             allItems = Object.values(data); // Convertir objeto a array
+            // Actualizar sugerencias de productos y unidades
+            productUnits = {};
+            const productNames = new Set();
+            allItems.forEach(item => {
+                productNames.add(item.producto);
+                if (item.unidad) {
+                    productUnits[item.producto] = item.unidad;
+                }
+            });
+            // Rellenar datalist
+            productSuggestions.innerHTML = '';
+            productNames.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                productSuggestions.appendChild(option);
+            });
         } else {
             allItems = [];
+            productUnits = {};
         }
         // Renderizar los items iniciales (sin filtro)
         renderItems(allItems);
@@ -118,12 +138,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const { value: pricePerUnitValue, unit: pricePerUnitUnit } = calculatePricePerUnit(parsedPrice, quantity, unit);
 
         const newItem = {
-            producto: document.getElementById('producto').value,
+            producto: productInput.value,
             supermercado: supermarketSelect.value, // Leer del select oculto
             precio: rawPrice, // Guardamos el precio original como string
             cantidad: quantity,
             unidad: unit,
-            categoria: categorySelect.value, // Leer del select de categoría
             fecha: new Date().toISOString(), // Fecha en formato ISO
             precioPorUnidad: pricePerUnitValue,
             unidadPrecioPorUnidad: pricePerUnitUnit
@@ -158,8 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const searchTerm = e.target.value.toLowerCase();
         const filteredItems = allItems.filter(item => 
             item.producto.toLowerCase().includes(searchTerm) ||
-            (item.supermercado && item.supermercado.toLowerCase().includes(searchTerm)) ||
-            (item.categoria && item.categoria.toLowerCase().includes(searchTerm))
+            (item.supermercado && item.supermercado.toLowerCase().includes(searchTerm))
         );
         renderItems(filteredItems);
     });
@@ -180,6 +198,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // Mover el foco al siguiente campo (producto)
             document.getElementById('producto').focus();
         });
+    });
+
+    // Lógica de autocompletado de producto y relleno de unidad
+    productInput.addEventListener('input', () => {
+        const selectedProduct = productInput.value;
+        if (productUnits[selectedProduct]) {
+            unitSelect.value = productUnits[selectedProduct];
+        }
     });
 
     // Lógica para la navegación con Enter en el formulario
