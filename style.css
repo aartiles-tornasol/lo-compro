@@ -118,12 +118,12 @@ body {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 60px;
-    height: 60px;
+    width: 80px; /* Más grande */
+    height: 80px; /* Más grande */
     border-radius: 50%;
     background-color: #007bff;
     color: white;
-    font-size: 2.5rem;
+    font-size: 1.5rem; /* Tamaño de fuente ajustado para el texto */
     display: flex;
     justify-content: center;
     align-items: center;

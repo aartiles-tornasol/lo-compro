@@ -176,7 +176,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Guardar en localStorage
             localStorage.setItem('lastSupermarket', selectedSupermarket);
+
+            // Mover el foco al siguiente campo (producto)
+            document.getElementById('producto').focus();
         });
+    });
+
+    // Lógica para la navegación con Enter en el formulario
+    form.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Prevenir el envío del formulario por defecto
+            const formElements = Array.from(form.elements).filter(el => 
+                !el.disabled && !el.hidden && el.type !== 'submit' && el.type !== 'button'
+            );
+            const currentElement = document.activeElement;
+            const currentIndex = formElements.indexOf(currentElement);
+
+            if (currentIndex > -1 && currentIndex < formElements.length - 1) {
+                formElements[currentIndex + 1].focus();
+            } else if (currentIndex === formElements.length - 1) {
+                // Si es el último campo, enviar el formulario
+                form.requestSubmit();
+            }
+        }
     });
 
     // Cargar el último supermercado seleccionado al iniciar
