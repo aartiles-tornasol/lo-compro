@@ -142,11 +142,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Lógica para mostrar/ocultar el formulario
     toggleFormBtn.addEventListener('click', () => {
         addItemCard.style.display = 'block'; // Siempre abre el formulario
+        toggleFormBtn.style.display = 'none'; // Oculta el botón FAB
     });
 
     // Lógica para cerrar el formulario con el botón 'x'
     closeFormBtn.addEventListener('click', () => {
         addItemCard.style.display = 'none';
+        toggleFormBtn.style.display = 'flex'; // Muestra el botón FAB
         // Deseleccionar el botón de supermercado
         supermarketButtons.forEach(btn => btn.classList.remove('selected'));
     });
