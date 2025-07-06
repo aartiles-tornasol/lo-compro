@@ -1,27 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Inicializar Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const itemsRef = database.ref('items');
+
     const form = document.getElementById('add-item-form');
     const itemList = document.getElementById('item-list');
-
-    // Función para cargar los productos desde la API
-    const loadItems = async () => {
-        try {
-            const response = await fetch(API_URL);
-            const data = await response.json();
-            renderItems(data.items);
-        } catch (error) {
-            console.error('Error al cargar los productos:', error);
-            itemList.innerHTML = '<li class="list-group-item list-group-item-danger">Error al cargar la lista.</li>';
-        }
-    };
 
     // Función para mostrar los productos en la lista
     const renderItems = (items) => {
         itemList.innerHTML = ''; // Limpiar la lista actual
-        if (items.length === 0) {
+        if (!items) {
             itemList.innerHTML = '<li class="list-group-item">No hay productos en la lista.</li>';
             return;
         }
-        items.forEach(item => {
+        Object.values(items).forEach(item => {
             const li = document.createElement('li');
             li.className = 'list-group-item';
             li.textContent = `${item.producto} - ${item.cantidad} ${item.unidad || ''} (${item.supermercado || 'N/A'}) - ${item.precio ? item.precio + '€' : 'Sin precio'}`;
@@ -29,8 +22,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    // Escuchar cambios en la base de datos en tiempo real
+    itemsRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        renderItems(data);
+    });
+
     // Función para añadir un nuevo producto
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', (e) => {
         e.preventDefault();
 
         const newItem = {
@@ -40,27 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
             cantidad: document.getElementById('cantidad').value,
             unidad: document.getElementById('unidad').value,
             categoria: document.getElementById('categoria').value,
-            fecha: new Date().toLocaleDateString('es-ES') // Añadimos la fecha actual
+            fecha: new Date().toLocaleDateString('es-ES')
         };
 
-        try {
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newItem)
-            });
-            
-            // Después de añadir, recargamos la lista
-            loadItems();
-            form.reset(); // Limpiamos el formulario
+        // Guardar el nuevo item en Firebase
+        itemsRef.push(newItem);
 
-        } catch (error) {
-            console.error('Error al añadir el producto:', error);
-        }
+        form.reset(); // Limpiamos el formulario
     });
-
-    // Carga inicial de los productos
-    loadItems();
 });
