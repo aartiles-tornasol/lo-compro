@@ -129,25 +129,27 @@ document.addEventListener('DOMContentLoaded', () => {
         renderItems(allItems);
     });
 
+    // Lógica de autocompletado de producto y relleno de unidad
+    productInput.addEventListener('input', () => {
+        const selectedProduct = productInput.value;
+        if (productUnits[selectedProduct]) {
+            unitSelect.value = productUnits[selectedProduct];
+        }
+    });
+
     // Función para añadir un nuevo producto
     form.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        // Autocompletar la unidad si el producto ya existe
-        const productName = productInput.value;
-        if (productUnits[productName]) {
-            unitSelect.value = productUnits[productName];
-        }
-
         const rawPrice = document.getElementById('precio').value;
         const parsedPrice = parsePrice(rawPrice);
         const quantity = parseFloat(document.getElementById('cantidad').value);
-        const unit = unitSelect.value; // Usar el valor potencialmente autocompletado
+        const unit = unitSelect.value; // Usar el valor actual del select
 
         const { value: pricePerUnitValue, unit: pricePerUnitUnit } = calculatePricePerUnit(parsedPrice, quantity, unit);
 
         const newItem = {
-            producto: productName,
+            producto: productInput.value,
             supermercado: supermarketSelect.value, // Leer del select oculto
             precio: rawPrice, // Guardamos el precio original como string
             cantidad: quantity,
@@ -245,5 +247,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.classList.add('selected');
             }
         });
+    }
+
+    // Mostrar el hash del commit
+    const commitHash = 'b1ff8e5'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
+    const commitHashDisplay = document.getElementById('commit-hash-display');
+    if (commitHashDisplay) {
+        commitHashDisplay.textContent = `v: ${commitHash}`;
     }
 });
