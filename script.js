@@ -59,8 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
             pricePerUnit = price / quantity;
             unitPerUnit = `€/${unit || '?'}`;
         }
-        // Redondear a 3 decimales para precisión
-        return { value: pricePerUnit ? parseFloat(pricePerUnit.toFixed(3)) : null, unit: unitPerUnit };
+        // Redondear a 2 decimales para precios
+        return { value: pricePerUnit ? parseFloat(pricePerUnit.toFixed(2)) : null, unit: unitPerUnit };
     };
 
     // Función para mostrar los productos en la lista
