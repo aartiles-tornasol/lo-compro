@@ -281,6 +281,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+        // Lógica del botón de borrar del buscador
+    const clearSearchBtn = document.getElementById('clear-search-btn');
+    searchInput.addEventListener('input', () => {
+        if (searchInput.value.length > 0) {
+            clearSearchBtn.style.display = 'block';
+        } else {
+            clearSearchBtn.style.display = 'none';
+        }
+    });
+
+    clearSearchBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input')); // Disparar evento input para actualizar la lista y ocultar la X
+    });
+
     // Cargar el último supermercado seleccionado al iniciar
     const lastSupermarket = localStorage.getItem('lastSupermarket');
     if (lastSupermarket) {

@@ -86,15 +86,16 @@
             <label for="search-input" class="form-label visually-hidden">Buscar</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-search"></i></span>
-                <input type="text" class="form-control rounded-end" id="search-input" placeholder="Buscar producto...">
+                <input type="text" class="form-control" id="search-input" placeholder="Buscar producto...">
+                <button class="btn btn-outline-secondary" type="button" id="clear-search-btn" style="display: none;"><i class="bi bi-x"></i></button>
             </div>
         </div>
 
         <div id="product-list-container" class="mb-3">
             <div class="product-table-header d-flex">
                 <div class="header-cell header-name" data-sort="producto">Nombre</div>
-                <div class="header-cell header-price" data-sort="precio">Precio</div>
-                <div class="header-cell header-price-per-unit" data-sort="precioPorUnidad">€/unidd</div>
+                <div class="header-cell header-price" data-sort="precio">€</div>
+                <div class="header-cell header-price-per-unit" data-sort="precioPorUnidad">€/ud</div>
                 <div class="header-cell header-avg-price" data-sort="precioMedio">€⊘</div>
             </div>
             <div id="item-list" class="product-table-body">
