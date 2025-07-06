@@ -46,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch(API_URL, {
                 method: 'POST',
-                mode: 'no-cors', // Importante para Google Apps Script
                 headers: {
                     'Content-Type': 'application/json',
                 },
