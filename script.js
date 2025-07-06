@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="product-cell name">${item.producto}</div>
                 <div class="product-cell price">${item.precio ? item.precio + '€' : '-'}</div>
                 <div class="product-cell price-per-unit">${item.precioPorUnidad ? item.precioPorUnidad + item.unidadPrecioPorUnidad : '-'}</div>
-                <div class="product-cell avg-price">-</div> <!-- Placeholder para precio medio -->
+                <div class="product-cell avg-price">${item.precioMedio ? item.precioMedio + '€' : '-'}</div>
             `;
             itemList.appendChild(productRow);
         });
@@ -113,16 +113,38 @@ document.addEventListener('DOMContentLoaded', () => {
             // Convertir objeto a array y ordenar por fecha para obtener la unidad más reciente
             allItems = Object.values(data).sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
             
-            // Actualizar sugerencias de productos y unidades
+            // Calcular precios medios y actualizar sugerencias de productos y unidades
+            const productPrices = {}; // { producto: { total: 0, count: 0 } }
             productUnits = {};
             const productNames = new Set();
+
             allItems.forEach(item => {
                 productNames.add(item.producto);
                 // Guardar la unidad solo si no ha sido guardada antes (la primera que encuentra es la más reciente)
                 if (item.unidad && !productUnits[item.producto]) {
                     productUnits[item.producto] = item.unidad;
                 }
+
+                // Acumular precios para el cálculo del precio medio
+                const parsedPrice = parsePrice(item.precio);
+                if (parsedPrice !== null) {
+                    if (!productPrices[item.producto]) {
+                        productPrices[item.producto] = { total: 0, count: 0 };
+                    }
+                    productPrices[item.producto].total += parsedPrice;
+                    productPrices[item.producto].count++;
+                }
             });
+
+            // Añadir el precio medio a cada item
+            allItems.forEach(item => {
+                if (productPrices[item.producto] && productPrices[item.producto].count > 0) {
+                    item.precioMedio = parseFloat((productPrices[item.producto].total / productPrices[item.producto].count).toFixed(2));
+                } else {
+                    item.precioMedio = null;
+                }
+            });
+
             // Rellenar datalist
             productSuggestions.innerHTML = '';
             productNames.forEach(name => {
@@ -135,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
             productUnits = {};
         }
         // Renderizar los items iniciales (sin filtro)
-        renderItems(allItems);
+        sortAndRenderItems(); // Llamar a la función de ordenación para renderizar
     });
 
     // Lógica de autocompletado de producto y relleno de unidad
