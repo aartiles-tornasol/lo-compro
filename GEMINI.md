@@ -12,3 +12,7 @@ El objetivo es desarrollar una aplicación web sencilla, diseñada con un enfoqu
 *   **Backend:** Hoja de cálculo de Google (Google Sheet).
 *   **Conectividad Backend:** Google Apps Script para lectura y escritura.
 *   **Diseño:** Prioridad en la adaptabilidad y la experiencia de usuario en pantallas pequeñas.
+
+## Problemas Recurrentes y Lecciones Aprendidas
+
+- **Botón Flotante (FAB) y conflictos de CSS:** Se ha perdido el estilo del botón flotante (`.fab-button`) en múltiples ocasiones, especialmente tras resoluciones de conflictos en `style.css`. Es crucial verificar siempre que los estilos de `position: fixed`, `bottom`, `right`, `width`, `height`, `border-radius`, `background-color`, `color`, `font-size`, `padding`, `display`, `justify-content`, `align-items`, `border`, `box-shadow` y `z-index` para `.fab-button` estén presentes y correctos después de cualquier operación de Git que afecte a `style.css`.
