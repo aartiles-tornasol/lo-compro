@@ -161,16 +161,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Si el swipe es suficientemente largo y rápido, se considera borrado
                 if (lastPosX < -deleteButtonWidth * 0.5 || ev.velocityX < -0.5) {
-                    // Animar hasta el final y luego borrar
+                    // Animar hasta el final para mostrar el botón de borrado
                     row.style.transform = `translateX(-${deleteButtonWidth}px)`;
-                    
-                    // Añadir una transición para el fade-out
-                    row.style.transition = 'transform 0.3s ease, opacity 0.5s ease';
-                    row.style.opacity = '0';
 
                     // Preguntar al usuario antes de borrar
                     if (confirm('¿Estás seguro de que quieres borrar este registro?')) {
-                        // Añadir una transición para el fade-out
+                        // Si el usuario confirma, aplicar fade-out y borrar
                         row.style.transition = 'transform 0.3s ease, opacity 0.5s ease';
                         row.style.opacity = '0';
 
@@ -179,13 +175,17 @@ document.addEventListener('DOMContentLoaded', () => {
                             deleteItem(row.dataset.itemId);
                         }, 500); // Coincide con la duración de la animación de opacidad
                     } else {
-                        // Si el usuario cancela, rebotar a la posición original
+                        // Si el usuario cancela, rebotar a la posición original y restablecer opacidad
+                        row.style.transition = 'transform 0.3s ease'; // Solo transform para el rebote
                         row.style.transform = 'translateX(0)';
+                        row.style.opacity = '1'; // Asegurar que la opacidad vuelve a 1
                     }
 
                 } else {
-                    // Si no, rebotar a la posición original
+                    // Si no, rebotar a la posición original y restablecer opacidad
+                    row.style.transition = 'transform 0.3s ease'; // Solo transform para el rebote
                     row.style.transform = 'translateX(0)';
+                    row.style.opacity = '1'; // Asegurar que la opacidad vuelve a 1
                 }
                 isSwipeActive = false;
             });
@@ -407,7 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Mostrar el hash del commit
-    const commitHash = 'd35843e'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
+    const commitHash = '4f8c080'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
     const commitHashDisplay = document.getElementById('commit-hash-display');
     if (commitHashDisplay) {
         commitHashDisplay.textContent = `v: ${commitHash}`;
