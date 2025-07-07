@@ -90,8 +90,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         itemsToRender.forEach(item => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'product-row-wrapper';
+
             const productRow = document.createElement('div');
             productRow.className = 'product-row';
+            productRow.dataset.itemId = item.id; // Guardamos el ID para futuras acciones
 
             const colorClass = supermarketColorClasses[item.supermercado] || '';
 
@@ -102,7 +106,71 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="product-cell price-per-unit">${item.precioPorUnidad ? item.precioPorUnidad + item.unidadPrecioPorUnidad : '-'}</div>
                 <div class="product-cell avg-price">${item.precioMedio ? item.precioMedio + '€' : '-'}</div>
             `;
-            itemList.appendChild(productRow);
+
+            const deleteButton = document.createElement('div');
+            deleteButton.className = 'delete-button';
+            deleteButton.innerHTML = '<i class="bi bi-trash"></i> Delete';
+
+            wrapper.appendChild(productRow);
+            wrapper.appendChild(deleteButton);
+            itemList.appendChild(wrapper);
+        });
+
+        initializeSwipeGestures(); // Inicializar gestos después de renderizar
+    };
+
+    // Función para inicializar los gestos de swipe en las filas
+    const initializeSwipeGestures = () => {
+        const rows = document.querySelectorAll('.product-row');
+        rows.forEach(row => {
+            const mc = new Hammer.Manager(row);
+            mc.add(new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 10 }));
+
+            let lastPosX = 0;
+            let isSwipeActive = false;
+
+            mc.on('panstart', (ev) => {
+                // Activar el swipe solo si se inicia en el 30% derecho de la fila
+                const rowWidth = row.offsetWidth;
+                const startX = ev.srcEvent.clientX || ev.srcEvent.touches[0].clientX;
+                const rowRightEdge = row.getBoundingClientRect().right;
+                
+                if (rowRightEdge - startX > rowWidth * 0.3) {
+                    isSwipeActive = false;
+                    return;
+                }
+                isSwipeActive = true;
+                row.classList.add('swiping');
+            });
+
+            mc.on('panleft panright', (ev) => {
+                if (!isSwipeActive) return;
+                // Mover la fila con el dedo/ratón, pero solo hacia la izquierda
+                const newPosX = Math.min(0, ev.deltaX);
+                row.style.transform = `translateX(${newPosX}px)`;
+                lastPosX = newPosX;
+            });
+
+            mc.on('panend', (ev) => {
+                if (!isSwipeActive) return;
+                row.classList.remove('swiping');
+                
+                const deleteButtonWidth = 100; // Ancho del botón de borrado
+
+                // Si el swipe es suficientemente largo y rápido, se considera borrado
+                if (lastPosX < -deleteButtonWidth * 0.5 || ev.velocityX < -0.5) {
+                    // Animar hasta el final y luego borrar
+                    row.style.transform = `translateX(-${deleteButtonWidth}px)`;
+                    // Aquí iría la lógica para borrar el item de la base de datos
+                    console.log('Item borrado:', row.dataset.itemId); 
+                    // Por ahora, solo lo mostramos en consola.
+                    // Para una implementación real, llamaríamos a una función deleteItem(row.dataset.itemId)
+                } else {
+                    // Si no, rebotar a la posición original
+                    row.style.transform = 'translateX(0)';
+                }
+                isSwipeActive = false;
+            });
         });
     };
 
@@ -111,7 +179,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = snapshot.val();
         if (data) {
             // Convertir objeto a array y ordenar por fecha para obtener la unidad más reciente
-            allItems = Object.values(data).sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+            allItems = Object.keys(data).map(key => ({
+                id: key, // Guardar la clave de Firebase como ID
+                ...data[key]
+            })).sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
             
             // Calcular precios medios y actualizar sugerencias de productos y unidades
             const productPrices = {}; // { producto: { total: 0, count: 0 } }
@@ -309,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Mostrar el hash del commit
-    const commitHash = 'b011b5c'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
+    const commitHash = '6f2abda'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
     const commitHashDisplay = document.getElementById('commit-hash-display');
     if (commitHashDisplay) {
         commitHashDisplay.textContent = `v: ${commitHash}`;
