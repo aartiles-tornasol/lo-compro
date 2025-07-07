@@ -123,13 +123,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const initializeSwipeGestures = () => {
         const rows = document.querySelectorAll('.product-row');
         rows.forEach(row => {
-            const mc = new Hammer.Manager(row);
-            mc.add(new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 10 }));
+            // Prevenir inicialización múltiple si ya existe un manejador
+            if (row.hammer) return;
+            row.hammer = new Hammer.Manager(row);
+            row.hammer.add(new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 10 }));
 
             let lastPosX = 0;
             let isSwipeActive = false;
 
-            mc.on('panstart', (ev) => {
+            row.hammer.on('panstart', (ev) => {
                 // Activar el swipe solo si se inicia en el 30% derecho de la fila
                 const rowWidth = row.offsetWidth;
                 const startX = ev.srcEvent.clientX || ev.srcEvent.touches[0].clientX;
@@ -143,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 row.classList.add('swiping');
             });
 
-            mc.on('panleft panright', (ev) => {
+            row.hammer.on('panleft panright', (ev) => {
                 if (!isSwipeActive) return;
                 // Mover la fila con el dedo/ratón, pero solo hacia la izquierda
                 const newPosX = Math.min(0, ev.deltaX);
@@ -151,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 lastPosX = newPosX;
             });
 
-            mc.on('panend', (ev) => {
+            row.hammer.on('panend', (ev) => {
                 if (!isSwipeActive) return;
                 row.classList.remove('swiping');
                 
@@ -161,10 +163,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (lastPosX < -deleteButtonWidth * 0.5 || ev.velocityX < -0.5) {
                     // Animar hasta el final y luego borrar
                     row.style.transform = `translateX(-${deleteButtonWidth}px)`;
-                    // Aquí iría la lógica para borrar el item de la base de datos
-                    console.log('Item borrado:', row.dataset.itemId); 
-                    // Por ahora, solo lo mostramos en consola.
-                    // Para una implementación real, llamaríamos a una función deleteItem(row.dataset.itemId)
+                    
+                    // Añadir una transición para el fade-out
+                    row.style.transition = 'transform 0.3s ease, opacity 0.5s ease';
+                    row.style.opacity = '0';
+
+                    // Esperar a que la animación de fade-out termine antes de borrar
+                    setTimeout(() => {
+                        deleteItem(row.dataset.itemId);
+                    }, 500); // Coincide con la duración de la animación de opacidad
+
                 } else {
                     // Si no, rebotar a la posición original
                     row.style.transform = 'translateX(0)';
@@ -172,6 +180,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 isSwipeActive = false;
             });
         });
+    };
+
+    // Función para borrar un item de Firebase
+    const deleteItem = (itemId) => {
+        if (!itemId) return;
+        itemsRef.child(itemId).remove()
+            .catch((error) => {
+                console.error("Error al eliminar el item:", error);
+            });
     };
 
     // Escuchar cambios en la base de datos en tiempo real
@@ -380,7 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Mostrar el hash del commit
-    const commitHash = '6f2abda'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
+    const commitHash = '12456ad'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
     const commitHashDisplay = document.getElementById('commit-hash-display');
     if (commitHashDisplay) {
         commitHashDisplay.textContent = `v: ${commitHash}`;
