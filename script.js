@@ -15,9 +15,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const productInput = document.getElementById('producto');
     const productSuggestions = document.getElementById('product-suggestions');
     const unitSelect = document.getElementById('unidad');
+    const addButton = form.querySelector('button[type="submit"]');
 
     // Establecer 'ud' como valor por defecto para la unidad
     unitSelect.value = 'ud';
+
+    // Función para validar el formulario y habilitar/deshabilitar el botón de añadir
+    const validateForm = () => {
+        const isProductValid = productInput.value.trim() !== '';
+        const isPriceValid = parseFloat(document.getElementById('precio').value) > 0;
+        const isQuantityValid = parseFloat(document.getElementById('cantidad').value) > 0;
+        const isUnitValid = unitSelect.value.trim() !== '';
+
+        if (isProductValid && isPriceValid && isQuantityValid && isUnitValid) {
+            addButton.disabled = false;
+        } else {
+            addButton.disabled = true;
+        }
+    };
+
+    // Llamar a la validación al cargar la página
+    validateForm();
+
+    // Llamar a la validación en cada cambio de los campos relevantes
+    productInput.addEventListener('input', validateForm);
+    document.getElementById('precio').addEventListener('input', validateForm);
+    document.getElementById('cantidad').addEventListener('input', validateForm);
+    unitSelect.addEventListener('change', validateForm);
 
     let allItems = []; // Para guardar todos los items y poder filtrar
     let productUnits = {}; // Para guardar la última unidad usada por producto
@@ -295,6 +319,8 @@ document.addEventListener('DOMContentLoaded', () => {
         itemsRef.push(newItem);
 
         form.reset(); // Limpiamos el formulario
+        unitSelect.value = 'ud'; // Restablecer la unidad a 'ud'
+        validateForm(); // Validar el formulario después de resetear
         addItemCard.style.display = 'none'; // Ocultar el formulario después de añadir
         toggleFormBtn.style.display = 'flex'; // Mostrar el botón FAB
 
@@ -410,7 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Mostrar el hash del commit
-    const commitHash = '9250cf8'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
+    const commitHash = 'e294b92'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
     const commitHashDisplay = document.getElementById('commit-hash-display');
     if (commitHashDisplay) {
         commitHashDisplay.textContent = `v: ${commitHash}`;
