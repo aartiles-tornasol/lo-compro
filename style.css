@@ -92,6 +92,28 @@
 .color-primor { background-color: #8A2BE2; }
 .color-druni { background-color: #00CED1; }
 
+/* Estilos para el botón flotante (FAB) */
+.fab-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: auto; /* Ancho automático para el texto */
+    min-width: 100px; /* Ancho mínimo */
+    height: 56px; /* Altura estándar para FABs rectangulares */
+    border-radius: 28px; /* La mitad de la altura para esquinas redondeadas */
+    background-color: #007bff;
+    color: white;
+    font-size: 1.2rem; /* Tamaño de fuente ajustado */
+    padding: 0 20px; /* Espaciado interno */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 1000;
+}
+
 /* Estilos para el swipe y el botón de borrado */
 .product-row-wrapper {
     position: relative; /* Contenedor necesario para posicionar el botón de borrado */
