@@ -168,10 +168,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     row.style.transition = 'transform 0.3s ease, opacity 0.5s ease';
                     row.style.opacity = '0';
 
-                    // Esperar a que la animación de fade-out termine antes de borrar
-                    setTimeout(() => {
-                        deleteItem(row.dataset.itemId);
-                    }, 500); // Coincide con la duración de la animación de opacidad
+                    // Preguntar al usuario antes de borrar
+                    if (confirm('¿Estás seguro de que quieres borrar este registro?')) {
+                        // Añadir una transición para el fade-out
+                        row.style.transition = 'transform 0.3s ease, opacity 0.5s ease';
+                        row.style.opacity = '0';
+
+                        // Esperar a que la animación de fade-out termine antes de borrar
+                        setTimeout(() => {
+                            deleteItem(row.dataset.itemId);
+                        }, 500); // Coincide con la duración de la animación de opacidad
+                    } else {
+                        // Si el usuario cancela, rebotar a la posición original
+                        row.style.transform = 'translateX(0)';
+                    }
 
                 } else {
                     // Si no, rebotar a la posición original
@@ -397,7 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Mostrar el hash del commit
-    const commitHash = '71c7b3f'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
+    const commitHash = 'd35843e'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
     const commitHashDisplay = document.getElementById('commit-hash-display');
     if (commitHashDisplay) {
         commitHashDisplay.textContent = `v: ${commitHash}`;
