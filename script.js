@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const productSuggestions = document.getElementById('product-suggestions');
     const unitSelect = document.getElementById('unidad');
 
+    // Establecer 'ud' como valor por defecto para la unidad
+    unitSelect.value = 'ud';
+
     let allItems = []; // Para guardar todos los items y poder filtrar
     let productUnits = {}; // Para guardar la última unidad usada por producto
 
@@ -407,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Mostrar el hash del commit
-    const commitHash = '0e6d95c'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
+    const commitHash = '9250cf8'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
     const commitHashDisplay = document.getElementById('commit-hash-display');
     if (commitHashDisplay) {
         commitHashDisplay.textContent = `v: ${commitHash}`;
