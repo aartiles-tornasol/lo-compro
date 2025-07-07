@@ -1,3 +1,4 @@
+
 /* Nuevos estilos para la tabla de productos */
 #product-list-container {
     border: 1px solid #dee2e6;
@@ -204,3 +205,4 @@
 .product-row.swiping + .delete-button {
     transform: translateX(0); /* Muestra el botón cuando se está deslizando */
 }
+
