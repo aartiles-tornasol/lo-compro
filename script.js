@@ -42,10 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
     productInput.addEventListener('input', validateForm);
     document.getElementById('precio').addEventListener('input', validateForm);
     document.getElementById('cantidad').addEventListener('input', validateForm);
-    unitSelect.addEventListener('change', validateForm);
-
-    // Listener para mover el foco a la cantidad después de seleccionar la unidad
+    // Listener para validar y mover el foco al cambiar la unidad
     unitSelect.addEventListener('change', () => {
+        validateForm();
         document.getElementById('cantidad').focus();
     });
 
