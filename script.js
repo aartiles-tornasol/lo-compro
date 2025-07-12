@@ -150,8 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="product-row-color-indicator ${colorClass}"></div>
                 <div class="product-cell name">${item.producto}</div>
                 <div class="product-cell price">${formatPriceTwoDecimals(parsePrice(item.precio))}€</div>
-                <div class="product-cell price-per-unit">${formatPrice(item.precioPorUnidad)}${item.unidadPrecioPorUnidad ? item.unidadPrecioPorUnidad.replace('€','') : ''}</div>
-                <div class="product-cell avg-price">${formatPrice(item.precioMedio)}€</div>
+                <div class="product-cell price-per-unit">${formatPrice(item.precioPorUnidad)}${item.unidadPrecioPorUnidad || ''}</div>
+                <div class="product-cell avg-price">${formatPrice(item.precioMedio)}${item.unidadPrecioPorUnidad || ''}</div>
             `;
 
             const editButton = document.createElement('div');
@@ -328,8 +328,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 ...data[key]
             })).sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
             
-            // Calcular precios medios y actualizar sugerencias de productos y unidades
-            const productPrices = {}; // { producto: { total: 0, count: 0 } }
+            // --- Nuevo cálculo de precios medios ---
+            const productPrices = {}; // { "producto-unidad": { total: 0, count: 0 } }
             productUnits = {};
             const productNames = new Set();
 
@@ -340,20 +340,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     productUnits[item.producto] = item.unidad;
                 }
 
-                // Acumular precios por unidad para el cálculo del precio medio
+                // Acumular precios por unidad, agrupando por producto Y unidad
                 if (item.precioPorUnidad !== null && item.precioPorUnidad > 0) {
-                    if (!productPrices[item.producto]) {
-                        productPrices[item.producto] = { total: 0, count: 0 };
+                    const groupKey = `${item.producto}-${item.unidadPrecioPorUnidad}`;
+                    if (!productPrices[groupKey]) {
+                        productPrices[groupKey] = { total: 0, count: 0 };
                     }
-                    productPrices[item.producto].total += item.precioPorUnidad;
-                    productPrices[item.producto].count++;
+                    productPrices[groupKey].total += item.precioPorUnidad;
+                    productPrices[groupKey].count++;
                 }
             });
 
             // Añadir el precio medio a cada item
             allItems.forEach(item => {
-                if (productPrices[item.producto] && productPrices[item.producto].count > 0) {
-                    item.precioMedio = parseFloat((productPrices[item.producto].total / productPrices[item.producto].count).toFixed(2));
+                const groupKey = `${item.producto}-${item.unidadPrecioPorUnidad}`;
+                if (productPrices[groupKey] && productPrices[groupKey].count > 0) {
+                    item.precioMedio = parseFloat((productPrices[groupKey].total / productPrices[groupKey].count).toFixed(2));
                 } else {
                     item.precioMedio = null;
                 }
