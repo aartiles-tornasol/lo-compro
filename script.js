@@ -446,6 +446,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Lógica para cerrar el formulario con el botón 'x'
     closeFormBtn.addEventListener('click', () => {
+        form.reset(); // Limpiar los campos del formulario
+        unitSelect.value = 'ud'; // Asegurar que la unidad por defecto se restablece
+        validateForm(); // Revalidar el formulario (lo deshabilitará)
         addItemCard.style.display = 'none';
         toggleFormBtn.style.display = 'flex'; // Muestra el botón FAB
         productoSeleccionadoParaClonar = null; // Limpiar el producto clonado
