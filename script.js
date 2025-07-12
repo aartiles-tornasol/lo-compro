@@ -70,6 +70,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return price.toFixed(1).replace('.', ',');
     };
 
+    // Función para formatear un número como precio con dos decimales y coma
+    const formatPriceTwoDecimals = (price) => {
+        if (price === null || isNaN(price)) return '-';
+        return price.toFixed(2).replace('.', ',');
+    };
+
     // Función para calcular el precio por unidad
     const calculatePricePerUnit = (price, quantity, unit) => {
         if (price === null || quantity === null || quantity === 0) {
@@ -137,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
             productRow.innerHTML = `
                 <div class="product-row-color-indicator ${colorClass}"></div>
                 <div class="product-cell name">${item.producto}</div>
-                <div class="product-cell price">${formatPrice(parsePrice(item.precio))}€</div>
+                <div class="product-cell price">${formatPriceTwoDecimals(parsePrice(item.precio))}€</div>
                 <div class="product-cell price-per-unit">${formatPrice(item.precioPorUnidad)}${item.unidadPrecioPorUnidad ? item.unidadPrecioPorUnidad.replace('€','') : ''}</div>
                 <div class="product-cell avg-price">${formatPrice(item.precioMedio)}€</div>
             `;
