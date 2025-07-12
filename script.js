@@ -232,6 +232,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             row.hammer.on('panstart', (ev) => {
                 // Resetear otras filas abiertas
+                document.querySelectorAll('.product-row-wrapper').forEach(otherWrapper => {
+                    otherWrapper.classList.remove('show-edit', 'show-delete');
+                });
                 document.querySelectorAll('.product-row').forEach(otherRow => {
                     if (otherRow !== row) otherRow.style.transform = 'translateX(0)';
                 });
@@ -242,8 +245,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (startX - rowRect.left < rowWidth * 0.3) {
                     swipeDirection = 'right'; // Para editar
+                    wrapper.classList.add('show-edit');
                 } else if (rowRect.right - startX < rowWidth * 0.3) {
                     swipeDirection = 'left'; // Para borrar
+                    wrapper.classList.add('show-delete');
                 } else {
                     swipeDirection = null;
                 }
@@ -292,6 +297,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
                 swipeDirection = null;
+                // Quitar las clases de visibilidad al final del gesto
+                setTimeout(() => wrapper.classList.remove('show-edit', 'show-delete'), 300);
             });
         });
     };

@@ -201,6 +201,12 @@
     align-items: center;
     justify-content: center;
     z-index: 0;
+    visibility: hidden; /* Oculto por defecto */
+}
+
+.product-row-wrapper.show-edit .edit-button,
+.product-row-wrapper.show-delete .delete-button {
+    visibility: visible; /* Mostrar el botón correspondiente */
 }
 
 .edit-button {
