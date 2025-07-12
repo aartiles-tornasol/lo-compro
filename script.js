@@ -26,8 +26,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const isPriceValid = parseFloat(document.getElementById('precio').value) > 0;
         const isQuantityValid = parseFloat(document.getElementById('cantidad').value) > 0;
         const isUnitValid = unitSelect.value.trim() !== '';
+        const isSupermarketSelected = supermarketSelect.value.trim() !== '';
 
-        if (isProductValid && isPriceValid && isQuantityValid && isUnitValid) {
+        if (isProductValid && isPriceValid && isQuantityValid && isUnitValid && isSupermarketSelected) {
             addButton.disabled = false;
         } else {
             addButton.disabled = true;
@@ -364,6 +365,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Guardar en localStorage
             localStorage.setItem('lastSupermarket', selectedSupermarket);
+
+            // Validar el formulario para habilitar el botón si todo está completo
+            validateForm();
 
             // Mover el foco al siguiente campo (producto)
             productInput.focus();
