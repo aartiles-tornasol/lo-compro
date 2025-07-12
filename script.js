@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     unitSelect.addEventListener('change', validateForm);
 
     let allItems = []; // Para guardar todos los items y poder filtrar
+    let itemsMostrados = []; // Para guardar los items que se están mostrando (filtrados o todos)
     let productUnits = {}; // Para guardar la última unidad usada por producto
 
     // Función para formatear la fecha para mostrar
@@ -352,6 +353,8 @@ document.addEventListener('DOMContentLoaded', () => {
             allItems = [];
             productUnits = {};
         }
+        // Al cargar, los items mostrados son todos los items
+        itemsMostrados = [...allItems];
         // Renderizar los items iniciales (sin filtro)
         sortAndRenderItems(); // Llamar a la función de ordenación para renderizar
     });
@@ -416,11 +419,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Lógica de búsqueda/filtrado
     searchInput.addEventListener('input', (e) => {
         const searchTerm = e.target.value.toLowerCase();
-        const filteredItems = allItems.filter(item => 
-            item.producto.toLowerCase().includes(searchTerm) ||
-            (item.supermercado && item.supermercado.toLowerCase().includes(searchTerm))
-        );
-        renderItems(filteredItems);
+        if (searchTerm) {
+            itemsMostrados = allItems.filter(item => 
+                item.producto.toLowerCase().includes(searchTerm) ||
+                (item.supermercado && item.supermercado.toLowerCase().includes(searchTerm))
+            );
+        } else {
+            itemsMostrados = [...allItems]; // Si no hay búsqueda, mostrar todos
+        }
+        renderItems(itemsMostrados);
     });
 
     // Lógica para los botones de supermercado
@@ -553,7 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para ordenar y renderizar los items
     const sortAndRenderItems = () => {
-        const sortedItems = [...allItems].sort((a, b) => {
+        const sortedItems = [...itemsMostrados].sort((a, b) => {
             let valA = a[currentSortColumn];
             let valB = b[currentSortColumn];
 
