@@ -455,6 +455,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Listener para hacer clic en el nombre de un producto y filtrarlo
+    itemList.addEventListener('click', (e) => {
+        const target = e.target;
+        // Comprobar si el clic fue en la celda del nombre
+        if (target && target.classList.contains('name')) {
+            const productName = target.textContent;
+            searchInput.value = productName;
+            // Disparar un evento 'input' para que se active la lógica de filtrado
+            searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+    });
+
     
 
     // Lógica para la navegación con Enter en el formulario
