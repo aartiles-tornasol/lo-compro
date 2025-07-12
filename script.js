@@ -521,7 +521,7 @@ document.addEventListener('DOMContentLoaded', () => {
     validateForm();
 
     // Mostrar el hash del commit
-    const commitHash = 'b6b1558'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
+    const commitHash = 'f243057'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
     const commitHashDisplay = document.getElementById('commit-hash-display');
     if (commitHashDisplay) {
         commitHashDisplay.textContent = `v: ${commitHash}`;
