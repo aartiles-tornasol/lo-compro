@@ -44,6 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('cantidad').addEventListener('input', validateForm);
     unitSelect.addEventListener('change', validateForm);
 
+    // Listener para mover el foco a la cantidad después de seleccionar la unidad
+    unitSelect.addEventListener('change', () => {
+        document.getElementById('cantidad').focus();
+    });
+
     let allItems = []; // Para guardar todos los items y poder filtrar
     let itemsMostrados = []; // Para guardar los items que se están mostrando (filtrados o todos)
     let productoSeleccionadoParaClonar = null; // Para guardar el último producto clicado
