@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let allItems = []; // Para guardar todos los items y poder filtrar
     let itemsMostrados = []; // Para guardar los items que se están mostrando (filtrados o todos)
+    let productoSeleccionadoParaClonar = null; // Para guardar el último producto clicado
     let productUnits = {}; // Para guardar la última unidad usada por producto
 
     // Función para formatear la fecha para mostrar
@@ -415,14 +416,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Lógica para mostrar/ocultar el formulario
     toggleFormBtn.addEventListener('click', () => {
+        if (productoSeleccionadoParaClonar) {
+            // Rellenar el formulario con los datos del producto clonado
+            productInput.value = productoSeleccionadoParaClonar.producto;
+            document.getElementById('precio').value = parsePrice(productoSeleccionadoParaClonar.precio);
+            document.getElementById('cantidad').value = productoSeleccionadoParaClonar.cantidad;
+            unitSelect.value = productoSeleccionadoParaClonar.unidad;
+            supermarketSelect.value = productoSeleccionadoParaClonar.supermercado;
+
+            // Marcar el botón de supermercado correcto
+            supermarketButtons.forEach(btn => {
+                if (btn.dataset.supermercado === productoSeleccionadoParaClonar.supermercado) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+        }
+        
         addItemCard.style.display = 'block'; // Siempre abre el formulario
         toggleFormBtn.style.display = 'none'; // Oculta el botón FAB
+        validateForm(); // Validar por si el formulario ya es válido
     });
 
     // Lógica para cerrar el formulario con el botón 'x'
     closeFormBtn.addEventListener('click', () => {
         addItemCard.style.display = 'none';
         toggleFormBtn.style.display = 'flex'; // Muestra el botón FAB
+        productoSeleccionadoParaClonar = null; // Limpiar el producto clonado
         // Deseleccionar el botón de supermercado
         supermarketButtons.forEach(btn => btn.classList.remove('selected'));
     });
@@ -467,6 +488,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const target = e.target;
         // Comprobar si el clic fue en la celda del nombre
         if (target && target.classList.contains('name')) {
+            const productRow = target.closest('.product-row');
+            const itemId = productRow.dataset.itemId;
+            productoSeleccionadoParaClonar = allItems.find(item => item.id === itemId);
+
             const productName = target.textContent;
             searchInput.value = productName;
             // Disparar un evento 'input' para que se active la lógica de filtrado
@@ -524,6 +549,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     clearSearchBtn.addEventListener('click', () => {
         searchInput.value = '';
+        productoSeleccionadoParaClonar = null; // Limpiar el producto clonado
         searchInput.dispatchEvent(new Event('input')); // Disparar evento input para actualizar la lista y ocultar la X
     });
 
