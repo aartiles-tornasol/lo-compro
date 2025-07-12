@@ -4,14 +4,18 @@ Este proyecto se gestionará utilizando un repositorio en GitHub. El usuario tie
 
 ## Descripción del Proyecto
 
-El objetivo es desarrollar una aplicación web sencilla, diseñada con un enfoque "mobile-first" para asegurar una excelente visualización y funcionalidad en dispositivos móviles.
+El objetivo es desarrollar una aplicación web sencilla, diseñada con un enfoque "mobile-first" para asegurar una excelente visualización y funcionalidad en dispositivos móviles. La aplicación permite llevar un registro de precios de productos de supermercado.
 
-### Tecnologías Propuestas
+## Arquitectura y Flujo de Datos
 
-*   **Frontend:** HTML, CSS (con Bootstrap para diseño responsivo), JavaScript.
-*   **Backend:** Hoja de cálculo de Google (Google Sheet).
-*   **Conectividad Backend:** Google Apps Script para lectura y escritura.
-*   **Diseño:** Prioridad en la adaptabilidad y la experiencia de usuario en pantallas pequeñas.
+*   **Frontend:** La aplicación está construida con HTML, CSS (utilizando Bootstrap para el diseño responsivo) y JavaScript nativo. La interfaz es una Single Page Application (SPA) que se actualiza dinámicamente.
+*   **Backend (Base de Datos):** Se utiliza **Firebase Realtime Database** para almacenar y sincronizar los datos de los productos en tiempo real.
+*   **Configuración:** Las credenciales y la configuración de la conexión a Firebase se encuentran en el archivo `config.js`.
+*   **Lógica de la Aplicación:** El archivo `script.js` contiene toda la lógica para inicializar Firebase, gestionar los datos (añadir, leer, eliminar), renderizar la interfaz y manejar toda la interacción del usuario.
+
+## Despliegue
+
+*   **Despliegue:** La aplicación se despliega en GitHub Pages.
 
 ## Problemas Recurrentes y Lecciones Aprendidas
 
@@ -19,4 +23,4 @@ El objetivo es desarrollar una aplicación web sencilla, diseñada con un enfoqu
 
 - **Caché de CSS:** Los cambios en `style.css` a veces no se reflejan inmediatamente debido a la caché del navegador. Es fundamental añadir un parámetro de versión (`?v=HASH_DEL_COMMIT`) al enlace de `style.css` en `index.html` para forzar la recarga del archivo y asegurar que los estilos más recientes se apliquen correctamente.
 
-- **Estilos de botones de supermercado (círculos):** Los botones de selección de supermercado (clase `.supermarket-btn`) pierden su forma circular y estilos de tamaño/color. Esto puede deberse a conflictos de especificidad con las reglas de Bootstrap o a la sobrescritura por otras reglas CSS. Es vital asegurar que las propiedades `width`, `height`, `border-radius`, `display`, `justify-content`, `align-items`, `font-weight`, `color`, `border`, `transition` y `font-size` se apliquen correctamente, posiblemente requiriendo mayor especificidad o el uso de `!important` como medida temporal para diagnóstico.
+- **Estilos de botones de supermercado (círculos):** Los botones de selección de supermercado (clase `.supermarket-btn`) pierden su forma circular y estilos de tamaño/color. Esto puede deberse a conflictos de especificidad con las reglas de Bootstrap o a la sobrescritadura por otras reglas CSS. Es vital asegurar que las propiedades `width`, `height`, `border-radius`, `display`, `justify-content`, `align-items`, `font-weight`, `color`, `border`, `transition` y `font-size` se apliquen correctamente, posiblemente requiriendo mayor especificidad o el uso de `!important` como medida temporal para diagnóstico.
