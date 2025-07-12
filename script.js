@@ -315,13 +315,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     productUnits[item.producto] = item.unidad;
                 }
 
-                // Acumular precios para el cálculo del precio medio
-                const parsedPrice = parsePrice(item.precio);
-                if (parsedPrice !== null) {
+                // Acumular precios por unidad para el cálculo del precio medio
+                if (item.precioPorUnidad !== null && item.precioPorUnidad > 0) {
                     if (!productPrices[item.producto]) {
                         productPrices[item.producto] = { total: 0, count: 0 };
                     }
-                    productPrices[item.producto].total += parsedPrice;
+                    productPrices[item.producto].total += item.precioPorUnidad;
                     productPrices[item.producto].count++;
                 }
             });
