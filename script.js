@@ -258,10 +258,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (swipeDirection === 'right') { // Lógica para Editar
                     if (lastPosX > buttonWidth / 2 || ev.velocityX > 0.5) {
-                        row.style.transform = `translateX(${buttonWidth}px)`; // Dejar abierto
-                    } else {
-                        row.style.transform = 'translateX(0)'; // Volver a la posición inicial
+                        populateFormForEdit(row.dataset.itemId);
                     }
+                    row.style.transform = 'translateX(0)'; // Volver a la posición inicial
                 } else { // Lógica para Borrar (la original)
                     if (lastPosX < -buttonWidth / 2 || ev.velocityX < -0.5) {
                         row.style.transform = `translateX(-${buttonWidth}px)`;
@@ -281,12 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
                 swipeDirection = null;
-            });
-
-            // Añadir el listener para el click en el botón de editar
-            editButton.addEventListener('click', () => {
-                populateFormForEdit(row.dataset.itemId); 
-                row.style.transform = 'translateX(0)'; // Cerrar la fila después de hacer clic
             });
         });
     };
