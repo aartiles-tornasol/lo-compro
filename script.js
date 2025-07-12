@@ -64,6 +64,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return isNaN(parsed) ? null : parsed;
     };
 
+    // Función para formatear un número como precio con un decimal y coma
+    const formatPrice = (price) => {
+        if (price === null || isNaN(price)) return '-';
+        return price.toFixed(1).replace('.', ',');
+    };
+
     // Función para calcular el precio por unidad
     const calculatePricePerUnit = (price, quantity, unit) => {
         if (price === null || quantity === null || quantity === 0) {
@@ -131,9 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
             productRow.innerHTML = `
                 <div class="product-row-color-indicator ${colorClass}"></div>
                 <div class="product-cell name">${item.producto}</div>
-                <div class="product-cell price">${item.precio ? item.precio + '€' : '-'}</div>
-                <div class="product-cell price-per-unit">${item.precioPorUnidad ? item.precioPorUnidad + item.unidadPrecioPorUnidad : '-'}</div>
-                <div class="product-cell avg-price">${item.precioMedio ? item.precioMedio + '€' : '-'}</div>
+                <div class="product-cell price">${formatPrice(parsePrice(item.precio))}€</div>
+                <div class="product-cell price-per-unit">${formatPrice(item.precioPorUnidad)}${item.unidadPrecioPorUnidad ? item.unidadPrecioPorUnidad.replace('€','') : ''}</div>
+                <div class="product-cell avg-price">${formatPrice(item.precioMedio)}€</div>
             `;
 
             const editButton = document.createElement('div');
