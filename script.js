@@ -427,17 +427,21 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInput.dispatchEvent(new Event('input')); // Disparar evento input para actualizar la lista y ocultar la X
     });
 
-    // Cargar el último supermercado seleccionado al iniciar
-    const lastSupermarket = localStorage.getItem('lastSupermarket');
-    if (lastSupermarket) {
-        supermarketSelect.value = lastSupermarket;
-        // Marcar el botón correspondiente
-        supermarketButtons.forEach(btn => {
-            if (btn.dataset.supermercado === lastSupermarket) {
-                btn.classList.add('selected');
-            }
-        });
+    // Cargar el último supermercado seleccionado o establecer Mercadona por defecto
+    let lastSupermarket = localStorage.getItem('lastSupermarket');
+    if (!lastSupermarket) {
+        lastSupermarket = 'Mercadona'; // Establecer Mercadona como valor por defecto
     }
+
+    supermarketSelect.value = lastSupermarket;
+    // Marcar el botón correspondiente
+    supermarketButtons.forEach(btn => {
+        if (btn.dataset.supermercado === lastSupermarket) {
+            btn.classList.add('selected');
+        }
+    });
+    // Validar el formulario por si acaso la selección por defecto ya lo hace válido
+    validateForm();
 
     // Mostrar el hash del commit
     const commitHash = '86e0406'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
