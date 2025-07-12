@@ -169,10 +169,10 @@
     background-color: #00CED1 !important; /* Celeste (DarkTurquoise) */
 }
 
-/* Estilos para el swipe y el botón de borrado */
+/* Estilos para el swipe y los botones de acción */
 .product-row-wrapper {
-    position: relative; /* Contenedor necesario para posicionar el botón de borrado */
-    overflow: hidden; /* Oculta el botón de borrado fuera de la vista */
+    position: relative;
+    overflow: hidden;
 }
 
 .product-row {
@@ -181,28 +181,35 @@
     border-bottom: 1px solid #eee;
     padding: 0.5rem 0;
     background-color: #fff;
-    position: relative; /* Para que el swipe funcione correctamente */
-    z-index: 1; /* Asegura que la fila esté por encima del botón de borrado */
-    transition: transform 0.3s ease; /* Animación para el rebote */
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
 }
 
-.delete-button {
+/* Desactiva la transición durante el swipe para un movimiento instantáneo */
+.product-row.swiping {
+    transition: none;
+}
+
+.edit-button, .delete-button {
     position: absolute;
     top: 0;
-    right: 0;
     bottom: 0;
-    width: 100px; /* Ancho del botón de borrado */
-    background-color: #dc3545; /* Color rojo para la acción de borrado */
+    width: 100px;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 0; /* Detrás de la fila */
-    transform: translateX(100%); /* Oculto a la derecha por defecto */
-    transition: transform 0.3s ease;
+    z-index: 0;
 }
 
-.product-row.swiping + .delete-button {
-    transform: translateX(0); /* Muestra el botón cuando se está deslizando */
+.edit-button {
+    left: 0;
+    background-color: #007bff; /* Azul para editar */
+}
+
+.delete-button {
+    right: 0;
+    background-color: #dc3545; /* Rojo para borrar */
 }
 

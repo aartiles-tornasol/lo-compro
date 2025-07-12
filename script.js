@@ -135,11 +135,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="product-cell avg-price">${item.precioMedio ? item.precioMedio + '€' : '-'}</div>
             `;
 
+            const editButton = document.createElement('div');
+            editButton.className = 'edit-button';
+            editButton.innerHTML = '<i class="bi bi-pencil"></i> Edit';
+
             const deleteButton = document.createElement('div');
             deleteButton.className = 'delete-button';
             deleteButton.innerHTML = '<i class="bi bi-trash"></i> Delete';
 
             wrapper.appendChild(productRow);
+            wrapper.appendChild(editButton);
             wrapper.appendChild(deleteButton);
             itemList.appendChild(wrapper);
         });
@@ -147,75 +152,140 @@ document.addEventListener('DOMContentLoaded', () => {
         initializeSwipeGestures(); // Inicializar gestos después de renderizar
     };
 
+    const editItemModal = new bootstrap.Modal(document.getElementById('edit-item-modal'));
+
+    // Función para poblar el formulario para la edición
+    const populateFormForEdit = (itemId) => {
+        const itemToEdit = allItems.find(item => item.id === itemId);
+        if (!itemToEdit) return;
+
+        // Rellenar los campos del formulario del modal
+        document.getElementById('edit-modal-item-id').value = itemId;
+        document.getElementById('edit-producto').value = itemToEdit.producto;
+        document.getElementById('edit-precio').value = parsePrice(itemToEdit.precio);
+        document.getElementById('edit-cantidad').value = itemToEdit.cantidad;
+        document.getElementById('edit-unidad').value = itemToEdit.unidad;
+        document.getElementById('edit-supermercado').value = itemToEdit.supermercado;
+        // Formatear la fecha para el input type="date" (YYYY-MM-DD)
+        document.getElementById('edit-fecha').value = new Date(itemToEdit.fecha).toISOString().split('T')[0];
+
+        // Mostrar el modal
+        editItemModal.show();
+    };
+
+    // Listener para el botón de guardar cambios en el modal
+    document.getElementById('save-edit-btn').addEventListener('click', () => {
+        const itemId = document.getElementById('edit-modal-item-id').value;
+        if (!itemId) return;
+
+        const rawPrice = document.getElementById('edit-precio').value;
+        const parsedPrice = parsePrice(rawPrice);
+        const quantity = parseFloat(document.getElementById('edit-cantidad').value);
+        const unit = document.getElementById('edit-unidad').value;
+        const fecha = new Date(document.getElementById('edit-fecha').value).toISOString();
+
+        const { value: pricePerUnitValue, unit: pricePerUnitUnit } = calculatePricePerUnit(parsedPrice, quantity, unit);
+
+        const updatedData = {
+            producto: document.getElementById('edit-producto').value,
+            supermercado: document.getElementById('edit-supermercado').value,
+            precio: rawPrice,
+            cantidad: quantity,
+            unidad: unit,
+            fecha: fecha, // Usar la nueva fecha del formulario
+            precioPorUnidad: pricePerUnitValue,
+            unidadPrecioPorUnidad: pricePerUnitUnit
+        };
+
+        itemsRef.child(itemId).update(updatedData);
+
+        editItemModal.hide();
+    });
+
     // Función para inicializar los gestos de swipe en las filas
     const initializeSwipeGestures = () => {
         const rows = document.querySelectorAll('.product-row');
         rows.forEach(row => {
-            // Prevenir inicialización múltiple si ya existe un manejador
-            if (row.hammer) return;
+            if (row.hammer) return; // Prevenir reinicialización
+
+            const wrapper = row.parentElement;
+            const editButton = wrapper.querySelector('.edit-button');
+
             row.hammer = new Hammer.Manager(row);
             row.hammer.add(new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 10 }));
 
             let lastPosX = 0;
-            let isSwipeActive = false;
+            let swipeDirection = null; // 'left' o 'right'
 
             row.hammer.on('panstart', (ev) => {
-                // Activar el swipe solo si se inicia en el 30% derecho de la fila
+                // Resetear otras filas abiertas
+                document.querySelectorAll('.product-row').forEach(otherRow => {
+                    if (otherRow !== row) otherRow.style.transform = 'translateX(0)';
+                });
+
                 const rowWidth = row.offsetWidth;
                 const startX = ev.srcEvent.clientX || ev.srcEvent.touches[0].clientX;
-                const rowRightEdge = row.getBoundingClientRect().right;
-                
-                if (rowRightEdge - startX > rowWidth * 0.3) {
-                    isSwipeActive = false;
-                    return;
+                const rowRect = row.getBoundingClientRect();
+
+                if (startX - rowRect.left < rowWidth * 0.3) {
+                    swipeDirection = 'right'; // Para editar
+                } else if (rowRect.right - startX < rowWidth * 0.3) {
+                    swipeDirection = 'left'; // Para borrar
+                } else {
+                    swipeDirection = null;
                 }
-                isSwipeActive = true;
-                row.classList.add('swiping');
+                // Añadir una clase para deshabilitar transiciones durante el swipe
+                if (swipeDirection) row.classList.add('swiping');
             });
 
-            row.hammer.on('panleft panright', (ev) => {
-                if (!isSwipeActive) return;
-                // Mover la fila con el dedo/ratón, pero solo hacia la izquierda
-                const newPosX = Math.min(0, ev.deltaX);
-                row.style.transform = `translateX(${newPosX}px)`;
-                lastPosX = newPosX;
+            row.hammer.on('panmove', (ev) => {
+                if (!swipeDirection) return;
+                
+                if (swipeDirection === 'right') {
+                    lastPosX = Math.min(100, Math.max(0, ev.deltaX)); // Mover a la derecha
+                } else { // 'left'
+                    lastPosX = Math.max(-100, Math.min(0, ev.deltaX)); // Mover a la izquierda
+                }
+                row.style.transform = `translateX(${lastPosX}px)`;
             });
 
             row.hammer.on('panend', (ev) => {
-                if (!isSwipeActive) return;
+                if (!swipeDirection) return;
                 row.classList.remove('swiping');
                 
-                const deleteButtonWidth = 100; // Ancho del botón de borrado
+                const buttonWidth = 100;
 
-                // Si el swipe es suficientemente largo y rápido, se considera borrado
-                if (lastPosX < -deleteButtonWidth * 0.5 || ev.velocityX < -0.5) {
-                    // Animar hasta el final para mostrar el botón de borrado
-                    row.style.transform = `translateX(-${deleteButtonWidth}px)`;
-
-                    // Preguntar al usuario antes de borrar
-                    if (confirm('¿Estás seguro de que quieres borrar este registro?')) {
-                        // Si el usuario confirma, aplicar fade-out y borrar
-                        row.style.transition = 'transform 0.3s ease, opacity 0.5s ease';
-                        row.style.opacity = '0';
-
-                        // Esperar a que la animación de fade-out termine antes de borrar
-                        setTimeout(() => {
-                            deleteItem(row.dataset.itemId);
-                        }, 500); // Coincide con la duración de la animación de opacidad
+                if (swipeDirection === 'right') { // Lógica para Editar
+                    if (lastPosX > buttonWidth / 2 || ev.velocityX > 0.5) {
+                        row.style.transform = `translateX(${buttonWidth}px)`; // Dejar abierto
                     } else {
-                        // Si el usuario cancela, rebotar a la posición original y restablecer opacidad
-                        row.style.transition = 'transform 0.3s ease'; // Solo transform para el rebote
-                        row.style.transform = 'translateX(0)';
-                        row.style.opacity = '1'; // Asegurar que la opacidad vuelve a 1
+                        row.style.transform = 'translateX(0)'; // Volver a la posición inicial
                     }
-
-                } else {
-                    // Si no, rebotar a la posición original y restablecer opacidad
-                    row.style.transition = 'transform 0.3s ease'; // Solo transform para el rebote
-                    row.style.transform = 'translateX(0)';
-                    row.style.opacity = '1'; // Asegurar que la opacidad vuelve a 1
+                } else { // Lógica para Borrar (la original)
+                    if (lastPosX < -buttonWidth / 2 || ev.velocityX < -0.5) {
+                        row.style.transform = `translateX(-${buttonWidth}px)`;
+                        if (confirm('¿Estás seguro de que quieres borrar este registro?')) {
+                            row.style.transition = 'transform 0.3s ease, opacity 0.5s ease';
+                            row.style.opacity = '0';
+                            setTimeout(() => {
+                                deleteItem(row.dataset.itemId);
+                            }, 500);
+                        } else {
+                            row.style.transform = 'translateX(0)';
+                            row.style.opacity = '1';
+                        }
+                    } else {
+                        row.style.transform = 'translateX(0)';
+                        row.style.opacity = '1';
+                    }
                 }
-                isSwipeActive = false;
+                swipeDirection = null;
+            });
+
+            // Añadir el listener para el click en el botón de editar
+            editButton.addEventListener('click', () => {
+                populateFormForEdit(row.dataset.itemId); 
+                row.style.transform = 'translateX(0)'; // Cerrar la fila después de hacer clic
             });
         });
     };
