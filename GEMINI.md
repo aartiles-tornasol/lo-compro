@@ -16,7 +16,7 @@ El objetivo es desarrollar una aplicación web sencilla, diseñada con un enfoqu
 
 ## Despliegue
 
-*   **Despliegue:** La aplicación se despliega en GitHub Pages.
+*   **Despliegue:** La aplicación se despliega en GitHub Pages y está disponible en https://locompro.artiles.org/
 
 ## Flujo de Trabajo para Subir Cambios
 
