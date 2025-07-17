@@ -84,6 +84,13 @@
 .product-cell.price-per-unit { flex: 2; text-align: right; }
 .product-cell.avg-price { flex: 2; text-align: right; }
 
+/* --- NUEVO: Resaltar columna de precio por unidad --- */
+.header-price-per-unit,
+.product-cell.price-per-unit {
+    background-color: #f0f8ff; /* Un azul muy suave (AliceBlue) */
+    font-weight: bold; /* Poner el texto en negrita para más énfasis */
+}
+
 .loading-row {
     text-align: center;
     padding: 1rem;
