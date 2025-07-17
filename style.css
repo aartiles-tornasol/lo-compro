@@ -52,7 +52,7 @@
 
 .product-row {
     display: flex;
-    align-items: center;
+    align-items: stretch; /* <-- CAMBIO CLAVE: Estirar celdas a la misma altura */
     /* border-bottom: 1px solid #eee; <-- Eliminado de aquí */
     /* padding: 0.5rem 0; <-- Eliminado de aquí */
     background-color: #fff;
