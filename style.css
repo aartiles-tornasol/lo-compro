@@ -53,7 +53,7 @@
 .product-row {
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #eee;
+    /* border-bottom: 1px solid #eee; <-- Eliminado de aquí */
     /* padding: 0.5rem 0; <-- Eliminado de aquí */
     background-color: #fff;
 }
@@ -77,6 +77,7 @@
     white-space: nowrap; /* Evita que el texto se envuelva */
     overflow: hidden;
     text-overflow: ellipsis; /* Añade puntos suspensivos si el texto es demasiado largo */
+    border-bottom: 1px solid #eee; /* <-- Añadido aquí */
 }
 
 .product-cell.name { flex: 4; }
@@ -88,6 +89,7 @@
 .header-price-per-unit,
 .product-cell.price-per-unit {
     background-color: #f8f9fa; /* Un gris muy suave, el mismo que la cabecera */
+    border-bottom-color: #f8f9fa; /* Borde del mismo color que el fondo para hacerlo invisible */
 }
 
 .loading-row {
