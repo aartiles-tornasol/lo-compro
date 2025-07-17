@@ -140,19 +140,20 @@ document.addEventListener('DOMContentLoaded', () => {
         itemsToAppend.forEach(item => {
             const row = document.createElement('tr');
             row.dataset.itemId = item.id;
+            row.className = 'product-row'; // Clase para identificar las filas con gestos
 
             // Columna 3 y 4: Precio por unidad con la unidad limpia (ej: "13,8 l")
             const cleanUnit = (item.unidadPrecioPorUnidad || '').replace('€/', '');
 
             row.innerHTML = `
-                <td><div class="product-row-color-indicator ${supermarketColorClasses[item.supermercado] || ''}"></div>${item.producto}</td>
+                <td><div class="product-row-color-indicator ${supermarketColorClasses[item.supermercado] || ''}"></div><span class="product-name">${item.producto}</span></td>
                 <td class="text-end">${formatPriceTwoDecimals(parsePrice(item.precio))}</td>
                 <td class="text-end price-per-unit">${formatPrice(item.precioPorUnidad)} ${cleanUnit}</td>
                 <td class="text-end">${formatPrice(item.precioMedio)} ${cleanUnit}</td>
             `;
             itemList.appendChild(row);
         });
-        // initializeSwipeGestures(); // El swipe se desactiva con la tabla
+        initializeSwipeGestures(); // Volver a inicializar gestos en las nuevas filas
     };
 
     // Función para cargar la siguiente "página" de items
@@ -238,90 +239,41 @@ document.addEventListener('DOMContentLoaded', () => {
         editItemModal.hide();
     });
 
-    // Función para inicializar los gestos de swipe en las filas
+    // --- REINTRODUCIDO: Lógica de Gestos de Swipe ---
     const initializeSwipeGestures = () => {
         const rows = document.querySelectorAll('.product-row');
         rows.forEach(row => {
             if (row.hammer) return; // Prevenir reinicialización
 
-            const wrapper = row.parentElement;
-            const editButton = wrapper.querySelector('.edit-button');
-
             row.hammer = new Hammer.Manager(row);
-            row.hammer.add(new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 10 }));
+            row.hammer.add(new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 40 }));
 
-            let lastPosX = 0;
-            let swipeDirection = null; // 'left' o 'right'
-
-            row.hammer.on('panstart', (ev) => {
-                // Resetear otras filas abiertas
-                document.querySelectorAll('.product-row-wrapper').forEach(otherWrapper => {
-                    otherWrapper.classList.remove('show-edit', 'show-delete');
-                });
-                document.querySelectorAll('.product-row').forEach(otherRow => {
-                    if (otherRow !== row) otherRow.style.transform = 'translateX(0)';
-                });
-
-                const rowWidth = row.offsetWidth;
-                const startX = ev.srcEvent.clientX || ev.srcEvent.touches[0].clientX;
-                const rowRect = row.getBoundingClientRect();
-
-                if (startX - rowRect.left < rowWidth * 0.3) {
-                    swipeDirection = 'right'; // Para editar
-                    wrapper.classList.add('show-edit');
-                } else if (rowRect.right - startX < rowWidth * 0.3) {
-                    swipeDirection = 'left'; // Para borrar
-                    wrapper.classList.add('show-delete');
-                } else {
-                    swipeDirection = null;
+            row.hammer.on('panleft panright', (ev) => {
+                row.classList.add('swiping');
+                if (ev.type === 'panleft') {
+                    row.style.transform = `translateX(${ev.deltaX}px)`;
+                } else if (ev.type === 'panright') {
+                    row.style.transform = `translateX(${ev.deltaX}px)`;
                 }
-                // Añadir una clase para deshabilitar transiciones durante el swipe
-                if (swipeDirection) row.classList.add('swiping');
-            });
-
-            row.hammer.on('panmove', (ev) => {
-                if (!swipeDirection) return;
-                
-                if (swipeDirection === 'right') {
-                    lastPosX = Math.min(100, Math.max(0, ev.deltaX)); // Mover a la derecha
-                } else { // 'left'
-                    lastPosX = Math.max(-100, Math.min(0, ev.deltaX)); // Mover a la izquierda
-                }
-                row.style.transform = `translateX(${lastPosX}px)`;
             });
 
             row.hammer.on('panend', (ev) => {
-                if (!swipeDirection) return;
                 row.classList.remove('swiping');
-                
-                const buttonWidth = 100;
+                const rowWidth = row.offsetWidth;
 
-                if (swipeDirection === 'right') { // Lógica para Editar
-                    if (lastPosX > buttonWidth / 2 || ev.velocityX > 0.5) {
-                        populateFormForEdit(row.dataset.itemId);
-                    }
-                    row.style.transform = 'translateX(0)'; // Volver a la posición inicial
-                } else { // Lógica para Borrar (la original)
-                    if (lastPosX < -buttonWidth / 2 || ev.velocityX < -0.5) {
-                        row.style.transform = `translateX(-${buttonWidth}px)`;
-                        if (confirm('¿Estás seguro de que quieres borrar este registro?')) {
-                            row.style.transition = 'transform 0.3s ease, opacity 0.5s ease';
-                            row.style.opacity = '0';
-                            setTimeout(() => {
-                                deleteItem(row.dataset.itemId);
-                            }, 500);
-                        } else {
-                            row.style.transform = 'translateX(0)';
-                            row.style.opacity = '1';
-                        }
-                    } else {
-                        row.style.transform = 'translateX(0)';
-                        row.style.opacity = '1';
-                    }
+                // Swipe a la derecha para EDITAR
+                if (ev.deltaX > rowWidth * 0.3) {
+                    populateFormForEdit(row.dataset.itemId);
                 }
-                swipeDirection = null;
-                // Quitar las clases de visibilidad al final del gesto
-                setTimeout(() => wrapper.classList.remove('show-edit', 'show-delete'), 300);
+                // Swipe a la izquierda para BORRAR
+                else if (ev.deltaX < -rowWidth * 0.3) {
+                    if (confirm('¿Estás seguro de que quieres borrar este registro?')) {
+                        deleteItem(row.dataset.itemId);
+                    } 
+                }
+
+                // Resetear posición
+                row.style.transform = 'translateX(0)';
             });
         });
     };
@@ -504,8 +456,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Listener para hacer clic en el nombre de un producto y filtrarlo
     itemList.addEventListener('click', (e) => {
         const target = e.target;
-        // Comprobar si el clic fue en la celda del nombre
-        if (target && target.classList.contains('name')) {
+        // Comprobar si el clic fue en el nombre del producto
+        if (target && target.classList.contains('product-name')) {
             const productRow = target.closest('.product-row');
             const itemId = productRow.dataset.itemId;
             productoSeleccionadoParaClonar = allItems.find(item => item.id === itemId);
