@@ -1,102 +1,34 @@
-/* Nuevos estilos para la tabla de productos */
-#product-list-container {
-    border: 1px solid #dee2e6;
-    border-radius: 0.25rem;
-    overflow: hidden;
-    /* --- NUEVO: Scroll para la lista --- */
-    max-height: 70vh; /* Altura máxima del 70% de la ventana */
-    overflow-y: auto; /* Scroll vertical si el contenido excede la altura */
-    /* --- FIN NUEVO --- */
+/* Estilos para la tabla de productos */
+.table {
+    vertical-align: middle; /* Centrar verticalmente el contenido de las celdas */
 }
 
-.product-table-header {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
-    display: flex;
-    padding: 0.5rem 0;
-    /* --- NUEVO: Cabecera Fija --- */
-    position: sticky;
-    top: 0;
-    z-index: 10; /* Asegura que la cabecera esté por encima del contenido */
-}
-
-.header-cell {
-    padding: 0.5rem 0.75rem;
-    text-align: center; /* Centrar el texto de la cabecera */
+.table .header-cell {
     cursor: pointer;
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Centrar el contenido */
 }
 
-.header-cell:hover {
-    background-color: #e9ecef;
-}
-
-.header-cell.asc::after {
-    content: ' \25B2'; /* Triángulo hacia arriba */
+.table .header-cell.asc::after {
+    content: ' \25B2';
     margin-left: 5px;
 }
 
-.header-cell.desc::after {
-    content: ' \25BC'; /* Triángulo hacia abajo */
+.table .header-cell.desc::after {
+    content: ' \25BC';
     margin-left: 5px;
-}
-
-/* Anchos de columna */
-.header-name { flex: 4; }
-.header-price { flex: 2; text-align: right; }
-.header-price-per-unit { flex: 2; text-align: right; }
-.header-avg-price { flex: 2; text-align: right; }
-
-.product-row {
-    display: flex;
-    align-items: stretch; /* <-- CAMBIO CLAVE: Estirar celdas a la misma altura */
-    /* border-bottom: 1px solid #eee; <-- Eliminado de aquí */
-    /* padding: 0.5rem 0; <-- Eliminado de aquí */
-    /* background-color: #fff; <-- Eliminado de aquí */
-}
-
-.product-row:last-child {
-    border-bottom: none;
 }
 
 .product-row-color-indicator {
-    width: 8px; /* Ancho de la barra de color */
-    height: 100%;
-    min-height: 2.5rem; /* Asegura que la barra tenga una altura mínima */
+    display: inline-block;
+    width: 8px;
+    height: 2.5rem; /* Altura fija */
     margin-right: 0.75rem;
-    flex-shrink: 0;
+    vertical-align: middle;
 }
 
-.product-cell {
-    padding: 0.5rem 0.75rem; /* <-- Añadido aquí */
-    text-align: left;
-    flex-grow: 1;
-    white-space: nowrap; /* Evita que el texto se envuelva */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Añade puntos suspensivos si el texto es demasiado largo */
-    border-bottom: 1px solid #eee; /* <-- Añadido aquí */
-    background-color: #fff; /* <-- Añadido aquí */
-}
-
-.product-cell.name { flex: 4; }
-.product-cell.price { flex: 2; text-align: right; }
-.product-cell.price-per-unit { flex: 2; text-align: right; }
-.product-cell.avg-price { flex: 2; text-align: right; }
-
-/* --- NUEVO: Resaltar columna de precio por unidad --- */
-.header-price-per-unit,
-.product-cell.price-per-unit {
+/* Resaltar columna de precio por unidad */
+.table .header-price-per-unit,
+.table .price-per-unit {
     background-color: #fff5e6; /* Un naranja muy suave */
-    border-bottom-color: #fff5e6; /* Borde del mismo color que el fondo para hacerlo invisible */
-}
-
-.loading-row {
-    text-align: center;
-    padding: 1rem;
-    color: #6c757d;
 }
 
 /* Colores de supermercado para el indicador */
