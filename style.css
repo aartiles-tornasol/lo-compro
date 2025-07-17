@@ -87,8 +87,7 @@
 /* --- NUEVO: Resaltar columna de precio por unidad --- */
 .header-price-per-unit,
 .product-cell.price-per-unit {
-    background-color: #f0f8ff; /* Un azul muy suave (AliceBlue) */
-    font-weight: bold; /* Poner el texto en negrita para más énfasis */
+    background-color: #f8f9fa; /* Un gris muy suave, el mismo que la cabecera */
 }
 
 .loading-row {
