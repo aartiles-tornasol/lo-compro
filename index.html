@@ -90,17 +90,21 @@
             </div>
         </div>
 
-        <div id="product-list-container" class="mb-3">
-            <div class="product-table-header d-flex">
-                <div class="header-cell header-name" data-sort="producto">Nombre</div>
-                <div class="header-cell header-price" data-sort="precio">€</div>
-                <div class="header-cell header-price-per-unit" data-sort="precioPorUnidad">€/ud</div>
-                <div class="header-cell header-avg-price" data-sort="precioMedio">€⊘/ud</div>
-            </div>
-            <div id="item-list" class="product-table-body">
-                <!-- Product rows will be rendered here by JavaScript -->
-                <div class="product-row loading-row">Cargando...</div>
-            </div>
+        <div id="product-list-container" class="mb-3 table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="sticky-top">
+                    <tr>
+                        <th class="header-cell header-name" data-sort="producto">Nombre</th>
+                        <th class="header-cell header-price text-end" data-sort="precio">€</th>
+                        <th class="header-cell header-price-per-unit text-end" data-sort="precioPorUnidad">€/ud</th>
+                        <th class="header-cell header-avg-price text-end" data-sort="precioMedio">€⊘/ud</th>
+                    </tr>
+                </thead>
+                <tbody id="item-list">
+                    <!-- Product rows will be rendered here by JavaScript -->
+                    <tr><td colspan="4" class="text-center p-3">Cargando...</td></tr>
+                </tbody>
+            </table>
         </div>
     </main>
 

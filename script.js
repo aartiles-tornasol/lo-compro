@@ -135,43 +135,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Lógica de Scroll Infinito ---
 
-    // Función para AÑADIR items al DOM
+    // Función para AÑADIR items a la tabla
     const appendItems = (itemsToAppend) => {
         itemsToAppend.forEach(item => {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'product-row-wrapper';
-
-            const productRow = document.createElement('div');
-            productRow.className = 'product-row';
-            productRow.dataset.itemId = item.id;
-
-            const colorClass = supermarketColorClasses[item.supermercado] || '';
+            const row = document.createElement('tr');
+            row.dataset.itemId = item.id;
 
             // Columna 3 y 4: Precio por unidad con la unidad limpia (ej: "13,8 l")
             const cleanUnit = (item.unidadPrecioPorUnidad || '').replace('€/', '');
 
-            productRow.innerHTML = `
-                <div class="product-row-color-indicator ${colorClass}"></div>
-                <div class="product-cell name">${item.producto}</div>
-                <div class="product-cell price">${formatPriceTwoDecimals(parsePrice(item.precio))}</div>
-                <div class="product-cell price-per-unit">${formatPrice(item.precioPorUnidad)} ${cleanUnit}</div>
-                <div class="product-cell avg-price">${formatPrice(item.precioMedio)} ${cleanUnit}</div>
+            row.innerHTML = `
+                <td><div class="product-row-color-indicator ${supermarketColorClasses[item.supermercado] || ''}"></div>${item.producto}</td>
+                <td class="text-end">${formatPriceTwoDecimals(parsePrice(item.precio))}</td>
+                <td class="text-end price-per-unit">${formatPrice(item.precioPorUnidad)} ${cleanUnit}</td>
+                <td class="text-end">${formatPrice(item.precioMedio)} ${cleanUnit}</td>
             `;
-
-            const editButton = document.createElement('div');
-            editButton.className = 'edit-button';
-            editButton.innerHTML = '<i class="bi bi-pencil"></i> Edit';
-
-            const deleteButton = document.createElement('div');
-            deleteButton.className = 'delete-button';
-            deleteButton.innerHTML = '<i class="bi bi-trash"></i> Delete';
-
-            wrapper.appendChild(productRow);
-            wrapper.appendChild(editButton);
-            wrapper.appendChild(deleteButton);
-            itemList.appendChild(wrapper);
+            itemList.appendChild(row);
         });
-        initializeSwipeGestures();
+        // initializeSwipeGestures(); // El swipe se desactiva con la tabla
     };
 
     // Función para cargar la siguiente "página" de items
@@ -184,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const itemsToLoad = sortedAndFilteredItems.slice(startIndex, endIndex);
 
         if (currentPage === 1 && itemsToLoad.length === 0) {
-            itemList.innerHTML = '<div class="product-row loading-row">No hay productos en la lista.</div>';
+            itemList.innerHTML = '<tr><td colspan="4" class="text-center p-3">No hay productos en la lista.</td></tr>';
         } else {
             appendItems(itemsToLoad);
         }
