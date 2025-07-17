@@ -603,12 +603,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Validar el formulario por si acaso la selección por defecto ya lo hace válido
     validateForm();
 
-    // Mostrar el hash del commit
-    const commitHash = '0446d08'; // ESTE VALOR SE ACTUALIZARÁ AUTOMÁTICAMENTE EN CADA COMMIT
+    // --- NUEVO: Cargar hash de commit desde Firebase ---
+    const versionRef = database.ref('config/versionHash');
     const commitHashDisplay = document.getElementById('commit-hash-display');
-    if (commitHashDisplay) {
-        commitHashDisplay.textContent = `v: ${commitHash}`;
-    }
+
+    versionRef.on('value', (snapshot) => {
+        const commitHash = snapshot.val();
+        if (commitHash && commitHashDisplay) {
+            commitHashDisplay.textContent = `v: ${commitHash}`;
+        }
+    });
 
     // Lógica de ordenación
     let currentSortColumn = 'fecha'; // Por defecto, ordenar por fecha

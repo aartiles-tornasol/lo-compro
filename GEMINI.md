@@ -20,17 +20,16 @@ El objetivo es desarrollar una aplicación web sencilla, diseñada con un enfoqu
 
 ## Flujo de Trabajo para Subir Cambios
 
-Para asegurar que la versión visible en la aplicación siempre corresponde al último cambio subido, se debe seguir el siguiente proceso **obligatorio** en dos fases:
+Para asegurar que la versión visible en la aplicación siempre corresponde al último cambio subido, se sigue un proceso en dos pasos:
 
-**Fase 1: Subir el cambio principal**
-1.  Añadir los archivos modificados (`git add`).
-2.  Crear un commit descriptivo (ej. `fix: Corregir error X`) (`git commit`).
-3.  Subir los cambios a GitHub (`git push`).
+1.  **Subir el cambio principal:**
+    *   Añadir los archivos modificados (`git add`).
+    *   Crear un commit descriptivo (ej. `fix: Corregir error X`) (`git commit`).
+    *   Subir los cambios a GitHub (`git push`).
 
-**Fase 2: Actualizar y subir el hash de la versión**
-4.  **Obtener el hash del último commit:** Justo después del `push`, obtener el identificador corto del commit recién subido.
-5.  **Actualizar `script.js`:** Reemplazar el valor de la constante `commitHash` en el archivo `script.js` con el nuevo hash.
-6.  **Subir la actualización del hash:** Crear un segundo commit (ej. `chore: Actualizar hash de commit`) y subirlo (`git add script.js && git commit ... && git push`).
+2.  **Actualizar el hash de la versión en Firebase:**
+    *   Justo después del `push`, obtener el identificador corto del commit recién subido (ej. `a1b2c3d`).
+    *   Actualizar el hash en la base de datos de Firebase ejecutando un comando `curl` para escribir el nuevo hash en la ruta `/config/versionHash`.
 
 ## Problemas Recurrentes y Lecciones Aprendidas
 
