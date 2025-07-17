@@ -55,7 +55,7 @@
     align-items: stretch; /* <-- CAMBIO CLAVE: Estirar celdas a la misma altura */
     /* border-bottom: 1px solid #eee; <-- Eliminado de aquí */
     /* padding: 0.5rem 0; <-- Eliminado de aquí */
-    background-color: #fff;
+    /* background-color: #fff; <-- Eliminado de aquí */
 }
 
 .product-row:last-child {
@@ -78,6 +78,7 @@
     overflow: hidden;
     text-overflow: ellipsis; /* Añade puntos suspensivos si el texto es demasiado largo */
     border-bottom: 1px solid #eee; /* <-- Añadido aquí */
+    background-color: #fff; /* <-- Añadido aquí */
 }
 
 .product-cell.name { flex: 4; }
