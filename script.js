@@ -147,15 +147,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const colorClass = supermarketColorClasses[item.supermercado] || '';
 
-            const quantityStr = String(item.cantidad).replace('.', ',');
-            const quantityAndUnit = `${quantityStr} ${item.unidad || ''}`;
+            const cleanUnitCol3 = (item.unidadPrecioPorUnidad || '').replace('€/', '');
 
             productRow.innerHTML = `
                 <div class="product-row-color-indicator ${colorClass}"></div>
                 <div class="product-cell name">${item.producto}</div>
                 <div class="product-cell price">${formatPriceTwoDecimals(parsePrice(item.precio))}</div>
-                <div class="product-cell price-per-unit">${quantityAndUnit}</div>
-                <div class="product-cell avg-price">${quantityAndUnit}</div>
+                <div class="product-cell price-per-unit">${formatPrice(item.precioPorUnidad)} ${cleanUnitCol3}</div>
+                <div class="product-cell avg-price">${formatPrice(item.precioMedio)} ${item.unidadPrecioPorUnidad || ''}</div>
             `;
 
             const editButton = document.createElement('div');
