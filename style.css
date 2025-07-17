@@ -1,56 +1,80 @@
-/* Estilos para la tabla de productos */
-.table {
-    vertical-align: middle; /* Centrar verticalmente el contenido de las celdas */
+/* Estilos generales para la tabla de productos */
+#product-list-container {
+    max-height: 70vh; /* Altura máxima del 70% de la ventana */
+    overflow-y: auto; /* Scroll vertical si el contenido excede la altura */
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
 }
 
-.table td {
+.table {
+    table-layout: fixed; /* Algoritmo fijo para evitar el "baile" de columnas */
+    width: 100%;
+    margin-bottom: 0; /* Eliminar margen inferior de la tabla */
+}
+
+/* Estilos para las cabeceras de la tabla */
+.table thead th {
+    background-color: #f8f9fa;
+    position: sticky;
+    top: 0;
+    z-index: 10; /* Asegura que la cabecera esté por encima del contenido */
+    padding: 0.5rem 0.75rem;
+    text-align: center; /* Centrar el texto de la cabecera */
+    cursor: pointer;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.table .header-cell {
-    cursor: pointer;
+.table thead th:hover {
+    background-color: #e9ecef;
 }
 
-.table .header-cell.asc::after {
-    content: ' \25B2';
+.table thead th.asc::after {
+    content: ' \25B2'; /* Triángulo hacia arriba */
     margin-left: 5px;
 }
 
-.table .header-cell.desc::after {
-    content: ' \25BC';
+.table thead th.desc::after {
+    content: ' \25BC'; /* Triángulo hacia abajo */
     margin-left: 5px;
 }
 
+/* Anchos de columna */
+.table thead th:nth-child(1) { width: 40%; } /* Nombre */
+.table thead th:nth-child(2) { width: 20%; } /* Precio */
+.table thead th:nth-child(3) { width: 20%; } /* €/ud */
+.table thead th:nth-child(4) { width: 20%; } /* €⊘/ud */
+
+/* Estilos para las celdas de la tabla */
+.table tbody td {
+    padding: 0.5rem 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background-color: #fff; /* Fondo blanco por defecto para todas las celdas */
+    border-bottom: 1px solid #eee; /* Borde inferior para las celdas */
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none; /* Eliminar borde inferior de la última fila */
+}
+
+/* Indicador de color del supermercado */
 .product-row-color-indicator {
     display: inline-block;
     width: 8px;
-    height: 2.5rem; /* Altura fija */
+    height: 100%; /* Ocupa toda la altura de la celda */
+    min-height: 2.5rem; /* Asegura una altura mínima */
     margin-right: 0.75rem;
     vertical-align: middle;
 }
 
 /* Resaltar columna de precio por unidad */
-.table .header-price-per-unit,
-.table .price-per-unit {
+.table thead th.header-price-per-unit,
+.table tbody td.price-per-unit {
     background-color: #fff5e6; /* Un naranja muy suave */
-}
-
-/* --- NUEVO: Anchos de columna fijos --- */
-.table {
-    table-layout: fixed; /* Algoritmo fijo para evitar el "baile" de columnas */
-    width: 100%;
-}
-
-.table .header-name {
-    width: 40%; /* La columna del nombre es la más ancha */
-}
-
-.table .header-price,
-.table .header-price-per-unit,
-.table .header-avg-price {
-    width: 20%; /* Las columnas de precios tienen el mismo ancho */
+    border-bottom-color: #fff5e6; /* Borde del mismo color que el fondo para hacerlo invisible */
 }
 
 /* Colores de supermercado para el indicador */
@@ -67,14 +91,14 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: auto; /* Ancho automático para el texto */
-    min-width: 100px; /* Ancho mínimo */
-    height: 56px; /* Altura estándar para FABs rectangulares */
-    border-radius: 28px; /* La mitad de la altura para esquinas redondeadas */
+    width: auto;
+    min-width: 100px;
+    height: 56px;
+    border-radius: 28px;
     background-color: #007bff;
     color: white;
-    font-size: 1.2rem; /* Tamaño de fuente ajustado */
-    padding: 0 20px; /* Espaciado interno */
+    font-size: 1.2rem;
+    padding: 0 20px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -87,19 +111,19 @@
 /* Estilos para los botones de supermercado */
 .supermarket-buttons-container {
     display: flex;
-    justify-content: flex-start; /* Alinear a la izquierda */
-    flex-wrap: nowrap; /* No envolver */
-    gap: 8px; /* Espacio más pequeño */
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 8px;
     margin-bottom: 15px;
-    overflow-x: auto; /* Scroll horizontal */
-    padding-bottom: 5px; /* Espacio para la barra de scroll */
-    -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+    overflow-x: auto;
+    padding-bottom: 5px;
+    -webkit-overflow-scrolling: touch;
 }
 
 .supermarket-btn {
-    flex-shrink: 0 !important; /* No encoger */
-    width: 30px !important; /* Aún más pequeños */
-    height: 30px !important; /* Aún más pequeños */
+    flex-shrink: 0 !important;
+    width: 30px !important;
+    height: 30px !important;
     border-radius: 50% !important;
     display: flex !important;
     justify-content: center !important;
@@ -108,59 +132,34 @@
     color: white !important;
     border: 2px solid transparent !important;
     transition: all 0.2s ease-in-out !important;
-    font-size: 0.7rem !important; /* Tamaño de fuente ajustado */
+    font-size: 0.7rem !important;
 }
 
 .supermarket-btn.selected {
-    border-color: #007bff !important; /* Color de borde para el seleccionado */
+    border-color: #007bff !important;
     box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25) !important;
 }
 
-.btn-mercadona {
-    background-color: #008000 !important; /* Verde */
-}
-.btn-hiperdino {
-    background-color: #FFD700 !important; /* Amarillo */
-    color: #333 !important; /* Texto oscuro para contraste */
-}
-.btn-alcampo {
-    background-color: #FF0000 !important; /* Rojo */
-}
-.btn-lidl {
-    background-color: #0000FF !important; /* Azul */
-}
-.btn-spar {
-    background-color: #808080 !important; /* Gris */
-}
-.btn-primor {
-    background-color: #8A2BE2 !important; /* Malva (BlueViolet) */
-}
-.btn-druni {
-    background-color: #00CED1 !important; /* Celeste (DarkTurquoise) */
-}
+.btn-mercadona { background-color: #008000 !important; }
+.btn-hiperdino { background-color: #FFD700 !important; color: #333 !important; }
+.btn-alcampo { background-color: #FF0000 !important; }
+.btn-lidl { background-color: #0000FF !important; }
+.btn-spar { background-color: #808080 !important; }
+.btn-primor { background-color: #8A2BE2 !important; }
+.btn-druni { background-color: #00CED1 !important; }
 
-/* Estilos para el swipe y los botones de acción */
-.product-row-wrapper {
+/* Estilos para el swipe */
+.product-row {
     position: relative;
     overflow: hidden;
-}
-
-.product-row {
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid #eee;
-    padding: 0.5rem 0;
-    background-color: #fff;
-    position: relative;
-    z-index: 1;
     transition: transform 0.3s ease;
 }
 
-/* Desactiva la transición durante el swipe para un movimiento instantáneo */
 .product-row.swiping {
     transition: none;
 }
 
+/* Ocultar botones de edición/borrado por defecto */
 .edit-button, .delete-button {
     position: absolute;
     top: 0;
@@ -171,25 +170,25 @@
     align-items: center;
     justify-content: center;
     z-index: 0;
-    visibility: hidden; /* Oculto por defecto */
+    visibility: hidden;
 }
 
 .product-row-wrapper.show-edit .edit-button,
 .product-row-wrapper.show-delete .delete-button {
-    visibility: visible; /* Mostrar el botón correspondiente */
+    visibility: visible;
 }
 
 .edit-button {
     left: 0;
-    background-color: #007bff; /* Azul para editar */
+    background-color: #007bff;
 }
 
 .delete-button {
     right: 0;
-    background-color: #dc3545; /* Rojo para borrar */
+    background-color: #dc3545;
 }
 
 .btn-success:disabled {
-    background-color: #6c757d !important; /* Un gris más oscuro */
-    border-color: #6c757d !important; /* Mismo color para el borde */
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
 }
