@@ -14,6 +14,10 @@
     border-bottom: 1px solid #dee2e6;
     display: flex;
     padding: 0.5rem 0;
+    /* --- NUEVO: Cabecera Fija --- */
+    position: sticky;
+    top: 0;
+    z-index: 10; /* Asegura que la cabecera esté por encima del contenido */
 }
 
 .header-cell {
