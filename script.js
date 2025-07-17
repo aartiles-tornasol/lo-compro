@@ -147,6 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const colorClass = supermarketColorClasses[item.supermercado] || '';
 
+            // Columna 3: Precio por unidad con la unidad limpia (ej: "13,8 l")
             const cleanUnitCol3 = (item.unidadPrecioPorUnidad || '').replace('€/', '');
 
             productRow.innerHTML = `
