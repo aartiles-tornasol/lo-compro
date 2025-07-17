@@ -595,6 +595,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const commitHash = snapshot.val();
         if (commitHash && commitHashDisplay) {
             commitHashDisplay.textContent = `v: ${commitHash}`;
+            
+            // --- NUEVO: Cache Busting para CSS ---
+            const stylesheet = document.getElementById('main-stylesheet');
+            if (stylesheet) {
+                stylesheet.href = `style.css?v=${commitHash}`;
+            }
         }
     });
 
