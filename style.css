@@ -37,6 +37,22 @@
     background-color: #fff5e6; /* Un naranja muy suave */
 }
 
+/* --- NUEVO: Anchos de columna fijos --- */
+.table {
+    table-layout: fixed; /* Algoritmo fijo para evitar el "baile" de columnas */
+    width: 100%;
+}
+
+.table .header-name {
+    width: 40%; /* La columna del nombre es la más ancha */
+}
+
+.table .header-price,
+.table .header-price-per-unit,
+.table .header-avg-price {
+    width: 20%; /* Las columnas de precios tienen el mismo ancho */
+}
+
 /* Colores de supermercado para el indicador */
 .color-mercadona { background-color: #008000; }
 .color-hiperdino { background-color: #FFD700; }
