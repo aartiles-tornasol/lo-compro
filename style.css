@@ -3,6 +3,10 @@
     border: 1px solid #dee2e6;
     border-radius: 0.25rem;
     overflow: hidden;
+    /* --- NUEVO: Scroll para la lista --- */
+    max-height: 70vh; /* Altura máxima del 70% de la ventana */
+    overflow-y: auto; /* Scroll vertical si el contenido excede la altura */
+    /* --- FIN NUEVO --- */
 }
 
 .product-table-header {

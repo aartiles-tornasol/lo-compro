@@ -53,6 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let productoSeleccionadoParaClonar = null; // Para guardar el último producto clicado
     let productUnits = {}; // Para guardar la última unidad usada por producto
 
+    // --- Estado para Scroll Infinito ---
+    const ITEMS_PER_PAGE = 30;
+    let currentPage = 1;
+    let isLoading = false;
+    let sortedAndFilteredItems = []; // Array sobre el que se pagina, ya filtrado y ordenado
+
     // Función para formatear la fecha para mostrar
     const formatDisplayDate = (isoDateString) => {
         if (!isoDateString) return '';
@@ -127,21 +133,17 @@ document.addEventListener('DOMContentLoaded', () => {
         'Druni': 'color-druni',
     };
 
-    // Función para mostrar los productos en la lista
-    const renderItems = (itemsToRender) => {
-        itemList.innerHTML = ''; // Limpiar la lista actual
-        if (!itemsToRender || itemsToRender.length === 0) {
-            itemList.innerHTML = '<div class="product-row loading-row">No hay productos en la lista.</div>';
-            return;
-        }
+    // --- Lógica de Scroll Infinito ---
 
-        itemsToRender.forEach(item => {
+    // Función para AÑADIR items al DOM
+    const appendItems = (itemsToAppend) => {
+        itemsToAppend.forEach(item => {
             const wrapper = document.createElement('div');
             wrapper.className = 'product-row-wrapper';
 
             const productRow = document.createElement('div');
             productRow.className = 'product-row';
-            productRow.dataset.itemId = item.id; // Guardamos el ID para futuras acciones
+            productRow.dataset.itemId = item.id;
 
             const colorClass = supermarketColorClasses[item.supermercado] || '';
 
@@ -166,9 +168,41 @@ document.addEventListener('DOMContentLoaded', () => {
             wrapper.appendChild(deleteButton);
             itemList.appendChild(wrapper);
         });
-
-        initializeSwipeGestures(); // Inicializar gestos después de renderizar
+        initializeSwipeGestures();
     };
+
+    // Función para cargar la siguiente "página" de items
+    const loadMoreItems = () => {
+        if (isLoading) return;
+        isLoading = true;
+
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        const endIndex = startIndex + ITEMS_PER_PAGE;
+        const itemsToLoad = sortedAndFilteredItems.slice(startIndex, endIndex);
+
+        if (currentPage === 1 && itemsToLoad.length === 0) {
+            itemList.innerHTML = '<div class="product-row loading-row">No hay productos en la lista.</div>';
+        } else {
+            appendItems(itemsToLoad);
+        }
+        
+        currentPage++;
+        
+        if (endIndex >= sortedAndFilteredItems.length) {
+            isLoading = true; // Bloquear cargas futuras al llegar al final
+        } else {
+            isLoading = false; // Permitir la siguiente carga
+        }
+    };
+
+    // Listener para el scroll
+    const listContainer = document.getElementById('product-list-container');
+    listContainer.addEventListener('scroll', () => {
+        // Comprobar si el usuario ha llegado al final del contenedor de la lista
+        if (listContainer.scrollTop + listContainer.clientHeight >= listContainer.scrollHeight - 200) {
+            loadMoreItems();
+        }
+    });
 
     const editItemModal = new bootstrap.Modal(document.getElementById('edit-item-modal'));
 
@@ -459,16 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Lógica de búsqueda/filtrado
     searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        if (searchTerm) {
-            itemsMostrados = allItems.filter(item => 
-                item.producto.toLowerCase().includes(searchTerm) ||
-                (item.supermercado && item.supermercado.toLowerCase().includes(searchTerm))
-            );
-        } else {
-            itemsMostrados = [...allItems]; // Si no hay búsqueda, mostrar todos
-        }
-        renderItems(itemsMostrados);
+        updateAndRender();
     });
 
     // Lógica para los botones de supermercado
@@ -589,56 +614,60 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentSortColumn = 'fecha'; // Por defecto, ordenar por fecha
     let currentSortDirection = 'desc'; // Por defecto, descendente
 
+    const updateAndRender = () => {
+        // 1. Filtrar
+        const searchTerm = searchInput.value.toLowerCase();
+        if (searchTerm) {
+            itemsMostrados = allItems.filter(item => 
+                item.producto.toLowerCase().includes(searchTerm) ||
+                (item.supermercado && item.supermercado.toLowerCase().includes(searchTerm))
+            );
+        } else {
+            itemsMostrados = [...allItems];
+        }
+
+        // 2. Ordenar
+        sortedAndFilteredItems = [...itemsMostrados].sort((a, b) => {
+            let valA = a[currentSortColumn];
+            let valB = b[currentSortColumn];
+
+            if (typeof valA === 'string' && !isNaN(parseFloat(valA))) { valA = parseFloat(valA); }
+            if (typeof valB === 'string' && !isNaN(parseFloat(valB))) { valB = parseFloat(valB); }
+
+            if (valA < valB) { return currentSortDirection === 'asc' ? -1 : 1; }
+            if (valA > valB) { return currentSortDirection === 'asc' ? 1 : -1; }
+            return 0;
+        });
+
+        // 3. Resetear y renderizar primera página
+        itemList.innerHTML = '';
+        currentPage = 1;
+        isLoading = false; // Permitir la carga inicial
+        loadMoreItems();
+    };
+
     const headerCells = document.querySelectorAll('.header-cell');
     headerCells.forEach(header => {
         header.addEventListener('click', () => {
             const sortColumn = header.dataset.sort;
 
-            // Si se hace clic en la misma columna, invertir la dirección
             if (sortColumn === currentSortColumn) {
                 currentSortDirection = (currentSortDirection === 'asc') ? 'desc' : 'asc';
             } else {
-                // Si se hace clic en una nueva columna, establecerla como ascendente
                 currentSortColumn = sortColumn;
                 currentSortDirection = 'asc';
             }
 
-            // Eliminar clases de ordenación de todas las cabeceras
-            headerCells.forEach(h => {
-                h.classList.remove('asc', 'desc');
-            });
-
-            // Añadir clase de ordenación a la cabecera actual
+            headerCells.forEach(h => { h.classList.remove('asc', 'desc'); });
             header.classList.add(currentSortDirection);
 
-            // Re-renderizar los items con la nueva ordenación
-            sortAndRenderItems();
+            updateAndRender();
         });
     });
 
-    // Función para ordenar y renderizar los items
+    // Función para ordenar y renderizar los items (ahora llama a la función central)
     const sortAndRenderItems = () => {
-        const sortedItems = [...itemsMostrados].sort((a, b) => {
-            let valA = a[currentSortColumn];
-            let valB = b[currentSortColumn];
-
-            // Manejar valores numéricos para ordenación correcta
-            if (typeof valA === 'string' && !isNaN(parseFloat(valA))) {
-                valA = parseFloat(valA);
-            }
-            if (typeof valB === 'string' && !isNaN(parseFloat(valB))) {
-                valB = parseFloat(valB);
-            }
-
-            if (valA < valB) {
-                return currentSortDirection === 'asc' ? -1 : 1;
-            }
-            if (valA > valB) {
-                return currentSortDirection === 'asc' ? 1 : -1;
-            }
-            return 0;
-        });
-        renderItems(sortedItems);
+        updateAndRender();
     };
 
     // Llamar a sortAndRenderItems inicialmente para aplicar la ordenación por defecto
