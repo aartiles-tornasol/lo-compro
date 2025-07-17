@@ -1,1 +1,2 @@
 # Ignorar ficheros de configuracion con informacion sensible
+venv/
