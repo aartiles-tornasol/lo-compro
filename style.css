@@ -54,7 +54,7 @@
     display: flex;
     align-items: center;
     border-bottom: 1px solid #eee;
-    padding: 0.5rem 0;
+    /* padding: 0.5rem 0; <-- Eliminado de aquí */
     background-color: #fff;
 }
 
@@ -71,7 +71,7 @@
 }
 
 .product-cell {
-    padding: 0 0.75rem;
+    padding: 0.5rem 0.75rem; /* <-- Añadido aquí */
     text-align: left;
     flex-grow: 1;
     white-space: nowrap; /* Evita que el texto se envuelva */
