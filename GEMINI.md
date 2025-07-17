@@ -31,6 +31,16 @@ Para asegurar que la versión visible en la aplicación siempre corresponde al �
     *   Justo después del `push`, obtener el identificador corto del commit recién subido (ej. `a1b2c3d`).
     *   Actualizar el hash en la base de datos de Firebase ejecutando un comando `curl` para escribir el nuevo hash en la ruta `/config/versionHash`.
 
+## Gestión de Datos de Prueba
+
+El repositorio incluye dos scripts de Python para gestionar datos de prueba en la base de datos de Firebase. Estos scripts requieren que las dependencias del archivo `requirements.txt` estén instaladas en un entorno virtual.
+
+*   **`add_dummy_data.py`**: Genera y añade un conjunto de ~70-80 productos de prueba realistas. Los datos se crean en grupos (ej. múltiples registros para "Leche Entera" con precios y fechas variables) para permitir la prueba de funcionalidades como el cálculo del precio medio.
+    *   **Uso**: `venv/bin/python3 add_dummy_data.py`
+
+*   **`delete_dummy_data.py`**: Busca y elimina todos los productos de la base de datos cuyo nombre comience con el prefijo "Dummy".
+    *   **Uso**: `venv/bin/python3 delete_dummy_data.py`
+
 ## Problemas Recurrentes y Lecciones Aprendidas
 
 - **Botón Flotante (FAB) y conflictos de CSS:** Se ha perdido el estilo del botón flotante (`.fab-button`) en múltiples ocasiones, especialmente tras resoluciones de conflictos en `style.css`. Es crucial verificar siempre que los estilos de `position: fixed`, `bottom`, `right`, `width`, `height`, `border-radius`, `background-color`, `color`, `font-size`, `padding`, `display`, `justify-content`, `align-items`, `border`, `box-shadow` y `z-index` para `.fab-button` estén presentes y correctos después de cualquier operación de Git que afecte a `style.css`.
