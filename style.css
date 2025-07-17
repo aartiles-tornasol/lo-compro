@@ -3,6 +3,12 @@
     vertical-align: middle; /* Centrar verticalmente el contenido de las celdas */
 }
 
+.table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .table .header-cell {
     cursor: pointer;
 }
