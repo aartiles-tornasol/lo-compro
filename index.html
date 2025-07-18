@@ -187,7 +187,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ¿Estás seguro de que quieres eliminar este registro?
+                    <p>¿Estás seguro de que quieres eliminar este registro?</p>
+                    <div class="d-flex align-items-center mb-2">
+                        <div id="delete-product-color-indicator" class="product-row-color-indicator me-2"></div>
+                        <strong id="delete-product-name"></strong>
+                    </div>
+                    <small class="text-muted" id="delete-product-date"></small>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger w-100" id="confirm-delete-btn">Eliminar</button>
