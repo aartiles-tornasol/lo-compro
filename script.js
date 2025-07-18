@@ -248,7 +248,30 @@ document.addEventListener('DOMContentLoaded', () => {
             row.hammer = new Hammer.Manager(row);
             row.hammer.add(new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 250 }));
 
+            row.hammer.on('panstart', (ev) => {
+                const BORDER_ZONE_PERCENTAGE = 0.15; // 15% de la anchura de la fila
+                const rowWidth = row.offsetWidth;
+                const touchX = ev.center.x; // Posición X del toque en la pantalla
+                const rowRect = row.getBoundingClientRect(); // Posición y tamaño de la fila
+
+                // Calcular la posición X del toque relativa a la fila
+                const relativeTouchX = touchX - rowRect.left;
+
+                // Determinar si el toque está en la zona izquierda o derecha
+                const isInLeftBorderZone = relativeTouchX < rowWidth * BORDER_ZONE_PERCENTAGE;
+                const isInRightBorderZone = relativeTouchX > rowWidth * (1 - BORDER_ZONE_PERCENTAGE);
+
+                // Permitir el swipe horizontal solo si el toque está en una de las zonas de borde
+                row.canSwipeHorizontally = isInLeftBorderZone || isInRightBorderZone;
+
+                if (row.canSwipeHorizontally) {
+                    row.classList.add('swiping');
+                }
+            });
+
             row.hammer.on('panleft panright', (ev) => {
+                if (!row.canSwipeHorizontally) return; // Solo aplicar transformación si se permite el swipe
+
                 row.classList.add('swiping');
                 if (ev.type === 'panleft') {
                     row.style.transform = `translateX(${ev.deltaX}px)`;
@@ -259,6 +282,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             row.hammer.on('panend', (ev) => {
                 row.classList.remove('swiping');
+                // Resetear posición siempre, independientemente de si el swipe fue válido o no
+                row.style.removeProperty('transform');
+
+                if (!row.canSwipeHorizontally) return; // No ejecutar acciones si el swipe no fue válido
+
                 const rowWidth = row.offsetWidth;
 
                 // Swipe a la derecha para EDITAR
@@ -271,9 +299,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         deleteItem(row.dataset.itemId);
                     } 
                 }
-
-                // Resetear posición
-                row.style.removeProperty('transform');
+                // Resetear la bandera
+                row.canSwipeHorizontally = false;
             });
         });
     };
