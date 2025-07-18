@@ -1,0 +1,3 @@
+- Lee el fichero GEMINI.md de esta carpeta del proyecto
+- Analiza el resto de ficheros de este proyecto
+- Mira en el repo y estudia todos los commits que hemos ido haciendo
