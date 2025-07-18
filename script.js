@@ -152,6 +152,78 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td class="text-end">${formatPrice(item.precioMedio)} ${cleanUnit}</td>
             `;
             itemList.appendChild(row);
+
+            // --- Lógica de Swipe para Borrar (Vanilla JS) ---
+            let startX = 0;
+            let currentX = 0;
+            let isSwiping = false;
+            let initialTouchRightZone = false;
+
+            const RIGHT_ZONE_PERCENTAGE = 0.20; // 20% de la anchura de la fila
+            const SWIPE_THRESHOLD = 50; // Píxeles para considerar un swipe
+            const DELETE_THRESHOLD = -80; // Píxeles para confirmar el borrado
+
+            row.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                const rowWidth = row.offsetWidth;
+                const rowRect = row.getBoundingClientRect();
+                const relativeTouchX = startX - rowRect.left;
+
+                // Solo permitir el inicio del swipe si el toque está en la zona derecha
+                initialTouchRightZone = relativeTouchX > rowWidth * (1 - RIGHT_ZONE_PERCENTAGE);
+                isSwiping = false; // Resetear estado de swipe
+                row.style.transition = 'none'; // Deshabilitar transición durante el arrastre
+            });
+
+            row.addEventListener('touchmove', (e) => {
+                if (!initialTouchRightZone) return; // Ignorar si no se inició en la zona derecha
+
+                currentX = e.touches[0].clientX;
+                const deltaX = currentX - startX;
+
+                // Si el movimiento es hacia la izquierda y excede el umbral, es un swipe
+                if (deltaX < 0 && Math.abs(deltaX) > SWIPE_THRESHOLD) {
+                    isSwiping = true;
+                    e.preventDefault(); // Prevenir scroll vertical/horizontal del navegador
+                    // Limitar el movimiento para que no se vaya demasiado lejos
+                    row.style.transform = `translateX(${Math.max(-150, deltaX)}px)`;
+                } else if (deltaX >= 0) {
+                    // Si el movimiento es hacia la derecha, no es un swipe de borrado
+                    isSwiping = false;
+                    row.style.transform = 'translateX(0px)'; // Asegurarse de que no se mueva a la derecha
+                }
+            });
+
+            row.addEventListener('touchend', () => {
+                row.style.transition = 'transform 0.3s ease-out'; // Habilitar transición para el reseteo
+
+                const deltaX = currentX - startX;
+
+                if (isSwiping && deltaX < DELETE_THRESHOLD) {
+                    // Confirmar y borrar
+                    if (confirm('¿Estás seguro de que quieres borrar este registro?')) {
+                        // Animación de salida antes de borrar
+                        row.style.transform = `translateX(-${row.offsetWidth}px)`;
+                        row.style.opacity = '0';
+                        setTimeout(() => {
+                            deleteItem(item.id);
+                        }, 300); // Esperar a que termine la animación
+                    } else {
+                        // Si cancela, volver a la posición original
+                        row.style.transform = 'translateX(0px)';
+                    }
+                } else {
+                    // Si no fue un swipe válido o no se alcanzó el umbral de borrado, volver a la posición original
+                    row.style.transform = 'translateX(0px)';
+                }
+
+                // Resetear variables de estado
+                startX = 0;
+                currentX = 0;
+                isSwiping = false;
+                initialTouchRightZone = false;
+            });
+            // --- Fin Lógica de Swipe ---
         });
         
     };
@@ -194,6 +266,15 @@ document.addEventListener('DOMContentLoaded', () => {
     
 
     
+
+    // Función para borrar un item de Firebase
+    const deleteItem = (itemId) => {
+        if (!itemId) return;
+        itemsRef.child(itemId).remove()
+            .catch((error) => {
+                console.error("Error al eliminar el item:", error);
+            });
+    };
 
     // Escuchar cambios en la base de datos en tiempo real
     itemsRef.on('value', (snapshot) => {
