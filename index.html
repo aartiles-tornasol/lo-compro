@@ -112,6 +112,72 @@
 
     
 
+    <!-- Modal de Edición -->
+    <div class="modal fade" id="edit-item-modal" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editItemModalLabel">Editar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-item-form">
+                        <input type="hidden" id="edit-modal-item-id">
+                        <div class="mb-3">
+                            <label for="edit-producto" class="form-label">Producto</label>
+                            <input type="text" class="form-control" id="edit-producto" required>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <label for="edit-precio" class="form-label">Precio</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" class="form-control" id="edit-precio" inputmode="decimal">
+                                    <span class="input-group-text">€</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label for="edit-cantidad" class="form-label">Cantidad</label>
+                                <input type="number" class="form-control" id="edit-cantidad" inputmode="decimal" step="any">
+                            </div>
+                            <div class="col-12">
+                                <label for="edit-unidad" class="form-label">Unidad</label>
+                                <select class="form-select" id="edit-unidad">
+                                    <option value="ml">ml (mililitros)</option>
+                                    <option value="l">l (litros)</option>
+                                    <option value="g">g (gramos)</option>
+                                    <option value="kg">kg (kilogramos)</option>
+                                    <option value="ud">ud (unidades)</option>
+                                    <option value="lata">lata</option>
+                                    <option value="caja">caja</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label for="edit-supermercado" class="form-label">Supermercado</label>
+                                <select class="form-select" id="edit-supermercado">
+                                    <option value="Mercadona">Mercadona</option>
+                                    <option value="Hiperdino">Hiperdino</option>
+                                    <option value="Lidl">Lidl</option>
+                                    <option value="Spar">Spar</option>
+                                    <option value="Carrefour">Carrefour</option>
+                                    <option value="Alcampo">Alcampo</option>
+                                    <option value="Druni">Druni</option>
+                                    <option value="Primor">Primor</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label for="edit-fecha" class="form-label">Fecha de Compra</label>
+                                <input type="date" class="form-control" id="edit-fecha">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success w-100" id="save-edit-btn">Actualizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
