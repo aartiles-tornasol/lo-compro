@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             itemList.appendChild(row);
         });
-        initializeSwipeGestures(); // Volver a inicializar gestos en las nuevas filas
+        
     };
 
     // Función para cargar la siguiente "página" de items
@@ -189,131 +189,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const editItemModal = new bootstrap.Modal(document.getElementById('edit-item-modal'));
+    
 
-    // Función para poblar el formulario para la edición
-    const populateFormForEdit = (itemId) => {
-        const itemToEdit = allItems.find(item => item.id === itemId);
-        if (!itemToEdit) return;
+    
 
-        // Rellenar los campos del formulario del modal
-        document.getElementById('edit-modal-item-id').value = itemId;
-        document.getElementById('edit-producto').value = itemToEdit.producto;
-        document.getElementById('edit-precio').value = parsePrice(itemToEdit.precio);
-        document.getElementById('edit-cantidad').value = itemToEdit.cantidad;
-        document.getElementById('edit-unidad').value = itemToEdit.unidad;
-        document.getElementById('edit-supermercado').value = itemToEdit.supermercado;
-        // Formatear la fecha para el input type="date" (YYYY-MM-DD)
-        document.getElementById('edit-fecha').value = new Date(itemToEdit.fecha).toISOString().split('T')[0];
-
-        // Mostrar el modal
-        editItemModal.show();
-    };
-
-    // Listener para el botón de guardar cambios en el modal
-    document.getElementById('save-edit-btn').addEventListener('click', () => {
-        const itemId = document.getElementById('edit-modal-item-id').value;
-        if (!itemId) return;
-
-        const rawPrice = document.getElementById('edit-precio').value;
-        const parsedPrice = parsePrice(rawPrice);
-        const quantity = parseFloat(document.getElementById('edit-cantidad').value);
-        const unit = document.getElementById('edit-unidad').value;
-        const fecha = new Date(document.getElementById('edit-fecha').value).toISOString();
-
-        const { value: pricePerUnitValue, unit: pricePerUnitUnit } = calculatePricePerUnit(parsedPrice, quantity, unit);
-
-        const updatedData = {
-            producto: document.getElementById('edit-producto').value,
-            supermercado: document.getElementById('edit-supermercado').value,
-            precio: rawPrice,
-            cantidad: quantity,
-            unidad: unit,
-            fecha: fecha, // Usar la nueva fecha del formulario
-            precioPorUnidad: pricePerUnitValue,
-            unidadPrecioPorUnidad: pricePerUnitUnit
-        };
-
-        itemsRef.child(itemId).update(updatedData);
-
-        editItemModal.hide();
-    });
-
-    // --- REINTRODUCIDO: Lógica de Gestos de Swipe ---
-    const initializeSwipeGestures = () => {
-        const rows = document.querySelectorAll('.product-row');
-        rows.forEach(row => {
-            if (row.hammer) return; // Prevenir reinicialización
-
-            row.hammer = new Hammer.Manager(row);
-            row.hammer.add(new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 300 }));
-
-            row.hammer.on('panstart', (ev) => {
-                const BORDER_ZONE_PERCENTAGE = 0.15; // 15% de la anchura de la fila
-                const rowWidth = row.offsetWidth;
-                const rowRect = row.getBoundingClientRect(); // Posición y tamaño de la fila
-
-                // Calcular la posición X del toque relativa a la fila
-                // Usar ev.srcEvent.clientX para una posición más precisa del inicio del toque
-                const touchX = ev.srcEvent.clientX || ev.srcEvent.touches[0].clientX;
-                const relativeTouchX = touchX - rowRect.left;
-
-                // Determinar si el toque está en la zona izquierda o derecha
-                const isInLeftBorderZone = relativeTouchX < rowWidth * BORDER_ZONE_PERCENTAGE;
-                const isInRightBorderZone = relativeTouchX > rowWidth * (1 - BORDER_ZONE_PERCENTAGE);
-
-                // Permitir el swipe horizontal solo si el toque está en una de las zonas de borde
-                row.canSwipeHorizontally = isInLeftBorderZone || isInRightBorderZone;
-
-                if (row.canSwipeHorizontally) {
-                    row.classList.add('swiping');
-                }
-            });
-
-            row.hammer.on('panleft panright', (ev) => {
-                if (!row.canSwipeHorizontally) return; // Solo aplicar transformación si se permite el swipe
-
-                row.classList.add('swiping');
-                if (ev.type === 'panleft') {
-                    row.style.transform = `translateX(${ev.deltaX}px)`;
-                } else if (ev.type === 'panright') {
-                    row.style.transform = `translateX(${ev.deltaX}px)`;
-                }
-            });
-
-            row.hammer.on('panend', (ev) => {
-                row.classList.remove('swiping');
-                // Resetear posición siempre, independientemente de si el swipe fue válido o no
-                row.style.removeProperty('transform');
-
-                if (!row.canSwipeHorizontally) return; // No ejecutar acciones si el swipe no fue válido
-
-                const rowWidth = row.offsetWidth;
-
-                // Swipe a la derecha para EDITAR
-                if (ev.deltaX > rowWidth * 0.3) {
-                    populateFormForEdit(row.dataset.itemId);
-                }
-                // Swipe a la izquierda para BORRAR
-                else if (ev.deltaX < -rowWidth * 0.3) {
-                    if (confirm('¿Estás seguro de que quieres borrar este registro?')) {
-                        deleteItem(row.dataset.itemId);
-                    } 
-                }
-                // Resetear la bandera
-                row.canSwipeHorizontally = false;
-            });
-        });
-    };
-
-    // Función para borrar un item de Firebase
-    const deleteItem = (itemId) => {
-        if (!itemId) return;
-        itemsRef.child(itemId).remove()
-            .catch((error) => {
-                console.error("Error al eliminar el item:", error);
-            });
-    };
+    
 
     // Escuchar cambios en la base de datos en tiempo real
     itemsRef.on('value', (snapshot) => {
