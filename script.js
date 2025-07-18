@@ -246,15 +246,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (row.hammer) return; // Prevenir reinicialización
 
             row.hammer = new Hammer.Manager(row);
-            row.hammer.add(new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 250 }));
+            row.hammer.add(new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 300 }));
 
             row.hammer.on('panstart', (ev) => {
                 const BORDER_ZONE_PERCENTAGE = 0.15; // 15% de la anchura de la fila
                 const rowWidth = row.offsetWidth;
-                const touchX = ev.center.x; // Posición X del toque en la pantalla
                 const rowRect = row.getBoundingClientRect(); // Posición y tamaño de la fila
 
                 // Calcular la posición X del toque relativa a la fila
+                // Usar ev.srcEvent.clientX para una posición más precisa del inicio del toque
+                const touchX = ev.srcEvent.clientX || ev.srcEvent.touches[0].clientX;
                 const relativeTouchX = touchX - rowRect.left;
 
                 // Determinar si el toque está en la zona izquierda o derecha
