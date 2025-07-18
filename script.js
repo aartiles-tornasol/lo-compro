@@ -153,15 +153,17 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             itemList.appendChild(row);
 
-            // --- Lógica de Swipe para Borrar (Vanilla JS) ---
+            // --- Lógica de Swipe para Borrar y Editar (Vanilla JS) ---
             let startX = 0;
             let currentX = 0;
             let isSwiping = false;
             let initialTouchRightZone = false;
+            let initialTouchLeftZone = false; // Nueva variable para swipe a la izquierda
 
-            const RIGHT_ZONE_PERCENTAGE = 0.20; // 20% de la anchura de la fila
+            const BORDER_ZONE_PERCENTAGE = 0.20; // 20% de la anchura de la fila
             const SWIPE_THRESHOLD = 50; // Píxeles para considerar un swipe
-            const DELETE_THRESHOLD = -150; // Píxeles para confirmar el borrado
+            const DELETE_THRESHOLD = -150; // Píxeles para confirmar el borrado (swipe izquierda)
+            const EDIT_THRESHOLD = 150; // Píxeles para confirmar la edición (swipe derecha)
 
             row.addEventListener('touchstart', (e) => {
                 startX = e.touches[0].clientX;
@@ -169,28 +171,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 const rowRect = row.getBoundingClientRect();
                 const relativeTouchX = startX - rowRect.left;
 
-                // Solo permitir el inicio del swipe si el toque está en la zona derecha
-                initialTouchRightZone = relativeTouchX > rowWidth * (1 - RIGHT_ZONE_PERCENTAGE);
+                // Determinar si el toque está en la zona derecha o izquierda
+                initialTouchRightZone = relativeTouchX > rowWidth * (1 - BORDER_ZONE_PERCENTAGE);
+                initialTouchLeftZone = relativeTouchX < rowWidth * BORDER_ZONE_PERCENTAGE; // Detectar zona izquierda
+
                 isSwiping = false; // Resetear estado de swipe
                 row.style.transition = 'none'; // Deshabilitar transición durante el arrastre
             });
 
             row.addEventListener('touchmove', (e) => {
-                if (!initialTouchRightZone) return; // Ignorar si no se inició en la zona derecha
+                // Ignorar si no se inició en ninguna zona de swipe válida
+                if (!initialTouchRightZone && !initialTouchLeftZone) return;
 
                 currentX = e.touches[0].clientX;
                 const deltaX = currentX - startX;
 
-                // Si el movimiento es hacia la izquierda y excede el umbral, es un swipe
-                if (deltaX < 0 && Math.abs(deltaX) > SWIPE_THRESHOLD) {
+                // Lógica para swipe hacia la izquierda (borrar)
+                if (initialTouchRightZone && deltaX < 0 && Math.abs(deltaX) > SWIPE_THRESHOLD) {
                     isSwiping = true;
                     e.preventDefault(); // Prevenir scroll vertical/horizontal del navegador
-                    // Limitar el movimiento para que no se vaya demasiado lejos
-                    row.style.transform = `translateX(${Math.max(-150, deltaX)}px)`;
-                } else if (deltaX >= 0) {
-                    // Si el movimiento es hacia la derecha, no es un swipe de borrado
+                    row.style.transform = `translateX(${Math.max(-150, deltaX)}px)`; // Limitar movimiento
+                }
+                // Lógica para swipe hacia la derecha (editar)
+                else if (initialTouchLeftZone && deltaX > 0 && Math.abs(deltaX) > SWIPE_THRESHOLD) {
+                    isSwiping = true;
+                    e.preventDefault(); // Prevenir scroll vertical/horizontal del navegador
+                    row.style.transform = `translateX(${Math.min(150, deltaX)}px)`; // Limitar movimiento
+                } else {
+                    // Si el movimiento no es un swipe válido en ninguna dirección, o es hacia la dirección opuesta
                     isSwiping = false;
-                    row.style.transform = 'translateX(0px)'; // Asegurarse de que no se mueva a la derecha
+                    row.style.transform = 'translateX(0px)';
                 }
             });
 
@@ -199,21 +209,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const deltaX = currentX - startX;
 
-                if (isSwiping && deltaX < DELETE_THRESHOLD) {
-                    // Confirmar y borrar
-                    if (confirm('¿Estás seguro de que quieres borrar este registro?')) {
-                        // Animación de salida antes de borrar
-                        row.style.transform = `translateX(-${row.offsetWidth}px)`;
-                        row.style.opacity = '0';
-                        setTimeout(() => {
-                            deleteItem(item.id);
-                        }, 300); // Esperar a que termine la animación
+                if (isSwiping) {
+                    if (initialTouchRightZone && deltaX < DELETE_THRESHOLD) {
+                        // Confirmar y borrar
+                        if (confirm('¿Estás seguro de que quieres borrar este registro?')) {
+                            row.style.transform = `translateX(-${row.offsetWidth}px)`;
+                            row.style.opacity = '0';
+                            setTimeout(() => {
+                                deleteItem(item.id);
+                            }, 300);
+                        } else {
+                            row.style.transform = 'translateX(0px)';
+                        }
+                    } else if (initialTouchLeftZone && deltaX > EDIT_THRESHOLD) {
+                        // Editar
+                        populateFormForEdit(item.id);
+                        row.style.transform = 'translateX(0px)'; // Volver a la posición original
                     } else {
-                        // Si cancela, volver a la posición original
+                        // Si no se alcanzó el umbral, volver a la posición original
                         row.style.transform = 'translateX(0px)';
                     }
                 } else {
-                    // Si no fue un swipe válido o no se alcanzó el umbral de borrado, volver a la posición original
+                    // Si no fue un swipe válido, volver a la posición original
                     row.style.transform = 'translateX(0px)';
                 }
 
@@ -222,6 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentX = 0;
                 isSwiping = false;
                 initialTouchRightZone = false;
+                initialTouchLeftZone = false;
             });
             // --- Fin Lógica de Swipe ---
         });
@@ -266,6 +284,56 @@ document.addEventListener('DOMContentLoaded', () => {
     
 
     
+
+    const editItemModal = new bootstrap.Modal(document.getElementById('edit-item-modal'));
+
+    // Función para poblar el formulario para la edición
+    const populateFormForEdit = (itemId) => {
+        const itemToEdit = allItems.find(item => item.id === itemId);
+        if (!itemToEdit) return;
+
+        // Rellenar los campos del formulario del modal
+        document.getElementById('edit-modal-item-id').value = itemId;
+        document.getElementById('edit-producto').value = itemToEdit.producto;
+        document.getElementById('edit-precio').value = parsePrice(itemToEdit.precio);
+        document.getElementById('edit-cantidad').value = itemToEdit.cantidad;
+        document.getElementById('edit-unidad').value = itemToEdit.unidad;
+        document.getElementById('edit-supermercado').value = itemToEdit.supermercado;
+        // Formatear la fecha para el input type="date" (YYYY-MM-DD)
+        document.getElementById('edit-fecha').value = new Date(itemToEdit.fecha).toISOString().split('T')[0];
+
+        // Mostrar el modal
+        editItemModal.show();
+    };
+
+    // Listener para el botón de guardar cambios en el modal
+    document.getElementById('save-edit-btn').addEventListener('click', () => {
+        const itemId = document.getElementById('edit-modal-item-id').value;
+        if (!itemId) return;
+
+        const rawPrice = document.getElementById('edit-precio').value;
+        const parsedPrice = parsePrice(rawPrice);
+        const quantity = parseFloat(document.getElementById('edit-cantidad').value);
+        const unit = document.getElementById('edit-unidad').value;
+        const fecha = new Date(document.getElementById('edit-fecha').value).toISOString();
+
+        const { value: pricePerUnitValue, unit: pricePerUnitUnit } = calculatePricePerUnit(parsedPrice, quantity, unit);
+
+        const updatedData = {
+            producto: document.getElementById('edit-producto').value,
+            supermercado: document.getElementById('edit-supermercado').value,
+            precio: rawPrice,
+            cantidad: quantity,
+            unidad: unit,
+            fecha: fecha, // Usar la nueva fecha del formulario
+            precioPorUnidad: pricePerUnitValue,
+            unidadPrecioPorUnidad: pricePerUnitUnit
+        };
+
+        itemsRef.child(itemId).update(updatedData);
+
+        editItemModal.hide();
+    });
 
     // Función para borrar un item de Firebase
     const deleteItem = (itemId) => {
