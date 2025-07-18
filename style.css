@@ -153,6 +153,7 @@
     position: relative;
     overflow: hidden;
     transition: transform 0.3s ease;
+    touch-action: pan-y; /* Permitir scroll vertical, Hammer.js manejará el horizontal */
 }
 
 .product-row.swiping {

@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (row.hammer) return; // Prevenir reinicialización
 
             row.hammer = new Hammer.Manager(row);
-            row.hammer.add(new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 40 }));
+            row.hammer.add(new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 75 }));
 
             row.hammer.on('panleft panright', (ev) => {
                 row.classList.add('swiping');
