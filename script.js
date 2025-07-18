@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const RIGHT_ZONE_PERCENTAGE = 0.20; // 20% de la anchura de la fila
             const SWIPE_THRESHOLD = 50; // Píxeles para considerar un swipe
-            const DELETE_THRESHOLD = -80; // Píxeles para confirmar el borrado
+            const DELETE_THRESHOLD = -150; // Píxeles para confirmar el borrado
 
             row.addEventListener('touchstart', (e) => {
                 startX = e.touches[0].clientX;
