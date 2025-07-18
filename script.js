@@ -211,16 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (isSwiping) {
                     if (initialTouchRightZone && deltaX < DELETE_THRESHOLD) {
-                        // Confirmar y borrar
-                        if (confirm('¿Estás seguro de que quieres borrar este registro?')) {
-                            row.style.transform = `translateX(-${row.offsetWidth}px)`;
-                            row.style.opacity = '0';
-                            setTimeout(() => {
-                                deleteItem(item.id);
-                            }, 300);
-                        } else {
-                            row.style.transform = 'translateX(0px)';
-                        }
+                        // Mostrar modal de confirmación en lugar de confirm()
+                        itemIdToDelete = item.id; // Guardar el ID del item a borrar
+                        deleteConfirmModal.show();
+                        row.style.transform = 'translateX(0px)'; // Volver a la posición original inmediatamente
                     } else if (initialTouchLeftZone && deltaX > EDIT_THRESHOLD) {
                         // Editar
                         populateFormForEdit(item.id);
@@ -335,6 +329,9 @@ document.addEventListener('DOMContentLoaded', () => {
         editItemModal.hide();
     });
 
+    const deleteConfirmModal = new bootstrap.Modal(document.getElementById('delete-confirm-modal'));
+    let itemIdToDelete = null; // Variable para almacenar el ID del item a borrar
+
     // Función para borrar un item de Firebase
     const deleteItem = (itemId) => {
         if (!itemId) return;
@@ -343,6 +340,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error("Error al eliminar el item:", error);
             });
     };
+
+    // Listener para el botón de confirmar eliminación en el modal
+    document.getElementById('confirm-delete-btn').addEventListener('click', () => {
+        if (itemIdToDelete) {
+            // Animación de salida antes de borrar (opcional, si se quiere mantener)
+            const rowToDelete = document.querySelector(`[data-item-id="${itemIdToDelete}"]`);
+            if (rowToDelete) {
+                rowToDelete.style.transform = `translateX(-${rowToDelete.offsetWidth}px)`;
+                rowToDelete.style.opacity = '0';
+                setTimeout(() => {
+                    deleteItem(itemIdToDelete);
+                    itemIdToDelete = null; // Resetear la variable
+                }, 300);
+            } else {
+                deleteItem(itemIdToDelete);
+                itemIdToDelete = null; // Resetear la variable
+            }
+        }
+        deleteConfirmModal.hide();
+    });
 
     // Escuchar cambios en la base de datos en tiempo real
     itemsRef.on('value', (snapshot) => {
