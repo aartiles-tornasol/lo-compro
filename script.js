@@ -211,8 +211,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (isSwiping) {
                     if (initialTouchRightZone && deltaX < DELETE_THRESHOLD) {
-                        // Mostrar modal de confirmación en lugar de confirm()
                         itemIdToDelete = item.id; // Guardar el ID del item a borrar
+                        itemToDeleteData = item; // Guardar los datos completos del item
+
+                        // Rellenar el modal con la información del producto
+                        deleteProductName.textContent = itemToDeleteData.producto;
+                        deleteProductDate.textContent = formatDisplayDate(itemToDeleteData.fecha);
+                        // Limpiar clases de color anteriores y añadir la nueva
+                        Object.values(supermarketColorClasses).forEach(cls => deleteProductColorIndicator.classList.remove(cls));
+                        deleteProductColorIndicator.classList.add(supermarketColorClasses[itemToDeleteData.supermercado] || '');
+
                         deleteConfirmModal.show();
                         row.style.transform = 'translateX(0px)'; // Volver a la posición original inmediatamente
                     } else if (initialTouchLeftZone && deltaX > EDIT_THRESHOLD) {
@@ -331,6 +339,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const deleteConfirmModal = new bootstrap.Modal(document.getElementById('delete-confirm-modal'));
     let itemIdToDelete = null; // Variable para almacenar el ID del item a borrar
+    let itemToDeleteData = null; // Variable para almacenar los datos completos del item a borrar
+
+    // Referencias a los elementos del modal de confirmación
+    const deleteProductName = document.getElementById('delete-product-name');
+    const deleteProductDate = document.getElementById('delete-product-date');
+    const deleteProductColorIndicator = document.getElementById('delete-product-color-indicator');
 
     // Función para borrar un item de Firebase
     const deleteItem = (itemId) => {
@@ -352,10 +366,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     deleteItem(itemIdToDelete);
                     itemIdToDelete = null; // Resetear la variable
+                    itemToDeleteData = null; // Resetear la variable
                 }, 300);
             } else {
                 deleteItem(itemIdToDelete);
                 itemIdToDelete = null; // Resetear la variable
+                itemToDeleteData = null; // Resetear la variable
             }
         }
         deleteConfirmModal.hide();
