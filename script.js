@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let initialTouchRightZone = false;
             let initialTouchLeftZone = false; // Nueva variable para swipe a la izquierda
 
-            const BORDER_ZONE_PERCENTAGE = 0.20; // 20% de la anchura de la fila
+            const BORDER_ZONE_PERCENTAGE = 0.12; // 12% de la anchura de la fila
             const SWIPE_THRESHOLD = 50; // Píxeles para considerar un swipe
             const DELETE_THRESHOLD = -150; // Píxeles para confirmar el borrado (swipe izquierda)
             const EDIT_THRESHOLD = 150; // Píxeles para confirmar la edición (swipe derecha)
