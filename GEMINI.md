@@ -12,7 +12,7 @@ El objetivo es desarrollar una aplicación web sencilla, diseñada con un enfoqu
 *   **Backend (Base de Datos):** Se utiliza **Firebase Realtime Database** para almacenar y sincronizar los datos de los productos en tiempo real.
 *   **Configuración:** Las credenciales y la configuración de la conexión a Firebase se encuentran en el archivo `config.js`.
 *   **Lógica de la Aplicación:** El archivo `script.js` contiene toda la lógica para inicializar Firebase, gestionar los datos (añadir, leer, eliminar), renderizar la interfaz y manejar toda la interacción del usuario.
-*   **Gestos Táctiles:** Se utiliza la librería **Hammer.js** para la detección de gestos de deslizamiento (swipe) en la lista de productos, permitiendo acciones como editar o borrar.
+*   **Gestos Táctiles:** Los gestos de deslizamiento (swipe) en la lista de productos, que permiten acciones como editar o borrar, están implementados manualmente usando eventos táctiles nativos de JavaScript.
 
 ## Despliegue
 
