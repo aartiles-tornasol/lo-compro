@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Lógica de Autenticación ---
     const signInWithGoogle = () => {
+        // Guardamos una marca para saber que hemos iniciado el login
+        sessionStorage.setItem('authInProgress', 'true');
         const provider = new firebase.auth.GoogleAuthProvider();
         auth.signInWithRedirect(provider);
     };
@@ -36,18 +38,21 @@ document.addEventListener('DOMContentLoaded', () => {
     loginBtn.addEventListener('click', signInWithGoogle);
     logoutBtn.addEventListener('click', signOut);
 
-    // Primero, gestionamos el resultado de la redirección
-    auth.getRedirectResult()
-        .then((result) => {
-            if (result.user) {
-                console.log("Login exitoso por redirección para el usuario:", result.user.displayName);
-            }
-        })
-        .catch((error) => {
-            console.error("Error durante la redirección de login:", error);
-        });
+    // Comprobamos si venimos de una redirección de login
+    if (sessionStorage.getItem('authInProgress')) {
+        sessionStorage.removeItem('authInProgress'); // Limpiamos la marca
+        auth.getRedirectResult()
+            .then((result) => {
+                if (result.user) {
+                    console.log("Login exitoso por redirección para el usuario:", result.user.displayName);
+                }
+            })
+            .catch((error) => {
+                console.error("Error durante la redirección de login:", error);
+            });
+    }
 
-    // Después, el listener de estado se encarga de actualizar la UI
+    // El listener de estado se encarga de actualizar la UI
     auth.onAuthStateChanged(user => {
         if (user) {
             // Usuario ha iniciado sesión
