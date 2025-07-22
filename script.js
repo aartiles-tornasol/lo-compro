@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Lógica de Autenticación ---
     const signInWithGoogle = () => {
         const provider = new firebase.auth.GoogleAuthProvider();
-        auth.signInWithPopup(provider).catch(error => console.error("Error en el login:", error));
+        auth.signInWithRedirect(provider);
     };
 
     const signOut = () => {
@@ -36,6 +36,18 @@ document.addEventListener('DOMContentLoaded', () => {
     loginBtn.addEventListener('click', signInWithGoogle);
     logoutBtn.addEventListener('click', signOut);
 
+    // Primero, gestionamos el resultado de la redirección
+    auth.getRedirectResult()
+        .then((result) => {
+            if (result.user) {
+                console.log("Login exitoso por redirección para el usuario:", result.user.displayName);
+            }
+        })
+        .catch((error) => {
+            console.error("Error durante la redirección de login:", error);
+        });
+
+    // Después, el listener de estado se encarga de actualizar la UI
     auth.onAuthStateChanged(user => {
         if (user) {
             // Usuario ha iniciado sesión
