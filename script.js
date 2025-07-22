@@ -2,7 +2,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicializar Firebase
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
+    const auth = firebase.auth();
     const itemsRef = database.ref('items');
+
+    // --- Elementos de Autenticación ---
+    const loginBtn = document.getElementById('login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const userDisplay = document.getElementById('user-display');
 
     const form = document.getElementById('add-item-form');
     const itemList = document.getElementById('item-list');
@@ -16,6 +22,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const productSuggestions = document.getElementById('product-suggestions');
     const unitSelect = document.getElementById('unidad');
     const addButton = form.querySelector('button[type="submit"]');
+
+    // --- Lógica de Autenticación ---
+    const signInWithGoogle = () => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider).catch(error => console.error("Error en el login:", error));
+    };
+
+    const signOut = () => {
+        auth.signOut().catch(error => console.error("Error en el logout:", error));
+    };
+
+    loginBtn.addEventListener('click', signInWithGoogle);
+    logoutBtn.addEventListener('click', signOut);
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            // Usuario ha iniciado sesión
+            console.log("Usuario autenticado. UID:", user.uid);
+            userDisplay.textContent = `Hola, ${user.displayName.split(' ')[0]}`;
+            userDisplay.classList.remove('d-none');
+            loginBtn.classList.add('d-none');
+            logoutBtn.classList.remove('d-none');
+            toggleFormBtn.style.display = 'flex'; // Mostrar el botón FAB para añadir
+        } else {
+            // Usuario ha cerrado sesión
+            console.log("Usuario no autenticado.");
+            userDisplay.classList.add('d-none');
+            loginBtn.classList.remove('d-none');
+            logoutBtn.classList.add('d-none');
+            toggleFormBtn.style.display = 'none'; // Ocultar el botón FAB
+            addItemCard.style.display = 'none'; // Ocultar el formulario si estaba abierto
+        }
+    });
 
     // Establecer 'ud' como valor por defecto para la unidad
     unitSelect.value = 'ud';
