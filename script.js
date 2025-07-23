@@ -148,8 +148,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Funciones de UI ---
     const uiSetupForAuthenticatedUser = (user) => {
-        searchContainer.style.display = 'block';
-        productListContainer.style.display = 'block';
+        // searchContainer.style.display = 'block';
+        // productListContainer.style.display = 'block';
         userDisplay.textContent = `Hola, ${user.displayName.split(' ')[0]}`;
         userDisplay.classList.remove('d-none');
         loginBtn.classList.add('d-none');
@@ -158,8 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const uiSetupForAnonymousUser = () => {
-        searchContainer.style.display = 'none';
-        productListContainer.style.display = 'none';
+        // searchContainer.style.display = 'none';
+        // productListContainer.style.display = 'none';
         userDisplay.classList.add('d-none');
         loginBtn.classList.remove('d-none');
         logoutBtn.classList.add('d-none');
