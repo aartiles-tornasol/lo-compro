@@ -65,29 +65,44 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Resultado de getRedirectResult:", result); // <-- NUEVO LOG
             if (result.user) {
                 console.log("Login exitoso por redirección para el usuario:", result.user.displayName);
-                // onAuthStateChanged se encargará del resto
             }
+            // Ahora que el redirect ha sido procesado, podemos configurar el listener de estado.
+            // Esto asegura que el listener no se dispare antes de que el redirect se procese.
+            auth.onAuthStateChanged(user => {
+                console.log("onAuthStateChanged user object:", user); // <-- NUEVO LOG
+                if (user) {
+                    // Usuario autenticado
+                    console.log("Usuario autenticado. UID:", user.uid);
+                    uiSetupForAuthenticatedUser(user);
+                    startDataListeners();
+                } else {
+                    // Usuario no autenticado
+                    console.log("Usuario no autenticado.");
+                    uiSetupForAnonymousUser();
+                    stopDataListeners();
+                }
+            });
         })
         .catch(error => {
             console.error("Error durante la redirección de login:", error);
             console.log("Detalle completo del error de redirección:", error); // <-- NUEVO LOG
+            // Si hay un error en el redirect, aún así configuramos el listener
+            // para que la UI se actualice a un estado no autenticado.
+            auth.onAuthStateChanged(user => {
+                console.log("onAuthStateChanged user object (after redirect error):", user); // <-- NUEVO LOG
+                if (user) {
+                    console.log("Usuario autenticado. UID:", user.uid);
+                    uiSetupForAuthenticatedUser(user);
+                    startDataListeners();
+                } else {
+                    console.log("Usuario no autenticado.");
+                    uiSetupForAnonymousUser();
+                    stopDataListeners();
+                }
+            });
         });
 
-    // Listener principal de estado de autenticación
-    auth.onAuthStateChanged(user => {
-        console.log("onAuthStateChanged user object:", user); // <-- NUEVO LOG
-        if (user) {
-            // Usuario autenticado
-            console.log("Usuario autenticado. UID:", user.uid);
-            uiSetupForAuthenticatedUser(user);
-            startDataListeners();
-        } else {
-            // Usuario no autenticado
-            console.log("Usuario no autenticado.");
-            uiSetupForAnonymousUser();
-            stopDataListeners();
-        }
-    });
+    
 
     // --- Funciones para manejar los listeners de Firebase ---
     const startDataListeners = () => {
