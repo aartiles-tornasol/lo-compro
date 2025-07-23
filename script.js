@@ -39,7 +39,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Lógica de Autenticación ---
     const signInWithGoogle = () => {
         const provider = new firebase.auth.GoogleAuthProvider();
-        auth.signInWithRedirect(provider);
+        // Forzar la persistencia a 'session' para ayudar a mantener el estado durante la redirección.
+        auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)
+            .then(() => {
+                // Una vez configurada la persistencia, iniciar el proceso de login.
+                return auth.signInWithRedirect(provider);
+            })
+            .catch((error) => {
+                console.error("Error al configurar la persistencia o al iniciar el login:", error);
+            });
     };
 
     const signOut = () => {
