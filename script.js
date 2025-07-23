@@ -1,10 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Inicializar Firebase
     firebase.initializeApp(firebaseConfig);
-    console.log("Firebase app initialized:", firebase.app().name); // <-- NUEVO LOG
-    console.log("Firebase auth object:", firebase.auth()); // <-- NUEVO LOG
-    console.log("Auth Domain from Firebase SDK:", firebase.auth().app.options.authDomain); // <-- NUEVO LOG
-    console.log("Database URL from Firebase SDK:", firebase.auth().app.options.databaseURL); // <-- NUEVO LOG
     const database = firebase.database();
     const auth = firebase.auth();
     const itemsRef = database.ref('items');
@@ -91,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Si hay un error en el redirect, aún así configuramos el listener
             // para que la UI se actualice a un estado no autenticado.
             auth.onAuthStateChanged(user => {
-                console.log("onAuthStateChanged user object (after redirect error):", user); // <-- NUEVO LOG
+                
                 if (user) {
                     console.log("Usuario autenticado. UID:", user.uid);
                     uiSetupForAuthenticatedUser(user);
