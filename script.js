@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             console.error("Error durante la redirección de login:", error);
+            console.log("Detalle completo del error de redirección:", error); // <-- NUEVO LOG
         });
 
     // Listener principal de estado de autenticación
