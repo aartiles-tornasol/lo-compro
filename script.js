@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     firebase.initializeApp(firebaseConfig);
     console.log("Firebase app initialized:", firebase.app().name); // <-- NUEVO LOG
     console.log("Firebase auth object:", firebase.auth()); // <-- NUEVO LOG
+    console.log("Auth Domain from Firebase SDK:", firebase.auth().app.options.authDomain); // <-- NUEVO LOG
+    console.log("Database URL from Firebase SDK:", firebase.auth().app.options.databaseURL); // <-- NUEVO LOG
     const database = firebase.database();
     const auth = firebase.auth();
     const itemsRef = database.ref('items');
