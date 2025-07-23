@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Procesar el resultado de la redirección de login al cargar la página
     auth.getRedirectResult()
         .then(result => {
+            console.log("Resultado de getRedirectResult:", result); // <-- NUEVO LOG
             if (result.user) {
                 console.log("Login exitoso por redirección para el usuario:", result.user.displayName);
                 // onAuthStateChanged se encargará del resto
@@ -71,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Listener principal de estado de autenticación
     auth.onAuthStateChanged(user => {
+        console.log("onAuthStateChanged user object:", user); // <-- NUEVO LOG
         if (user) {
             // Usuario autenticado
             console.log("Usuario autenticado. UID:", user.uid);
