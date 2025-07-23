@@ -1,0 +1,1002 @@
+{
+  "-NzUwoea2yuCsKuHUFktS": {
+    "producto": "Dummy Huevos Camperos",
+    "supermercado": "Lidl",
+    "precio": "5,13",
+    "cantidad": 7,
+    "unidad": "l",
+    "fecha": "2025-06-20T17:26:48.057938Z",
+    "precioPorUnidad": 0.73,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-N6Wf73e7FNctBiu4zZzG": {
+    "producto": "Dummy Galletas Mar\u00eda",
+    "supermercado": "Druni",
+    "precio": "8,46",
+    "cantidad": 4,
+    "unidad": "l",
+    "fecha": "2025-03-08T17:26:48.058426Z",
+    "precioPorUnidad": 2.12,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-Njjg2oJst0VrewBrkDd7": {
+    "producto": "Dummy Pan Bimbo",
+    "supermercado": "Primor",
+    "precio": "11,68",
+    "cantidad": 6,
+    "unidad": "l",
+    "fecha": "2025-06-15T17:26:48.058447Z",
+    "precioPorUnidad": 1.95,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-N0CXwnknsrg9gdEnpqcw": {
+    "producto": "Dummy Aceite de Oliva",
+    "supermercado": "Hiperdino",
+    "precio": "16,73",
+    "cantidad": 4,
+    "unidad": "kg",
+    "fecha": "2025-05-26T17:26:48.058462Z",
+    "precioPorUnidad": 4.18,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-N1YuP8bcVjLVIAnJoIGI": {
+    "producto": "Dummy Rexona Algodon",
+    "supermercado": "Alcampo",
+    "precio": "2,07",
+    "cantidad": 2,
+    "unidad": "paq",
+    "fecha": "2025-02-20T17:26:48.058476Z",
+    "precioPorUnidad": 1.03,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NxxUSRZaQ1O8o9KZwdmK": {
+    "producto": "Dummy Rexona Algodon",
+    "supermercado": "Spar",
+    "precio": "16,72",
+    "cantidad": 9,
+    "unidad": "l",
+    "fecha": "2025-04-23T17:26:48.058489Z",
+    "precioPorUnidad": 1.86,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NIke2ter2EKiPSzhvLSX": {
+    "producto": "Dummy Yogur Griego",
+    "supermercado": "Hiperdino",
+    "precio": "12,82",
+    "cantidad": 2,
+    "unidad": "ud",
+    "fecha": "2024-11-30T17:26:48.058501Z",
+    "precioPorUnidad": 6.41,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NklBB1mv63T9iTdqEB0y": {
+    "producto": "Dummy Aceite de Oliva",
+    "supermercado": "Mercadona",
+    "precio": "11,81",
+    "cantidad": 8,
+    "unidad": "g",
+    "fecha": "2024-07-17T17:26:48.058512Z",
+    "precioPorUnidad": 1476.25,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NOdengHtuPESM6HOnkNR": {
+    "producto": "Dummy Jam\u00f3n Serrano",
+    "supermercado": "Hiperdino",
+    "precio": "13,55",
+    "cantidad": 5,
+    "unidad": "paq",
+    "fecha": "2025-04-27T17:26:48.058524Z",
+    "precioPorUnidad": 2.71,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-N1PnbEpWWvFzmD154j77": {
+    "producto": "Dummy Jam\u00f3n Serrano",
+    "supermercado": "Alcampo",
+    "precio": "2,36",
+    "cantidad": 7,
+    "unidad": "paq",
+    "fecha": "2024-10-01T17:26:48.058535Z",
+    "precioPorUnidad": 0.34,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NF5syGnwds2Deyre3HJu": {
+    "producto": "Dummy Yogur Griego",
+    "supermercado": "Druni",
+    "precio": "11,05",
+    "cantidad": 10,
+    "unidad": "l",
+    "fecha": "2024-08-19T17:26:48.058547Z",
+    "precioPorUnidad": 1.1,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-N6nQKK6SBK2qFcpgSHyK": {
+    "producto": "Dummy Jam\u00f3n Serrano",
+    "supermercado": "Druni",
+    "precio": "19,5",
+    "cantidad": 8,
+    "unidad": "paq",
+    "fecha": "2025-06-16T17:26:48.058558Z",
+    "precioPorUnidad": 2.44,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NxQkYtXIPnLg86d9uhQf": {
+    "producto": "Dummy Aceite de Oliva",
+    "supermercado": "Druni",
+    "precio": "8,77",
+    "cantidad": 3,
+    "unidad": "ud",
+    "fecha": "2024-07-17T17:26:48.058570Z",
+    "precioPorUnidad": 2.92,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-N6hRFGZiOZ4Z8UsjRqYI": {
+    "producto": "Dummy Zumo de Naranja",
+    "supermercado": "Lidl",
+    "precio": "13,84",
+    "cantidad": 7,
+    "unidad": "ml",
+    "fecha": "2024-12-06T17:26:48.058581Z",
+    "precioPorUnidad": 1977.14,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NZROXbUbOZhVbmwsOi8d": {
+    "producto": "Dummy Aceite de Oliva",
+    "supermercado": "Spar",
+    "precio": "15,27",
+    "cantidad": 2,
+    "unidad": "ud",
+    "fecha": "2025-07-10T17:26:48.058592Z",
+    "precioPorUnidad": 7.63,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NjVa9d4r8YagNfD9NqqF": {
+    "producto": "Dummy Agua Mineral",
+    "supermercado": "Alcampo",
+    "precio": "17,56",
+    "cantidad": 9,
+    "unidad": "kg",
+    "fecha": "2024-11-23T17:26:48.058603Z",
+    "precioPorUnidad": 1.95,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-N3lH1OYd2SyW6UeDUEgi": {
+    "producto": "Dummy Rexona Algodon",
+    "supermercado": "Druni",
+    "precio": "6,42",
+    "cantidad": 10,
+    "unidad": "ml",
+    "fecha": "2025-06-20T17:26:48.058613Z",
+    "precioPorUnidad": 642.0,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NQubWLJc5ZvnHhHrmY31": {
+    "producto": "Dummy Aceite de Oliva",
+    "supermercado": "Mercadona",
+    "precio": "13,33",
+    "cantidad": 6,
+    "unidad": "kg",
+    "fecha": "2025-06-22T17:26:48.058624Z",
+    "precioPorUnidad": 2.22,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-N7bXkcJFUVbmGgEepObI": {
+    "producto": "Dummy Cereales Fitness",
+    "supermercado": "Mercadona",
+    "precio": "13,18",
+    "cantidad": 6,
+    "unidad": "ml",
+    "fecha": "2025-05-29T17:26:48.058634Z",
+    "precioPorUnidad": 2196.67,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NI0DVxzdBYCESaSE9Iik": {
+    "producto": "Dummy Queso Curado",
+    "supermercado": "Alcampo",
+    "precio": "11,34",
+    "cantidad": 9,
+    "unidad": "g",
+    "fecha": "2024-11-29T17:26:48.058644Z",
+    "precioPorUnidad": 1260.0,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-Ncz6YOlmsxbkCK8iKeCO": {
+    "producto": "Dummy Agua Mineral",
+    "supermercado": "Alcampo",
+    "precio": "9,44",
+    "cantidad": 10,
+    "unidad": "paq",
+    "fecha": "2025-04-12T17:26:48.058655Z",
+    "precioPorUnidad": 0.94,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NKgju81hEXJvNdxkmns9": {
+    "producto": "Dummy Galletas Mar\u00eda",
+    "supermercado": "Spar",
+    "precio": "13,25",
+    "cantidad": 6,
+    "unidad": "kg",
+    "fecha": "2024-12-25T17:26:48.058666Z",
+    "precioPorUnidad": 2.21,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-ND1CCvlESMKYMcpL2xSl": {
+    "producto": "Dummy Leche Puleva",
+    "supermercado": "Druni",
+    "precio": "17,75",
+    "cantidad": 2,
+    "unidad": "ml",
+    "fecha": "2025-06-22T17:26:48.058678Z",
+    "precioPorUnidad": 8875.0,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-N6hTTRKNqZ33sgxDNwar": {
+    "producto": "Dummy Rexona Algodon",
+    "supermercado": "Primor",
+    "precio": "20,27",
+    "cantidad": 5,
+    "unidad": "g",
+    "fecha": "2024-11-02T17:26:48.058688Z",
+    "precioPorUnidad": 4054.0,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NPQP2vluZZ7Lxk8xodTH": {
+    "producto": "Dummy Pan Bimbo",
+    "supermercado": "Lidl",
+    "precio": "7,05",
+    "cantidad": 6,
+    "unidad": "ml",
+    "fecha": "2025-01-23T17:26:48.058699Z",
+    "precioPorUnidad": 1175.0,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-Nle8VpskMB45Iz8zqRNy": {
+    "producto": "Dummy Zumo de Naranja",
+    "supermercado": "Hiperdino",
+    "precio": "14,11",
+    "cantidad": 2,
+    "unidad": "ml",
+    "fecha": "2024-07-29T17:26:48.058709Z",
+    "precioPorUnidad": 7055.0,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NglCBq8mzIQNaQoQVjCN": {
+    "producto": "Dummy Galletas Mar\u00eda",
+    "supermercado": "Alcampo",
+    "precio": "4,25",
+    "cantidad": 8,
+    "unidad": "ud",
+    "fecha": "2024-08-14T17:26:48.058721Z",
+    "precioPorUnidad": 0.53,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-N0uz5R4bbnOqYb7db2io": {
+    "producto": "Dummy Agua Mineral",
+    "supermercado": "Lidl",
+    "precio": "19,05",
+    "cantidad": 5,
+    "unidad": "l",
+    "fecha": "2024-12-22T17:26:48.058731Z",
+    "precioPorUnidad": 3.81,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NZNUMKTqHZ03iZK2wCXw": {
+    "producto": "Dummy Rexona Algodon",
+    "supermercado": "Primor",
+    "precio": "5,36",
+    "cantidad": 1,
+    "unidad": "paq",
+    "fecha": "2025-02-25T17:26:48.058742Z",
+    "precioPorUnidad": 5.36,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NmltssULL4kzEinZ0ALt": {
+    "producto": "Dummy Galletas Mar\u00eda",
+    "supermercado": "Hiperdino",
+    "precio": "8,96",
+    "cantidad": 4,
+    "unidad": "ml",
+    "fecha": "2025-06-13T17:26:48.058752Z",
+    "precioPorUnidad": 2240.0,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NIHOsb8PJjQKEeE6h6HB": {
+    "producto": "Dummy Zumo de Naranja",
+    "supermercado": "Druni",
+    "precio": "18,62",
+    "cantidad": 5,
+    "unidad": "kg",
+    "fecha": "2025-01-12T17:26:48.058762Z",
+    "precioPorUnidad": 3.72,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-Ni3xXb3Mz6eeq9LGtMbO": {
+    "producto": "Dummy Rexona Algodon",
+    "supermercado": "Mercadona",
+    "precio": "3,28",
+    "cantidad": 3,
+    "unidad": "paq",
+    "fecha": "2025-01-28T17:26:48.058772Z",
+    "precioPorUnidad": 1.09,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-N6MHvoOk8n3lTylk7PCJ": {
+    "producto": "Dummy Huevos Camperos",
+    "supermercado": "Primor",
+    "precio": "9,09",
+    "cantidad": 8,
+    "unidad": "kg",
+    "fecha": "2024-12-27T17:26:48.058782Z",
+    "precioPorUnidad": 1.14,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NUOKr4oFuZ4uwYMMIyZo": {
+    "producto": "Dummy Pan Bimbo",
+    "supermercado": "Spar",
+    "precio": "17,89",
+    "cantidad": 4,
+    "unidad": "paq",
+    "fecha": "2024-12-04T17:26:48.058793Z",
+    "precioPorUnidad": 4.47,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NTouM2U0rkSq47wiWFmP": {
+    "producto": "Dummy Queso Curado",
+    "supermercado": "Druni",
+    "precio": "9,63",
+    "cantidad": 1,
+    "unidad": "g",
+    "fecha": "2025-05-26T17:26:48.058803Z",
+    "precioPorUnidad": 9630.0,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NYCTlvUmb0c4C5LvsQxE": {
+    "producto": "Dummy Galletas Mar\u00eda",
+    "supermercado": "Alcampo",
+    "precio": "7,76",
+    "cantidad": 3,
+    "unidad": "ml",
+    "fecha": "2024-11-09T17:26:48.058813Z",
+    "precioPorUnidad": 2586.67,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NrzreKqwRlNabF1FZmiK": {
+    "producto": "Dummy Cereales Fitness",
+    "supermercado": "Spar",
+    "precio": "19,94",
+    "cantidad": 3,
+    "unidad": "l",
+    "fecha": "2024-12-23T17:26:48.058823Z",
+    "precioPorUnidad": 6.65,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NYI3T0Jkt4siUliwewvM": {
+    "producto": "Dummy Zumo de Naranja",
+    "supermercado": "Druni",
+    "precio": "2,06",
+    "cantidad": 8,
+    "unidad": "ml",
+    "fecha": "2024-09-10T17:26:48.058833Z",
+    "precioPorUnidad": 257.5,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-N8pr5Avvq8pQs3UGtahY": {
+    "producto": "Dummy Jam\u00f3n Serrano",
+    "supermercado": "Alcampo",
+    "precio": "16,15",
+    "cantidad": 6,
+    "unidad": "kg",
+    "fecha": "2025-03-27T17:26:48.058843Z",
+    "precioPorUnidad": 2.69,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NjRyJ74AegfxCB3aiAft": {
+    "producto": "Dummy Pan Bimbo",
+    "supermercado": "Hiperdino",
+    "precio": "16,73",
+    "cantidad": 9,
+    "unidad": "ml",
+    "fecha": "2025-07-03T17:26:48.058853Z",
+    "precioPorUnidad": 1858.89,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-N9HW6xSukJ0UXcpMUHqW": {
+    "producto": "Dummy Queso Curado",
+    "supermercado": "Alcampo",
+    "precio": "12,23",
+    "cantidad": 6,
+    "unidad": "g",
+    "fecha": "2024-09-09T17:26:48.058864Z",
+    "precioPorUnidad": 2038.33,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NwA3dBYGYJ8WSGkHUMGx": {
+    "producto": "Dummy Queso Curado",
+    "supermercado": "Mercadona",
+    "precio": "2,72",
+    "cantidad": 4,
+    "unidad": "ml",
+    "fecha": "2025-02-28T17:26:48.058874Z",
+    "precioPorUnidad": 680.0,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NQ1qN9sPOL1OFvEFJvMw": {
+    "producto": "Dummy Galletas Mar\u00eda",
+    "supermercado": "Lidl",
+    "precio": "5,15",
+    "cantidad": 1,
+    "unidad": "l",
+    "fecha": "2024-11-13T17:26:48.058885Z",
+    "precioPorUnidad": 5.15,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-N2Sa5az1HIRXIXmtr5Ks": {
+    "producto": "Dummy Galletas Mar\u00eda",
+    "supermercado": "Primor",
+    "precio": "5,37",
+    "cantidad": 4,
+    "unidad": "l",
+    "fecha": "2024-09-03T17:26:48.058897Z",
+    "precioPorUnidad": 1.34,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NYPJgfmAJlzrKoUZ84O9": {
+    "producto": "Dummy Jam\u00f3n Serrano",
+    "supermercado": "Primor",
+    "precio": "5,62",
+    "cantidad": 8,
+    "unidad": "g",
+    "fecha": "2024-07-18T17:26:48.058907Z",
+    "precioPorUnidad": 702.5,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-Nbcwm7sGOoOGGfTOcqbS": {
+    "producto": "Dummy Yogur Griego",
+    "supermercado": "Primor",
+    "precio": "19,95",
+    "cantidad": 5,
+    "unidad": "ud",
+    "fecha": "2025-04-17T17:26:48.058918Z",
+    "precioPorUnidad": 3.99,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NerJLepg714xAVoFwpa2": {
+    "producto": "Dummy Huevos Camperos",
+    "supermercado": "Hiperdino",
+    "precio": "7,25",
+    "cantidad": 9,
+    "unidad": "kg",
+    "fecha": "2025-07-11T17:26:48.058928Z",
+    "precioPorUnidad": 0.81,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NGpaou0sFrbSNQv2u0Xz": {
+    "producto": "Dummy Queso Curado",
+    "supermercado": "Lidl",
+    "precio": "11,92",
+    "cantidad": 8,
+    "unidad": "l",
+    "fecha": "2024-12-15T17:26:48.058938Z",
+    "precioPorUnidad": 1.49,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NHHkmzIzKj3IvLGMCiRj": {
+    "producto": "Dummy Galletas Mar\u00eda",
+    "supermercado": "Lidl",
+    "precio": "6,21",
+    "cantidad": 1,
+    "unidad": "kg",
+    "fecha": "2024-10-26T17:26:48.058949Z",
+    "precioPorUnidad": 6.21,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NnevnWmwfqlqcp9I5egt": {
+    "producto": "Dummy Pan Bimbo",
+    "supermercado": "Druni",
+    "precio": "12,18",
+    "cantidad": 7,
+    "unidad": "ud",
+    "fecha": "2024-12-07T17:26:48.058959Z",
+    "precioPorUnidad": 1.74,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NrPbbpOLGMEqtZUrp4RE": {
+    "producto": "Dummy Galletas Mar\u00eda",
+    "supermercado": "Spar",
+    "precio": "11,53",
+    "cantidad": 7,
+    "unidad": "kg",
+    "fecha": "2025-03-01T17:26:48.058969Z",
+    "precioPorUnidad": 1.65,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NcX2h3stOAmgWpYYg0Xw": {
+    "producto": "Dummy Huevos Camperos",
+    "supermercado": "Alcampo",
+    "precio": "4,92",
+    "cantidad": 8,
+    "unidad": "ud",
+    "fecha": "2024-11-09T17:26:48.058979Z",
+    "precioPorUnidad": 0.61,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-N7eFBFsIwFB4SXXWyDgz": {
+    "producto": "Dummy Galletas Mar\u00eda",
+    "supermercado": "Spar",
+    "precio": "4,45",
+    "cantidad": 1,
+    "unidad": "l",
+    "fecha": "2025-06-23T17:26:48.058989Z",
+    "precioPorUnidad": 4.45,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NLirpcLfZylFUq6dUJ1N": {
+    "producto": "Dummy Zumo de Naranja",
+    "supermercado": "Druni",
+    "precio": "16,08",
+    "cantidad": 9,
+    "unidad": "g",
+    "fecha": "2025-07-03T17:26:48.059000Z",
+    "precioPorUnidad": 1786.67,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NmfgSEUZDBg59xTdRu21": {
+    "producto": "Dummy Agua Mineral",
+    "supermercado": "Hiperdino",
+    "precio": "10,13",
+    "cantidad": 6,
+    "unidad": "ud",
+    "fecha": "2024-12-08T17:26:48.059011Z",
+    "precioPorUnidad": 1.69,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-Ndchws8RtlevEhoYzJET": {
+    "producto": "Dummy Agua Mineral",
+    "supermercado": "Mercadona",
+    "precio": "17,42",
+    "cantidad": 8,
+    "unidad": "l",
+    "fecha": "2024-09-13T17:26:48.059021Z",
+    "precioPorUnidad": 2.18,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NxKmv7KH3FjefzI0icFt": {
+    "producto": "Dummy Zumo de Naranja",
+    "supermercado": "Hiperdino",
+    "precio": "9,62",
+    "cantidad": 9,
+    "unidad": "g",
+    "fecha": "2025-06-07T17:26:48.059031Z",
+    "precioPorUnidad": 1068.89,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-Nfbr5u89AImhi8iqeKoJ": {
+    "producto": "Dummy Jam\u00f3n Serrano",
+    "supermercado": "Alcampo",
+    "precio": "4,99",
+    "cantidad": 5,
+    "unidad": "ud",
+    "fecha": "2025-03-29T17:26:48.059042Z",
+    "precioPorUnidad": 1.0,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NOuPvtyLX46KUXpJ3lk5": {
+    "producto": "Dummy Cereales Fitness",
+    "supermercado": "Mercadona",
+    "precio": "12,47",
+    "cantidad": 6,
+    "unidad": "ud",
+    "fecha": "2025-04-07T17:26:48.059052Z",
+    "precioPorUnidad": 2.08,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NfKkj74e2aqN6jowHOyd": {
+    "producto": "Dummy Galletas Mar\u00eda",
+    "supermercado": "Spar",
+    "precio": "8,22",
+    "cantidad": 7,
+    "unidad": "paq",
+    "fecha": "2024-10-30T17:26:48.059063Z",
+    "precioPorUnidad": 1.17,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NXc2UsX6Xw7B9caDXa5a": {
+    "producto": "Dummy Rexona Algodon",
+    "supermercado": "Hiperdino",
+    "precio": "11,37",
+    "cantidad": 4,
+    "unidad": "ud",
+    "fecha": "2025-04-01T17:26:48.059073Z",
+    "precioPorUnidad": 2.84,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NXTHO0GO7P6hmsl2ZNoc": {
+    "producto": "Dummy Yogur Griego",
+    "supermercado": "Mercadona",
+    "precio": "11,57",
+    "cantidad": 10,
+    "unidad": "g",
+    "fecha": "2024-12-30T17:26:48.059083Z",
+    "precioPorUnidad": 1157.0,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NI0E9C2ZZGrSJTes6lyC": {
+    "producto": "Dummy Huevos Camperos",
+    "supermercado": "Mercadona",
+    "precio": "0,61",
+    "cantidad": 9,
+    "unidad": "kg",
+    "fecha": "2024-10-22T17:26:48.059094Z",
+    "precioPorUnidad": 0.07,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NzTS92Txv6tI8C4linwx": {
+    "producto": "Dummy Yogur Griego",
+    "supermercado": "Lidl",
+    "precio": "1,93",
+    "cantidad": 5,
+    "unidad": "g",
+    "fecha": "2025-04-08T17:26:48.059104Z",
+    "precioPorUnidad": 386.0,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NIp4mes0V4tS4d8wYQfG": {
+    "producto": "Dummy Huevos Camperos",
+    "supermercado": "Alcampo",
+    "precio": "2,59",
+    "cantidad": 7,
+    "unidad": "paq",
+    "fecha": "2025-04-01T17:26:48.059114Z",
+    "precioPorUnidad": 0.37,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-Np9UrU6ne3mjHKSYsVMY": {
+    "producto": "Dummy Aceite de Oliva",
+    "supermercado": "Lidl",
+    "precio": "8,54",
+    "cantidad": 1,
+    "unidad": "paq",
+    "fecha": "2025-05-02T17:26:48.059124Z",
+    "precioPorUnidad": 8.54,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NbrMKtUIWW6QumTP4MUS": {
+    "producto": "Dummy Pan Bimbo",
+    "supermercado": "Mercadona",
+    "precio": "14,86",
+    "cantidad": 1,
+    "unidad": "l",
+    "fecha": "2024-10-06T17:26:48.059134Z",
+    "precioPorUnidad": 14.86,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NmL3b9ibS9dx6ywf28Ya": {
+    "producto": "Dummy Huevos Camperos",
+    "supermercado": "Primor",
+    "precio": "12,79",
+    "cantidad": 5,
+    "unidad": "kg",
+    "fecha": "2025-04-26T17:26:48.059146Z",
+    "precioPorUnidad": 2.56,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NHa8tGcyr2HpWfjGKB4E": {
+    "producto": "Dummy Aceite de Oliva",
+    "supermercado": "Lidl",
+    "precio": "3,49",
+    "cantidad": 9,
+    "unidad": "g",
+    "fecha": "2025-01-27T17:26:48.059155Z",
+    "precioPorUnidad": 387.78,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-Nb9WpdIRjAQXVQBw2Lln": {
+    "producto": "Dummy Huevos Camperos",
+    "supermercado": "Alcampo",
+    "precio": "16,37",
+    "cantidad": 4,
+    "unidad": "kg",
+    "fecha": "2024-12-14T17:26:48.059166Z",
+    "precioPorUnidad": 4.09,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NuZrulbcvz0uzBiW7skg": {
+    "producto": "Dummy Agua Mineral",
+    "supermercado": "Alcampo",
+    "precio": "19,64",
+    "cantidad": 8,
+    "unidad": "paq",
+    "fecha": "2024-11-03T17:26:48.059176Z",
+    "precioPorUnidad": 2.46,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NYOWKBcZSbfAK1Ao5Z0k": {
+    "producto": "Dummy Queso Curado",
+    "supermercado": "Mercadona",
+    "precio": "6,29",
+    "cantidad": 4,
+    "unidad": "g",
+    "fecha": "2025-04-24T17:26:48.059186Z",
+    "precioPorUnidad": 1572.5,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NYAK0gz3WRrmlGItR4TQ": {
+    "producto": "Dummy Cereales Fitness",
+    "supermercado": "Druni",
+    "precio": "10,56",
+    "cantidad": 1,
+    "unidad": "ud",
+    "fecha": "2025-02-28T17:26:48.059196Z",
+    "precioPorUnidad": 10.56,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-N09Or4BBVnbhtkNdaP5c": {
+    "producto": "Dummy Jam\u00f3n Serrano",
+    "supermercado": "Lidl",
+    "precio": "19,36",
+    "cantidad": 1,
+    "unidad": "ud",
+    "fecha": "2025-05-22T17:26:48.059206Z",
+    "precioPorUnidad": 19.36,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-Nzok4w5FWh6g4fZyWPpi": {
+    "producto": "Dummy Rexona Algodon",
+    "supermercado": "Mercadona",
+    "precio": "4,84",
+    "cantidad": 6,
+    "unidad": "kg",
+    "fecha": "2025-06-11T17:26:48.059216Z",
+    "precioPorUnidad": 0.81,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NMyfaB4NHHBiXOeGiE2w": {
+    "producto": "Dummy Leche Puleva",
+    "supermercado": "Lidl",
+    "precio": "10,63",
+    "cantidad": 8,
+    "unidad": "kg",
+    "fecha": "2024-09-03T17:26:48.059226Z",
+    "precioPorUnidad": 1.33,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-N2qnyp8c2D1dM1Bnl3hU": {
+    "producto": "Dummy Aceite de Oliva",
+    "supermercado": "Alcampo",
+    "precio": "10,15",
+    "cantidad": 7,
+    "unidad": "ud",
+    "fecha": "2025-03-24T17:26:48.059237Z",
+    "precioPorUnidad": 1.45,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-Nr9QPU0zEk0IAApuvlyx": {
+    "producto": "Dummy Rexona Algodon",
+    "supermercado": "Alcampo",
+    "precio": "8,67",
+    "cantidad": 4,
+    "unidad": "kg",
+    "fecha": "2024-08-05T17:26:48.059247Z",
+    "precioPorUnidad": 2.17,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NqRWCuiOQ6caNZmMfGEc": {
+    "producto": "Dummy Rexona Algodon",
+    "supermercado": "Primor",
+    "precio": "15,63",
+    "cantidad": 4,
+    "unidad": "kg",
+    "fecha": "2024-12-08T17:26:48.059257Z",
+    "precioPorUnidad": 3.91,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-Np9Rq1ELWRneBhHjVYl1": {
+    "producto": "Dummy Yogur Griego",
+    "supermercado": "Hiperdino",
+    "precio": "19,01",
+    "cantidad": 3,
+    "unidad": "ud",
+    "fecha": "2025-05-15T17:26:48.059267Z",
+    "precioPorUnidad": 6.34,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NPTr37zceVItgBW3f5lX": {
+    "producto": "Dummy Rexona Algodon",
+    "supermercado": "Primor",
+    "precio": "4,08",
+    "cantidad": 4,
+    "unidad": "kg",
+    "fecha": "2024-11-24T17:26:48.059278Z",
+    "precioPorUnidad": 1.02,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NsbmBdviouwZG9VGXymJ": {
+    "producto": "Dummy Jam\u00f3n Serrano",
+    "supermercado": "Mercadona",
+    "precio": "19,31",
+    "cantidad": 10,
+    "unidad": "paq",
+    "fecha": "2025-05-25T17:26:48.059288Z",
+    "precioPorUnidad": 1.93,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NZoUORov0YrXFtQpnA8X": {
+    "producto": "Dummy Leche Puleva",
+    "supermercado": "Druni",
+    "precio": "5,66",
+    "cantidad": 7,
+    "unidad": "paq",
+    "fecha": "2024-12-19T17:26:48.059298Z",
+    "precioPorUnidad": 0.81,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NJTJWYGv7UrnuCIc6iJf": {
+    "producto": "Dummy Galletas Mar\u00eda",
+    "supermercado": "Hiperdino",
+    "precio": "7,39",
+    "cantidad": 10,
+    "unidad": "g",
+    "fecha": "2024-07-19T17:26:48.059308Z",
+    "precioPorUnidad": 739.0,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NBLNgPgmaWu4nK1KxuNp": {
+    "producto": "Dummy Jam\u00f3n Serrano",
+    "supermercado": "Hiperdino",
+    "precio": "10,33",
+    "cantidad": 7,
+    "unidad": "ud",
+    "fecha": "2025-02-14T17:26:48.059319Z",
+    "precioPorUnidad": 1.48,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NL3XFE1ZzsbXTcIPKnPL": {
+    "producto": "Dummy Jam\u00f3n Serrano",
+    "supermercado": "Spar",
+    "precio": "16,0",
+    "cantidad": 3,
+    "unidad": "ml",
+    "fecha": "2024-12-28T17:26:48.059329Z",
+    "precioPorUnidad": 5333.33,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NRF5FjRQ9qPmsCz05F7r": {
+    "producto": "Dummy Zumo de Naranja",
+    "supermercado": "Mercadona",
+    "precio": "8,42",
+    "cantidad": 4,
+    "unidad": "ml",
+    "fecha": "2024-12-04T17:26:48.059341Z",
+    "precioPorUnidad": 2105.0,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NA9nAQpnQ9MocKW9jLRq": {
+    "producto": "Dummy Queso Curado",
+    "supermercado": "Primor",
+    "precio": "6,4",
+    "cantidad": 5,
+    "unidad": "l",
+    "fecha": "2025-05-03T17:26:48.059351Z",
+    "precioPorUnidad": 1.28,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NBhGyEVRg7seeT0cC5Qd": {
+    "producto": "Dummy Cereales Fitness",
+    "supermercado": "Mercadona",
+    "precio": "18,89",
+    "cantidad": 10,
+    "unidad": "ud",
+    "fecha": "2025-07-05T17:26:48.059362Z",
+    "precioPorUnidad": 1.89,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-N0Ip3iK6q3xPrILQ2GFV": {
+    "producto": "Dummy Aceite de Oliva",
+    "supermercado": "Druni",
+    "precio": "20,27",
+    "cantidad": 6,
+    "unidad": "paq",
+    "fecha": "2025-04-27T17:26:48.059372Z",
+    "precioPorUnidad": 3.38,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NmOM3urdSFit2DG0phpR": {
+    "producto": "Dummy Queso Curado",
+    "supermercado": "Lidl",
+    "precio": "19,42",
+    "cantidad": 9,
+    "unidad": "ud",
+    "fecha": "2024-11-15T17:26:48.059382Z",
+    "precioPorUnidad": 2.16,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-N95EolLTNjGSgo9Hra40": {
+    "producto": "Dummy Leche Puleva",
+    "supermercado": "Spar",
+    "precio": "8,39",
+    "cantidad": 3,
+    "unidad": "ml",
+    "fecha": "2024-10-17T17:26:48.059392Z",
+    "precioPorUnidad": 2796.67,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NK7elvrg6g7GIu3ErAtf": {
+    "producto": "Dummy Agua Mineral",
+    "supermercado": "Hiperdino",
+    "precio": "8,23",
+    "cantidad": 1,
+    "unidad": "l",
+    "fecha": "2025-01-11T17:26:48.059403Z",
+    "precioPorUnidad": 8.23,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-N3LlAeweuZnoSzhp1NJs": {
+    "producto": "Dummy Pan Bimbo",
+    "supermercado": "Lidl",
+    "precio": "6,18",
+    "cantidad": 3,
+    "unidad": "ud",
+    "fecha": "2024-11-07T17:26:48.059414Z",
+    "precioPorUnidad": 2.06,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-NmRQDheNKkKFrIh91MTd": {
+    "producto": "Dummy Agua Mineral",
+    "supermercado": "Mercadona",
+    "precio": "15,08",
+    "cantidad": 4,
+    "unidad": "ml",
+    "fecha": "2025-06-29T17:26:48.059425Z",
+    "precioPorUnidad": 3770.0,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-N8h5SIOdb9l1heXDzryb": {
+    "producto": "Dummy Yogur Griego",
+    "supermercado": "Mercadona",
+    "precio": "16,59",
+    "cantidad": 2,
+    "unidad": "ml",
+    "fecha": "2024-12-21T17:26:48.059435Z",
+    "precioPorUnidad": 8295.0,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NQDzMgTEmP6asT8MgyIa": {
+    "producto": "Dummy Aceite de Oliva",
+    "supermercado": "Primor",
+    "precio": "14,3",
+    "cantidad": 10,
+    "unidad": "ud",
+    "fecha": "2025-04-11T17:26:48.059446Z",
+    "precioPorUnidad": 1.43,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  },
+  "-Ny6ZQkckUfmVc4Dbq5e3": {
+    "producto": "Dummy Queso Curado",
+    "supermercado": "Alcampo",
+    "precio": "5,99",
+    "cantidad": 8,
+    "unidad": "l",
+    "fecha": "2024-11-12T17:26:48.059457Z",
+    "precioPorUnidad": 0.75,
+    "unidadPrecioPorUnidad": "\u20ac/l"
+  },
+  "-NYZLKo5QKl8jsG4w6jq7": {
+    "producto": "Dummy Zumo de Naranja",
+    "supermercado": "Hiperdino",
+    "precio": "1,14",
+    "cantidad": 6,
+    "unidad": "g",
+    "fecha": "2025-06-30T17:26:48.059467Z",
+    "precioPorUnidad": 190.0,
+    "unidadPrecioPorUnidad": "\u20ac/kg"
+  },
+  "-NeziwUe4bEf7Vo1191x9": {
+    "producto": "Dummy Galletas Mar\u00eda",
+    "supermercado": "Druni",
+    "precio": "13,36",
+    "cantidad": 10,
+    "unidad": "paq",
+    "fecha": "2024-10-25T17:26:48.059477Z",
+    "precioPorUnidad": 1.34,
+    "unidadPrecioPorUnidad": "\u20ac/ud"
+  }
+}

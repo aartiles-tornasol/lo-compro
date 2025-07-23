@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const unitSelect = document.getElementById('unidad');
     const addButton = form.querySelector('button[type="submit"]');
     const commitHashDisplay = document.getElementById('commit-hash-display');
-    const mainContent = document.querySelector('main.container'); // Corregido para seleccionar el main
+    const searchContainer = document.getElementById('search-container');
+    const productListContainer = document.getElementById('product-list-container');
 
     // --- Variables de estado ---
     let allItems = [];
@@ -147,7 +148,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Funciones de UI ---
     const uiSetupForAuthenticatedUser = (user) => {
-        mainContent.style.display = 'block'; // Mostrar contenido principal
+        searchContainer.style.display = 'block';
+        productListContainer.style.display = 'block';
         userDisplay.textContent = `Hola, ${user.displayName.split(' ')[0]}`;
         userDisplay.classList.remove('d-none');
         loginBtn.classList.add('d-none');
@@ -156,7 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const uiSetupForAnonymousUser = () => {
-        mainContent.style.display = 'none'; // Ocultar contenido principal
+        searchContainer.style.display = 'none';
+        productListContainer.style.display = 'none';
         userDisplay.classList.add('d-none');
         loginBtn.classList.remove('d-none');
         logoutBtn.classList.add('d-none');
@@ -166,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Limpiar estado
         allItems = [];
         productUnits = {};
-        updateAndRender(); // Limpiará la tabla y mostrará "No hay productos"
+        updateAndRender(); // Limpiará la tabla y mostrará el mensaje correcto
     };
 
 
