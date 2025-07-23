@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const unitSelect = document.getElementById('unidad');
     const addButton = form.querySelector('button[type="submit"]');
     const commitHashDisplay = document.getElementById('commit-hash-display');
-    const mainContent = document.getElementById('main-content');
+    const mainContent = document.querySelector('main.container'); // Corregido para seleccionar el main
 
     // --- Variables de estado ---
     let allItems = [];
