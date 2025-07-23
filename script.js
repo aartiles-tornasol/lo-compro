@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Inicializar Firebase
     firebase.initializeApp(firebaseConfig);
+    console.log("Firebase app initialized:", firebase.app().name); // <-- NUEVO LOG
+    console.log("Firebase auth object:", firebase.auth()); // <-- NUEVO LOG
     const database = firebase.database();
     const auth = firebase.auth();
     const itemsRef = database.ref('items');
