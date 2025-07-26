@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             userProfileDropdown.style.display = 'none';
 
             ui.start('#firebaseui-auth-container', {
+                signInFlow: 'popup',
                 signInOptions: [
                     firebase.auth.EmailAuthProvider.PROVIDER_ID
                 ],
