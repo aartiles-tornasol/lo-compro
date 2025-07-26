@@ -11,27 +11,32 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
-    <div id="firebaseui-auth-container"></div>
+    <header class="container">
+        <div class="d-flex justify-content-between align-items-center my-4">
+            <h1 class="text-center mb-0">¿Lo compro?</h1>
+            <span id="commit-hash-display" style="font-size: 0.7rem; color: #999; margin-left: 0.5rem;"></span>
 
+            <!-- Menú de Perfil de Usuario -->
+            <div class="dropdown" id="user-profile-dropdown">
+                <a href="#" class="text-decoration-none text-dark" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle" style="font-size: 1.5rem;"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><span class="dropdown-item-text" id="user-email-display"></span></li>
+                    <li><a class="dropdown-item" href="#" id="login-btn">Iniciar Sesión</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#" id="logout-btn">Cerrar Sesión</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenedor para el login de FirebaseUI (oculto por defecto) -->
+    <div id="firebaseui-auth-container" style="display: none;"></div>
+
+    <!-- Contenedor principal de la app (oculto por defecto) -->
     <div id="app-container" style="display: none;">
         <main class="container">
-            <div class="d-flex justify-content-between align-items-center my-4">
-                <h1 class="text-center mb-0">¿Lo compro?</h1>
-                <span id="commit-hash-display" style="font-size: 0.7rem; color: #999; margin-left: 0.5rem;"></span>
-
-                <!-- Menú de Perfil de Usuario -->
-                <div class="dropdown" id="user-profile-dropdown" style="display: none;">
-                    <a href="#" class="text-decoration-none text-dark" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-person-circle" style="font-size: 1.5rem;"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><span class="dropdown-item-text" id="user-email-display"></span></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#" id="logout-btn">Cerrar Sesión</a></li>
-                    </ul>
-                </div>
-            </div>
-
             <div class="card mb-4" id="add-item-card" style="display: none;">
                 <div class="card-header d-flex justify-content-end">
                     <button type="button" class="btn-close" aria-label="Close" id="close-form-btn"></button>
@@ -223,6 +228,6 @@
     <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
     <script src="config.js"></script>
     
-    <script src="script.js"></script>
+    <script src="script.js" id="main-script"></script>
 </body>
 </html>
