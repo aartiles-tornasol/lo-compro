@@ -26,23 +26,18 @@ document.addEventListener('DOMContentLoaded', () => {
         // Limpiar el contenedor de autenticación antes de iniciar FirebaseUI
         authContainer.innerHTML = ''; 
         console.log("Iniciando FirebaseUI con flujo 'popup'..."); 
-        ui.start('#firebaseui-auth-container', {
-            signInFlow: 'popup',
-            signInOptions: [
-                firebase.auth.EmailAuthProvider.PROVIDER_ID
-            ],
-            signInSuccessUrl: '#', // Para permanecer en la misma página
-            callbacks: {
-                signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-                    console.log("Inicio de sesión exitoso:", authResult.user.email);
-                    return false;
-                },
-                signInFailure: function(error) {
-                    console.error("Error de inicio de sesión de FirebaseUI:", error);
-                    return Promise.resolve();
-                }
-            }
-        });
+        // Limpiar el contenedor de autenticación antes de iniciar FirebaseUI
+        authContainer.innerHTML = ''; 
+        console.log("Iniciando signInWithPopup directamente..."); 
+        auth.signInWithPopup(new firebase.auth.EmailAuthProvider())
+            .then((result) => {
+                console.log("signInWithPopup exitoso:", result.user.email);
+            })
+            .catch((error) => {
+                console.error("signInWithPopup error:", error);
+                authContainer.innerHTML = `<div class="alert alert-danger mt-3">Error de inicio de sesión: ${error.message}</div>`;
+            });
+        // ui.start(...) // Comentamos esta línea para esta prueba
     });
 
     auth.onAuthStateChanged(user => {
