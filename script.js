@@ -410,7 +410,8 @@ document.addEventListener('DOMContentLoaded', () => {
             unidad: unit,
             fecha: fecha, // Usar la nueva fecha del formulario
             precioPorUnidad: pricePerUnitValue,
-            unidadPrecioPorUnidad: pricePerUnitUnit
+            unidadPrecioPorUnidad: pricePerUnitUnit,
+            userId: auth.currentUser.uid // Mantener el ID del usuario actual
         };
 
         itemsRef.child(itemId).update(updatedData);
@@ -550,7 +551,8 @@ document.addEventListener('DOMContentLoaded', () => {
             unidad: unit,
             fecha: new Date().toISOString(), // Fecha en formato ISO
             precioPorUnidad: pricePerUnitValue,
-            unidadPrecioPorUnidad: pricePerUnitUnit
+            unidadPrecioPorUnidad: pricePerUnitUnit,
+            userId: auth.currentUser.uid // Añadir el ID del usuario actual
         };
 
         // Guardar el nuevo item en Firebase
