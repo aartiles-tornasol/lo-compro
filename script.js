@@ -1,10 +1,63 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Inicializar Firebase
     firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
     const database = firebase.database();
     const itemsRef = database.ref('items');
 
+    // Referencias a elementos de autenticación y contenido
+    const authenticatedContent = document.getElementById('authenticated-content');
+    const unauthenticatedMessage = document.getElementById('unauthenticated-message');
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
     const form = document.getElementById('add-item-form');
+
+    // Manejar el estado de autenticación
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            // Usuario autenticado
+            authenticatedContent.style.display = 'block';
+            unauthenticatedMessage.style.display = 'none';
+            toggleFormBtn.style.display = 'flex';
+            loginBtn.style.display = 'none';
+            logoutBtn.style.display = 'block';
+            // Cargar los datos cuando el usuario está autenticado
+            itemsRef.on('value', loadData);
+        } else {
+            // Usuario no autenticado
+            authenticatedContent.style.display = 'none';
+            unauthenticatedMessage.style.display = 'block';
+            toggleFormBtn.style.display = 'none';
+            loginBtn.style.display = 'block';
+            logoutBtn.style.display = 'none';
+            // Desconectar el listener cuando el usuario no está autenticado
+            itemsRef.off('value', loadData);
+            // Limpiar los datos
+            allItems = [];
+            itemList.innerHTML = '';
+        }
+    });
+
+    // Manejar clic en login
+    loginBtn.addEventListener('click', async () => {
+        try {
+            const provider = new firebase.auth.EmailAuthProvider();
+            await auth.signInWithPopup(provider);
+        } catch (error) {
+            console.error('Error de login:', error);
+            alert('Error al iniciar sesión: ' + error.message);
+        }
+    });
+
+    // Manejar clic en logout
+    logoutBtn.addEventListener('click', async () => {
+        try {
+            await auth.signOut();
+        } catch (error) {
+            console.error('Error al cerrar sesión:', error);
+            alert('Error al cerrar sesión: ' + error.message);
+        }
+    });
     const itemList = document.getElementById('item-list');
     const toggleFormBtn = document.getElementById('toggle-form-btn');
     const addItemCard = document.getElementById('add-item-card');
@@ -377,8 +430,8 @@ document.addEventListener('DOMContentLoaded', () => {
         deleteConfirmModal.hide();
     });
 
-    // Escuchar cambios en la base de datos en tiempo real
-    itemsRef.on('value', (snapshot) => {
+    // Función para cargar y procesar los datos
+    const loadData = (snapshot) => {
         const data = snapshot.val();
         if (data) {
             // Convertir objeto a array y ordenar por fecha para obtener la unidad más reciente
@@ -435,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
         itemsMostrados = [...allItems];
         // Renderizar los items iniciales (sin filtro)
         sortAndRenderItems(); // Llamar a la función de ordenación para renderizar
-    });
+    };
 
     // Lógica de autocompletado de producto y relleno de unidad
     productInput.addEventListener('input', () => {
