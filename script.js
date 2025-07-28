@@ -317,8 +317,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const endIndex = startIndex + ITEMS_PER_PAGE;
         const itemsToLoad = sortedAndFilteredItems.slice(startIndex, endIndex);
 
-        if (currentPage === 1 && itemsToLoad.length === 0) {
-            itemList.innerHTML = '<tr><td colspan="4" class="text-center p-3">No hay productos en la lista.</td></tr>';
+        if (currentPage === 1) {
+            itemList.innerHTML = ''; // Limpiar la lista
+            if (itemsToLoad.length === 0) {
+                itemList.innerHTML = '<tr><td colspan="4" class="text-center p-3">No hay productos en la lista.</td></tr>';
+            } else {
+                appendItems(itemsToLoad);
+            }
         } else {
             appendItems(itemsToLoad);
         }
@@ -440,6 +445,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Función para cargar y procesar los datos
     const loadData = (snapshot) => {
         const data = snapshot.val();
+        // Resetear el array de items
+        allItems = [];
         if (data) {
             // Convertir objeto a array y ordenar por fecha para obtener la unidad más reciente
             allItems = Object.keys(data).map(key => ({
@@ -494,6 +501,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Al cargar, los items mostrados son todos los items
         itemsMostrados = [...allItems];
         // Renderizar los items iniciales (sin filtro)
+        sortedAndFilteredItems = [...allItems];
+        currentPage = 1;
+        isLoading = false;
         sortAndRenderItems(); // Llamar a la función de ordenación para renderizar
     };
 
