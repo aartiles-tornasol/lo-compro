@@ -53,8 +53,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             signInFlow: 'popup',
+            signInSuccessUrl: window.location.href, // Redirigir a la misma página
             callbacks: {
-                signInSuccessWithAuthResult: () => false
+                signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+                    // El usuario ha iniciado sesión correctamente
+                    return true; // Permitir la redirección automática
+                },
+                signInFailure: function(error) {
+                    // Manejar errores específicos
+                    if (error.code === 'firebaseui/auth/email-already-in-use') {
+                        // El correo ya está en uso
+                        return firebase.auth().signInWithEmailAndPassword(error.email, error.credential.password);
+                    }
+                    return Promise.resolve();
+                }
             }
         };
         ui.start('#firebaseui-auth-container', uiConfig);
