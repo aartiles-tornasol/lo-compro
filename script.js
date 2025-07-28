@@ -40,12 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Manejar clic en login
     loginBtn.addEventListener('click', async () => {
-        try {
-            await auth.signInWithEmailAndPassword('aartiles@gmail.com', '123456');
-        } catch (error) {
-            console.error('Error de login:', error);
-            alert('Error al iniciar sesión: ' + error.message);
-        }
+        const ui = new firebaseui.auth.AuthUI(auth);
+        const uiConfig = {
+            signInOptions: [
+                {
+                    provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+                    requireDisplayName: false
+                }
+            ],
+            signInFlow: 'popup',
+            callbacks: {
+                signInSuccessWithAuthResult: () => false
+            }
+        };
+        ui.start('#firebaseui-auth-container', uiConfig);
     });
 
     // Manejar clic en logout
