@@ -8,10 +8,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicializar FirebaseUI
     const ui = new firebaseui.auth.AuthUI(auth);
     const uiConfig = {
-        signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID],
-        signInFlow: 'popup',
+        signInOptions: [
+            {
+                provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+                requireDisplayName: false,
+                disableSignUp: {
+                    status: true
+                }
+            }
+        ],
+        signInFlow: 'redirect',
+        signInSuccessUrl: window.location.href,
         callbacks: {
-            signInSuccessWithAuthResult: () => false // Prevenir redirección automática
+            signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+                console.log('Autenticación exitosa:', authResult);
+                // No redirigir automáticamente
+                return false;
+            },
+            signInFailure: function(error) {
+                console.error('Error de autenticación:', error);
+                return Promise.resolve();
+            }
         }
     };
 
@@ -50,7 +67,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Manejar clic en login
     loginBtn.addEventListener('click', () => {
-        ui.start('#firebaseui-auth-container', uiConfig);
+        console.log('Botón de login clickeado');
+        
+        // Limpiar el contenedor antes de iniciar FirebaseUI
+        const container = document.getElementById('firebaseui-auth-container');
+        container.innerHTML = '';
+        
+        try {
+            ui.start('#firebaseui-auth-container', uiConfig);
+            console.log('FirebaseUI iniciado correctamente');
+        } catch (error) {
+            console.error('Error al iniciar FirebaseUI:', error);
+        }
     });
 
     // Manejar clic en logout
