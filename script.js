@@ -45,7 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
             signInOptions: [
                 {
                     provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-                    requireDisplayName: false
+                    requireDisplayName: false,
+                    signInMethod: firebase.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD,
+                    disableSignUp: {
+                        status: true
+                    }
                 }
             ],
             signInFlow: 'popup',
