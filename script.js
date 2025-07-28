@@ -5,6 +5,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const database = firebase.database();
     const itemsRef = database.ref('items');
 
+    // Inicializar FirebaseUI
+    const ui = new firebaseui.auth.AuthUI(auth);
+    const uiConfig = {
+        signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID],
+        signInFlow: 'popup',
+        callbacks: {
+            signInSuccessWithAuthResult: () => false // Prevenir redirección automática
+        }
+    };
+
     // Referencias a elementos de autenticación y contenido
     const authenticatedContent = document.getElementById('authenticated-content');
     const unauthenticatedMessage = document.getElementById('unauthenticated-message');
@@ -39,36 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Manejar clic en login
-    loginBtn.addEventListener('click', async () => {
-        const ui = new firebaseui.auth.AuthUI(auth);
-        const uiConfig = {
-            signInOptions: [
-                {
-                    provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-                    requireDisplayName: false,
-                    signInMethod: firebase.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD,
-                    disableSignUp: {
-                        status: true
-                    }
-                }
-            ],
-            signInFlow: 'popup',
-            signInSuccessUrl: window.location.href, // Redirigir a la misma página
-            callbacks: {
-                signInSuccessWithAuthResult: (authResult, redirectUrl) => {
-                    // El usuario ha iniciado sesión correctamente
-                    return true; // Permitir la redirección automática
-                },
-                signInFailure: function(error) {
-                    // Manejar errores específicos
-                    if (error.code === 'firebaseui/auth/email-already-in-use') {
-                        // El correo ya está en uso
-                        return firebase.auth().signInWithEmailAndPassword(error.email, error.credential.password);
-                    }
-                    return Promise.resolve();
-                }
-            }
-        };
+    loginBtn.addEventListener('click', () => {
         ui.start('#firebaseui-auth-container', uiConfig);
     });
 
