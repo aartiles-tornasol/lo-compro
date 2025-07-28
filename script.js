@@ -41,8 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Manejar clic en login
     loginBtn.addEventListener('click', async () => {
         try {
-            const provider = new firebase.auth.EmailAuthProvider();
-            await auth.signInWithPopup(provider);
+            await auth.signInWithEmailAndPassword('aartiles@gmail.com', '123456');
         } catch (error) {
             console.error('Error de login:', error);
             alert('Error al iniciar sesión: ' + error.message);
