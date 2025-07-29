@@ -17,16 +17,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         ],
-        signInFlow: 'redirect',
-        signInSuccessUrl: window.location.href,
+        signInFlow: 'popup',
+        credentialHelper: firebaseui.auth.CredentialHelper.NONE,
         callbacks: {
             signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-                console.log('Autenticación exitosa:', authResult);
-                // No redirigir automáticamente
+                console.log('Login exitoso:', authResult.user.email);
+                // Limpiar la UI de autenticación
+                const authContainer = document.getElementById('firebaseui-auth-container');
+                authContainer.innerHTML = '';
                 return false;
             },
             signInFailure: function(error) {
-                console.error('Error de autenticación:', error);
+                console.error('=== ERROR DE AUTENTICACIÓN ===');
+                console.error('Error completo:', error);
+                console.error('Código de error:', error.code);
+                console.error('Mensaje de error:', error.message);
+                console.error('Email intentado:', error.email || 'No disponible');
+                console.error('Credential:', error.credential || 'No disponible');
+                
+                // Verificar si es un problema de dominio autorizado
+                if (error.code === 'auth/unauthorized-domain') {
+                    console.error('PROBLEMA: Dominio no autorizado en Firebase Console');
+                }
+                
                 return Promise.resolve();
             }
         }
@@ -43,20 +56,28 @@ document.addEventListener('DOMContentLoaded', () => {
     auth.onAuthStateChanged((user) => {
         if (user) {
             // Usuario autenticado
+            console.log('Usuario logueado:', user.email);
             authenticatedContent.style.display = 'block';
             unauthenticatedMessage.style.display = 'none';
             toggleFormBtn.style.display = 'flex';
             loginBtn.style.display = 'none';
             logoutBtn.style.display = 'block';
+            // Limpiar el formulario de Firebase
+            const authContainer = document.getElementById('firebaseui-auth-container');
+            authContainer.innerHTML = '';
             // Cargar los datos cuando el usuario está autenticado
             itemsRef.on('value', loadData);
         } else {
             // Usuario no autenticado
+            console.log('Usuario no logueado');
             authenticatedContent.style.display = 'none';
             unauthenticatedMessage.style.display = 'block';
             toggleFormBtn.style.display = 'none';
             loginBtn.style.display = 'block';
             logoutBtn.style.display = 'none';
+            // Limpiar cualquier formulario de Firebase previo
+            const authContainer = document.getElementById('firebaseui-auth-container');
+            authContainer.innerHTML = '';
             // Desconectar el listener cuando el usuario no está autenticado
             itemsRef.off('value', loadData);
             // Limpiar los datos
@@ -67,7 +88,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Manejar clic en login
     loginBtn.addEventListener('click', () => {
-        console.log('Botón de login clickeado');
+        console.log('=== INICIANDO FIREBASE UI ===');
+        console.log('Dominio actual:', window.location.hostname);
+        console.log('URL completa:', window.location.href);
+        console.log('FirebaseUI disponible:', typeof firebaseui !== 'undefined');
+        console.log('Firebase Auth disponible:', typeof firebase.auth !== 'undefined');
         
         // Limpiar el contenedor antes de iniciar FirebaseUI
         const container = document.getElementById('firebaseui-auth-container');
@@ -805,5 +830,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Llamar a sortAndRenderItems inicialmente para aplicar la ordenación por defecto
     sortAndRenderItems();
+
+    // Logging de inicialización
+    console.log('=== FIREBASE INICIALIZADO ===');
+    console.log('Firebase Config cargado:', typeof firebaseConfig !== 'undefined');
+    console.log('Proyecto Firebase:', firebaseConfig?.projectId || 'No disponible');
+    console.log('Auth domain:', firebaseConfig?.authDomain || 'No disponible');
+    console.log('Firebase y FirebaseUI inicializados');
 
 });
