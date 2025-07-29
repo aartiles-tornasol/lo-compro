@@ -1,9 +1,12 @@
 # Ignorar ficheros de configuracion con informacion sensible
 venv/
 
-# Archivos de configuración de Firebase con información sensible
+# Carpeta con archivos privados/sensibles - NUNCA debe subirse al repositorio
+_private/
+
+# Archivos de configuración de Firebase con información sensible (por si acaso están fuera de _private)
 database.rules.json
 
-# Archivos de instrucciones internas para IAs - no deben ser públicos
+# Archivos de instrucciones internas para IAs (por si acaso están fuera de _private)
 *.md
 !README.md
