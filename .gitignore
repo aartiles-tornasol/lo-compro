@@ -7,6 +7,10 @@ _private/
 # Archivos de configuración de Firebase con información sensible (por si acaso están fuera de _private)
 database.rules.json
 
+# Scripts de Python y dependencias (por si acaso están fuera de _private)
+*.py
+requirements.txt
+
 # Archivos de instrucciones internas para IAs (por si acaso están fuera de _private)
 *.md
 !README.md
