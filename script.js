@@ -50,6 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const unauthenticatedMessage = document.getElementById('unauthenticated-message');
     const loginBtn = document.getElementById('loginBtn');
     const logoutBtn = document.getElementById('logoutBtn');
+    const userEmailItem = document.getElementById('userEmailItem');
+    const userEmailDisplay = document.getElementById('userEmailDisplay');
+    const logoutBtnItem = document.getElementById('logoutBtnItem');
     const form = document.getElementById('add-item-form');
 
     // Manejar el estado de autenticación
@@ -62,6 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleFormBtn.style.display = 'flex';
             loginBtn.style.display = 'none';
             logoutBtn.style.display = 'block';
+            // Mostrar email del usuario en el menú
+            userEmailDisplay.textContent = user.email;
+            userEmailItem.style.display = 'block';
+            logoutBtnItem.style.display = 'block';
             // Limpiar el formulario de Firebase
             const authContainer = document.getElementById('firebaseui-auth-container');
             authContainer.innerHTML = '';
@@ -75,6 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleFormBtn.style.display = 'none';
             loginBtn.style.display = 'block';
             logoutBtn.style.display = 'none';
+            // Ocultar email del usuario en el menú
+            userEmailItem.style.display = 'none';
+            logoutBtnItem.style.display = 'none';
             // Limpiar cualquier formulario de Firebase previo
             const authContainer = document.getElementById('firebaseui-auth-container');
             authContainer.innerHTML = '';
