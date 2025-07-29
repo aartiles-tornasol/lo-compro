@@ -131,8 +131,7 @@
                     }
                 }
             ],
-            signInFlow: 'redirect',
-            signInSuccessUrl: window.location.href,
+            signInFlow: 'popup',
             credentialHelper: firebaseui.auth.CredentialHelper.NONE,
             callbacks: {
                 signInSuccessWithAuthResult: function(authResult, redirectUrl) {
