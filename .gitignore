@@ -3,3 +3,7 @@ venv/
 
 # Archivos de configuración de Firebase con información sensible
 database.rules.json
+
+# Archivos de instrucciones internas para IAs - no deben ser públicos
+*.md
+!README.md
