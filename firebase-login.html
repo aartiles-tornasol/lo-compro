@@ -142,9 +142,18 @@
                     return false;
                 },
                 signInFailure: function(error) {
-                    console.error('Error completo en login:', error);
+                    console.error('=== ERROR DE AUTENTICACIÓN ===');
+                    console.error('Error completo:', error);
                     console.error('Código de error:', error.code);
                     console.error('Mensaje de error:', error.message);
+                    console.error('Email intentado:', error.email || 'No disponible');
+                    console.error('Credential:', error.credential || 'No disponible');
+                    
+                    // Verificar si es un problema de dominio autorizado
+                    if (error.code === 'auth/unauthorized-domain') {
+                        console.error('PROBLEMA: Dominio no autorizado en Firebase Console');
+                    }
+                    
                     return Promise.resolve();
                 }
             }
@@ -152,7 +161,12 @@
         
         // Evento del botón de login - aquí Firebase toma el control
         loginButton.addEventListener('click', () => {
-            console.log('Iniciando Firebase UI...');
+            console.log('=== INICIANDO FIREBASE UI ===');
+            console.log('Dominio actual:', window.location.hostname);
+            console.log('URL completa:', window.location.href);
+            console.log('FirebaseUI disponible:', typeof firebaseui !== 'undefined');
+            console.log('Firebase Auth disponible:', typeof firebase.auth !== 'undefined');
+            
             // Firebase mostrará su propio formulario en el contenedor
             ui.start('#firebaseui-auth-container', uiConfig);
             loginButton.style.display = 'none';
@@ -191,6 +205,10 @@
             }
         });
         
+        console.log('=== FIREBASE INICIALIZADO ===');
+        console.log('Firebase Config cargado:', typeof firebaseConfig !== 'undefined');
+        console.log('Proyecto Firebase:', firebaseConfig?.projectId || 'No disponible');
+        console.log('Auth domain:', firebaseConfig?.authDomain || 'No disponible');
         console.log('Firebase y FirebaseUI inicializados');
     </script>
 </body>
