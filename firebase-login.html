@@ -123,9 +123,17 @@
         // Configuración de FirebaseUI - Firebase gestiona todo el formulario
         const uiConfig = {
             signInOptions: [
-                firebase.auth.EmailAuthProvider.PROVIDER_ID
+                {
+                    provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+                    requireDisplayName: false,
+                    disableSignUp: {
+                        status: true
+                    }
+                }
             ],
-            signInFlow: 'popup',
+            signInFlow: 'redirect',
+            signInSuccessUrl: window.location.href,
+            credentialHelper: firebaseui.auth.CredentialHelper.NONE,
             callbacks: {
                 signInSuccessWithAuthResult: function(authResult, redirectUrl) {
                     console.log('Login exitoso:', authResult.user.email);
@@ -134,7 +142,9 @@
                     return false;
                 },
                 signInFailure: function(error) {
-                    console.error('Error en login:', error);
+                    console.error('Error completo en login:', error);
+                    console.error('Código de error:', error.code);
+                    console.error('Mensaje de error:', error.message);
                     return Promise.resolve();
                 }
             }
