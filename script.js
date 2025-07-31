@@ -234,9 +234,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Mostrar las unidades por encima del cuadro
         const cleanUnit = (item.unidadPrecioPorUnidad || '').replace('€/', '');
         if (cleanUnit) {
-            popupUnitLabels.textContent = `${cleanUnit}     ⊘${cleanUnit}`;
+            popupUnitLabels.innerHTML = `<span>${cleanUnit}</span><span>⊘${cleanUnit}</span>`;
         } else {
-            popupUnitLabels.textContent = '';
+            popupUnitLabels.innerHTML = '';
         }
         
         // Rellenar precios por unidad (solo números, sin unidades)

@@ -279,13 +279,18 @@
 
 .product-info-units {
     margin-bottom: 8px;
-    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    align-items: baseline;
 }
 
 .unit-label {
     font-size: 0.85rem;
     color: #6c757d;
     font-weight: 500;
+    display: flex;
+    gap: 40px;
+    margin-right: 12px;
 }
 
 .product-info-purchase {
@@ -324,7 +329,7 @@
     font-size: 1.2rem;
     font-weight: 400;
     color: #6c757d;
-    margin-left: 24px;
+    margin-left: 40px;
 }
 
 .product-info-metadata {
