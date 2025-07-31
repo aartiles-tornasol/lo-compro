@@ -230,17 +230,15 @@ document.addEventListener('DOMContentLoaded', () => {
         popupDate.textContent = formatDisplayDate(item.fecha);
         popupSupermarket.textContent = item.supermercado;
         
-        // Rellenar precios por unidad
-        const cleanUnit = (item.unidadPrecioPorUnidad || '').replace('€/', '');
-        
+        // Rellenar precios por unidad (solo números, sin unidades)
         if (item.precioPorUnidad) {
-            popupPricePerUnit.textContent = ` (${formatPrice(item.precioPorUnidad)} ${cleanUnit})`;
+            popupPricePerUnit.textContent = ` ${formatPrice(item.precioPorUnidad)}`;
         } else {
             popupPricePerUnit.textContent = '';
         }
         
         if (item.precioMedio) {
-            popupAveragePrice.textContent = ` [⊘${formatPrice(item.precioMedio)} ${cleanUnit}]`;
+            popupAveragePrice.textContent = ` ${formatPrice(item.precioMedio)}`;
         } else {
             popupAveragePrice.textContent = '';
         }
