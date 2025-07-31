@@ -320,21 +320,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             row.innerHTML = `
                 <td class="product-name-cell"><div class="product-row-color-indicator ${supermarketColorClasses[item.supermercado] || ''}"></div><span class="product-name">${item.producto}</span></td>
-                <td class="text-end">${formatPriceTwoDecimals(parsePrice(item.precio))}</td>
-                <td class="text-end price-per-unit">${formatPrice(item.precioPorUnidad)} ${cleanUnit}</td>
-                <td class="text-end">${formatPrice(item.precioMedio)} ${cleanUnit}</td>
+                <td class="text-end price-cell">${formatPriceTwoDecimals(parsePrice(item.precio))}</td>
+                <td class="text-end price-per-unit price-cell">${formatPrice(item.precioPorUnidad)} ${cleanUnit}</td>
+                <td class="text-end price-cell">${formatPrice(item.precioMedio)} ${cleanUnit}</td>
             `;
             itemList.appendChild(row);
 
-            // Hacer toda la celda del nombre clickeable
+            // Hacer toda la celda del nombre clickeable para filtrado
             const nombreCell = row.querySelector('.product-name-cell');
             nombreCell.addEventListener('click', (e) => {
-                // Prevenir el click si fue una pulsación larga
-                if (isLongPress) {
-                    isLongPress = false; // Reset para futuros clicks
-                    return;
-                }
-                
                 const itemId = item.id;
                 productoSeleccionadoParaClonar = allItems.find(item => item.id === itemId);
                 const productName = item.producto;
@@ -343,55 +337,14 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             nombreCell.style.cursor = 'pointer';
 
-            // --- Lógica de Pulsación Larga para Mostrar Info ---
-            let longPressTimer = null;
-            let isLongPress = false;
-            let pressStartTime = 0;
-            
-            // Para desktop: mousedown/mouseup
-            row.addEventListener('mousedown', (e) => {
-                // Solo procesar botón izquierdo del mouse
-                if (e.button !== 0) return;
-                
-                pressStartTime = Date.now();
-                isLongPress = false;
-                
-                longPressTimer = setTimeout(() => {
-                    isLongPress = true;
+            // Hacer las columnas de precios clickeables para mostrar info del producto
+            const priceCells = row.querySelectorAll('.price-cell');
+            priceCells.forEach(priceCell => {
+                priceCell.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevenir interferencia con otros eventos
                     showProductInfoPopup(item);
-                }, 800); // 800ms para desktop
-            });
-            
-            row.addEventListener('mouseup', (e) => {
-                if (e.button !== 0) return;
-                clearTimeout(longPressTimer);
-            });
-            
-            row.addEventListener('mouseleave', () => {
-                clearTimeout(longPressTimer);
-            });
-            
-            // Para móvil: touchstart/touchend
-            row.addEventListener('touchstart', (e) => {
-                pressStartTime = Date.now();
-                isLongPress = false;
-                
-                longPressTimer = setTimeout(() => {
-                    isLongPress = true;
-                    // Añadir vibración en móvil si está disponible
-                    if (navigator.vibrate) {
-                        navigator.vibrate(50);
-                    }
-                    showProductInfoPopup(item);
-                }, 600); // 600ms para móvil
-            });
-            
-            row.addEventListener('touchend', () => {
-                clearTimeout(longPressTimer);
-            });
-            
-            row.addEventListener('touchcancel', () => {
-                clearTimeout(longPressTimer);
+                });
+                priceCell.style.cursor = 'pointer';
             });
 
             // --- Lógica de Click Derecho para Ordenadores ---
@@ -469,8 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const DELETE_THRESHOLD = -150; // Píxeles para confirmar el borrado (swipe izquierda)
             const EDIT_THRESHOLD = 150; // Píxeles para confirmar la edición (swipe derecha)
 
-            // Nota: El touchstart para el swipe necesita coordinar con el long press
-            // El long press ya maneja touchstart, así que aquí solo modificamos las variables del swipe
+            // Gestión del touchstart para el swipe
             row.addEventListener('touchstart', (e) => {
                 startX = e.touches[0].clientX;
                 const rowWidth = row.offsetWidth;
@@ -486,9 +438,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             row.addEventListener('touchmove', (e) => {
-                // Cancelar el timer de long press cuando hay movimiento
-                clearTimeout(longPressTimer);
-                
                 // Ignorar si no se inició en ninguna zona de swipe válida
                 if (!initialTouchRightZone && !initialTouchLeftZone) return;
 
