@@ -137,6 +137,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const unitSelect = document.getElementById('unidad');
     const addButton = form.querySelector('button[type="submit"]');
 
+    // Referencias para el popup de información del producto
+    const productInfoPopup = document.getElementById('product-info-popup');
+    const closeProductInfo = document.getElementById('close-product-info');
+    const popupProductName = document.getElementById('popup-product-name');
+    const popupQuantity = document.getElementById('popup-quantity');
+    const popupUnit = document.getElementById('popup-unit');
+    const popupPrice = document.getElementById('popup-price');
+    const popupDate = document.getElementById('popup-date');
+    const popupSupermarket = document.getElementById('popup-supermarket');
+    const popupColorBar = document.getElementById('popup-color-bar');
+
     // Establecer 'ud' como valor por defecto para la unidad
     unitSelect.value = 'ud';
 
@@ -207,6 +218,48 @@ document.addEventListener('DOMContentLoaded', () => {
         return price.toFixed(2).replace('.', ',');
     };
 
+    // Función para mostrar el popup de información del producto
+    const showProductInfoPopup = (item) => {
+        // Rellenar el contenido del popup
+        popupProductName.textContent = item.producto;
+        popupQuantity.textContent = item.cantidad;
+        popupUnit.textContent = item.unidad;
+        popupPrice.textContent = `${formatPriceTwoDecimals(parsePrice(item.precio))}€`;
+        popupDate.textContent = formatDisplayDate(item.fecha);
+        popupSupermarket.textContent = item.supermercado;
+        
+        // Aplicar el color del supermercado a la barra lateral
+        Object.values(supermarketColorClasses).forEach(cls => popupColorBar.classList.remove(cls));
+        popupColorBar.classList.add(supermarketColorClasses[item.supermercado] || '');
+        
+        // Mostrar el popup
+        productInfoPopup.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Prevenir scroll del fondo
+    };
+
+    // Función para ocultar el popup de información del producto
+    const hideProductInfoPopup = () => {
+        productInfoPopup.style.display = 'none';
+        document.body.style.overflow = ''; // Restaurar scroll del fondo
+    };
+
+    // Event listeners para cerrar el popup
+    closeProductInfo.addEventListener('click', hideProductInfoPopup);
+    
+    // Cerrar popup al hacer click en el fondo
+    productInfoPopup.addEventListener('click', (e) => {
+        if (e.target === productInfoPopup) {
+            hideProductInfoPopup();
+        }
+    });
+
+    // Cerrar popup con tecla Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && productInfoPopup.style.display === 'flex') {
+            hideProductInfoPopup();
+        }
+    });
+
     // Función para calcular el precio por unidad
     const calculatePricePerUnit = (price, quantity, unit) => {
         if (price === null || quantity === null || quantity === 0) {
@@ -275,7 +328,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Hacer toda la celda del nombre clickeable
             const nombreCell = row.querySelector('.product-name-cell');
-            nombreCell.addEventListener('click', () => {
+            nombreCell.addEventListener('click', (e) => {
+                // Prevenir el click si fue una pulsación larga
+                if (isLongPress) {
+                    isLongPress = false; // Reset para futuros clicks
+                    return;
+                }
+                
                 const itemId = item.id;
                 productoSeleccionadoParaClonar = allItems.find(item => item.id === itemId);
                 const productName = item.producto;
@@ -283,6 +342,120 @@ document.addEventListener('DOMContentLoaded', () => {
                 searchInput.dispatchEvent(new Event('input', { bubbles: true }));
             });
             nombreCell.style.cursor = 'pointer';
+
+            // --- Lógica de Pulsación Larga para Mostrar Info ---
+            let longPressTimer = null;
+            let isLongPress = false;
+            let pressStartTime = 0;
+            
+            // Para desktop: mousedown/mouseup
+            row.addEventListener('mousedown', (e) => {
+                // Solo procesar botón izquierdo del mouse
+                if (e.button !== 0) return;
+                
+                pressStartTime = Date.now();
+                isLongPress = false;
+                
+                longPressTimer = setTimeout(() => {
+                    isLongPress = true;
+                    showProductInfoPopup(item);
+                }, 800); // 800ms para desktop
+            });
+            
+            row.addEventListener('mouseup', (e) => {
+                if (e.button !== 0) return;
+                clearTimeout(longPressTimer);
+            });
+            
+            row.addEventListener('mouseleave', () => {
+                clearTimeout(longPressTimer);
+            });
+            
+            // Para móvil: touchstart/touchend
+            row.addEventListener('touchstart', (e) => {
+                pressStartTime = Date.now();
+                isLongPress = false;
+                
+                longPressTimer = setTimeout(() => {
+                    isLongPress = true;
+                    // Añadir vibración en móvil si está disponible
+                    if (navigator.vibrate) {
+                        navigator.vibrate(50);
+                    }
+                    showProductInfoPopup(item);
+                }, 600); // 600ms para móvil
+            });
+            
+            row.addEventListener('touchend', () => {
+                clearTimeout(longPressTimer);
+            });
+            
+            row.addEventListener('touchcancel', () => {
+                clearTimeout(longPressTimer);
+            });
+
+            // --- Lógica de Click Derecho para Ordenadores ---
+            row.addEventListener('contextmenu', (e) => {
+                e.preventDefault(); // Prevenir el menú contextual del navegador
+                
+                // Crear menú contextual
+                const contextMenu = document.createElement('div');
+                contextMenu.style.cssText = `
+                    position: fixed;
+                    top: ${e.clientY}px;
+                    left: ${e.clientX}px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                    z-index: 9999;
+                    min-width: 120px;
+                `;
+                
+                contextMenu.innerHTML = `
+                    <div style="padding: 8px 12px; cursor: pointer; border-bottom: 1px solid #eee;" data-action="edit">
+                        ✏️ Editar
+                    </div>
+                    <div style="padding: 8px 12px; cursor: pointer; color: #dc3545;" data-action="delete">
+                        🗑️ Borrar
+                    </div>
+                `;
+                
+                // Añadir el menú al body
+                document.body.appendChild(contextMenu);
+                
+                // Manejar clicks en el menú
+                contextMenu.addEventListener('click', (e) => {
+                    const action = e.target.dataset.action;
+                    if (action === 'edit') {
+                        populateFormForEdit(item.id);
+                    } else if (action === 'delete') {
+                        itemIdToDelete = item.id;
+                        itemToDeleteData = item;
+                        
+                        // Rellenar el modal con la información del producto
+                        deleteProductName.textContent = itemToDeleteData.producto;
+                        deleteProductDate.textContent = formatDisplayDate(itemToDeleteData.fecha);
+                        // Limpiar clases de color anteriores y añadir la nueva
+                        Object.values(supermarketColorClasses).forEach(cls => deleteProductColorIndicator.classList.remove(cls));
+                        deleteProductColorIndicator.classList.add(supermarketColorClasses[itemToDeleteData.supermercado] || '');
+                        
+                        deleteConfirmModal.show();
+                    }
+                    document.body.removeChild(contextMenu);
+                });
+                
+                // Cerrar menú al hacer click fuera
+                setTimeout(() => {
+                    const closeMenu = (e) => {
+                        if (!contextMenu.contains(e.target)) {
+                            document.body.removeChild(contextMenu);
+                            document.removeEventListener('click', closeMenu);
+                        }
+                    };
+                    document.addEventListener('click', closeMenu);
+                }, 10);
+            });
 
             // --- Lógica de Swipe para Borrar y Editar (Vanilla JS) ---
             let startX = 0;
@@ -296,6 +469,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const DELETE_THRESHOLD = -150; // Píxeles para confirmar el borrado (swipe izquierda)
             const EDIT_THRESHOLD = 150; // Píxeles para confirmar la edición (swipe derecha)
 
+            // Nota: El touchstart para el swipe necesita coordinar con el long press
+            // El long press ya maneja touchstart, así que aquí solo modificamos las variables del swipe
             row.addEventListener('touchstart', (e) => {
                 startX = e.touches[0].clientX;
                 const rowWidth = row.offsetWidth;
@@ -311,6 +486,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             row.addEventListener('touchmove', (e) => {
+                // Cancelar el timer de long press cuando hay movimiento
+                clearTimeout(longPressTimer);
+                
                 // Ignorar si no se inició en ninguna zona de swipe válida
                 if (!initialTouchRightZone && !initialTouchLeftZone) return;
 
