@@ -266,12 +266,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const cleanUnit = (item.unidadPrecioPorUnidad || '').replace('€/', '');
 
             row.innerHTML = `
-                <td><div class="product-row-color-indicator ${supermarketColorClasses[item.supermercado] || ''}"></div><span class="product-name">${item.producto}</span></td>
+                <td class="product-name-cell"><div class="product-row-color-indicator ${supermarketColorClasses[item.supermercado] || ''}"></div><span class="product-name">${item.producto}</span></td>
                 <td class="text-end">${formatPriceTwoDecimals(parsePrice(item.precio))}</td>
                 <td class="text-end price-per-unit">${formatPrice(item.precioPorUnidad)} ${cleanUnit}</td>
                 <td class="text-end">${formatPrice(item.precioMedio)} ${cleanUnit}</td>
             `;
             itemList.appendChild(row);
+
+            // Hacer toda la celda del nombre clickeable
+            const nombreCell = row.querySelector('.product-name-cell');
+            nombreCell.addEventListener('click', () => {
+                const itemId = item.id;
+                productoSeleccionadoParaClonar = allItems.find(item => item.id === itemId);
+                const productName = item.producto;
+                searchInput.value = productName;
+                searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+            });
+            nombreCell.style.cursor = 'pointer';
 
             // --- Lógica de Swipe para Borrar y Editar (Vanilla JS) ---
             let startX = 0;
@@ -675,21 +686,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Listener para hacer clic en el nombre de un producto y filtrarlo
-    itemList.addEventListener('click', (e) => {
-        const target = e.target;
-        // Comprobar si el clic fue en el nombre del producto
-        if (target && target.classList.contains('product-name')) {
-            const productRow = target.closest('.product-row');
-            const itemId = productRow.dataset.itemId;
-            productoSeleccionadoParaClonar = allItems.find(item => item.id === itemId);
-
-            const productName = target.textContent;
-            searchInput.value = productName;
-            // Disparar un evento 'input' para que se active la lógica de filtrado
-            searchInput.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-    });
+    // Listener removido - ahora cada celda tiene su propio listener
 
     
 
