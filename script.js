@@ -232,8 +232,18 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Rellenar precios por unidad
         const cleanUnit = (item.unidadPrecioPorUnidad || '').replace('€/', '');
-        popupPricePerUnit.textContent = item.precioPorUnidad ? `${formatPrice(item.precioPorUnidad)} ${cleanUnit}` : '-';
-        popupAveragePrice.textContent = item.precioMedio ? `${formatPrice(item.precioMedio)} ${cleanUnit}` : '-';
+        
+        if (item.precioPorUnidad) {
+            popupPricePerUnit.textContent = ` (${formatPrice(item.precioPorUnidad)} ${cleanUnit})`;
+        } else {
+            popupPricePerUnit.textContent = '';
+        }
+        
+        if (item.precioMedio) {
+            popupAveragePrice.textContent = ` [⊘${formatPrice(item.precioMedio)} ${cleanUnit}]`;
+        } else {
+            popupAveragePrice.textContent = '';
+        }
         
         // Aplicar el color del supermercado a la barra lateral
         Object.values(supermarketColorClasses).forEach(cls => popupColorBar.classList.remove(cls));
