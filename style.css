@@ -289,7 +289,8 @@
     color: #6c757d;
     font-weight: 500;
     display: flex;
-    gap: 40px;
+    justify-content: space-between;
+    width: 100%;
     margin-right: 12px;
 }
 
@@ -324,12 +325,19 @@
     margin-left: 8px;
 }
 
-.product-info-unit-price,
+.product-info-unit-price {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #6c757d;
+    margin-left: 60px;
+}
+
 .product-info-average-price {
     font-size: 1.2rem;
     font-weight: 400;
     color: #6c757d;
-    margin-left: 40px;
+    margin-left: auto;
+    margin-right: 12px;
 }
 
 .product-info-metadata {

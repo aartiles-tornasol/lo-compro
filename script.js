@@ -231,10 +231,10 @@ document.addEventListener('DOMContentLoaded', () => {
         popupDate.textContent = formatDisplayDate(item.fecha);
         popupSupermarket.textContent = item.supermercado;
         
-        // Mostrar las unidades por encima del cuadro
+        // Mostrar las unidades por encima del cuadro (como en las cabeceras de la tabla)
         const cleanUnit = (item.unidadPrecioPorUnidad || '').replace('€/', '');
         if (cleanUnit) {
-            popupUnitLabels.innerHTML = `<span>${cleanUnit}</span><span>⊘${cleanUnit}</span>`;
+            popupUnitLabels.innerHTML = `<span>€/${cleanUnit}</span><span>€⊘/${cleanUnit}</span>`;
         } else {
             popupUnitLabels.innerHTML = '';
         }
