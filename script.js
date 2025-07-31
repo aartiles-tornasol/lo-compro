@@ -147,6 +147,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const popupDate = document.getElementById('popup-date');
     const popupSupermarket = document.getElementById('popup-supermarket');
     const popupColorBar = document.getElementById('popup-color-bar');
+    const popupPricePerUnit = document.getElementById('popup-price-per-unit');
+    const popupAveragePrice = document.getElementById('popup-average-price');
 
     // Establecer 'ud' como valor por defecto para la unidad
     unitSelect.value = 'ud';
@@ -227,6 +229,11 @@ document.addEventListener('DOMContentLoaded', () => {
         popupPrice.textContent = `${formatPriceTwoDecimals(parsePrice(item.precio))}€`;
         popupDate.textContent = formatDisplayDate(item.fecha);
         popupSupermarket.textContent = item.supermercado;
+        
+        // Rellenar precios por unidad
+        const cleanUnit = (item.unidadPrecioPorUnidad || '').replace('€/', '');
+        popupPricePerUnit.textContent = item.precioPorUnidad ? `${formatPrice(item.precioPorUnidad)} ${cleanUnit}` : '-';
+        popupAveragePrice.textContent = item.precioMedio ? `${formatPrice(item.precioMedio)} ${cleanUnit}` : '-';
         
         // Aplicar el color del supermercado a la barra lateral
         Object.values(supermarketColorClasses).forEach(cls => popupColorBar.classList.remove(cls));
