@@ -149,6 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const popupColorBar = document.getElementById('popup-color-bar');
     const popupPricePerUnit = document.getElementById('popup-price-per-unit');
     const popupAveragePrice = document.getElementById('popup-average-price');
+    const popupUnitLabels = document.getElementById('popup-unit-labels');
 
     // Establecer 'ud' como valor por defecto para la unidad
     unitSelect.value = 'ud';
@@ -229,6 +230,14 @@ document.addEventListener('DOMContentLoaded', () => {
         popupPrice.textContent = `${formatPriceTwoDecimals(parsePrice(item.precio))}€`;
         popupDate.textContent = formatDisplayDate(item.fecha);
         popupSupermarket.textContent = item.supermercado;
+        
+        // Mostrar las unidades por encima del cuadro
+        const cleanUnit = (item.unidadPrecioPorUnidad || '').replace('€/', '');
+        if (cleanUnit) {
+            popupUnitLabels.textContent = `${cleanUnit}     ⊘${cleanUnit}`;
+        } else {
+            popupUnitLabels.textContent = '';
+        }
         
         // Rellenar precios por unidad (solo números, sin unidades)
         if (item.precioPorUnidad) {
