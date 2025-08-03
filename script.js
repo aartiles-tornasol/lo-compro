@@ -385,12 +385,33 @@ document.addEventListener('DOMContentLoaded', () => {
             const cleanUnit = (item.unidadPrecioPorUnidad || '').replace('€/', '');
 
             row.innerHTML = `
-                <td class="product-name-cell"><div class="product-row-color-indicator ${supermarketColorClasses[item.supermercado] || ''}"></div><span class="product-name">${item.producto}</span></td>
+                <td class="product-name-cell">
+                    <div class="d-flex align-items-center">
+                        <img id="thumbnail-${item.id}" class="product-thumbnail me-2" style="width: 30px; height: 20px; object-fit: cover; border-radius: 3px; display: none;" />
+                        <div class="product-row-color-indicator ${supermarketColorClasses[item.supermercado] || ''}"></div>
+                        <span class="product-name">${item.producto}</span>
+                    </div>
+                </td>
                 <td class="text-end price-cell">${formatPriceTwoDecimals(parsePrice(item.precio))}</td>
                 <td class="text-end price-per-unit price-cell">${formatPrice(item.precioPorUnidad)} ${cleanUnit}</td>
                 <td class="text-end price-cell">${formatPrice(item.precioMedio)} ${cleanUnit}</td>
             `;
             itemList.appendChild(row);
+            
+            // Cargar imagen del producto si existe
+            const thumbnailImg = document.getElementById(`thumbnail-${item.id}`);
+            if (thumbnailImg) {
+                // Buscar imagen guardada para este producto
+                firebase.database().ref(`productImages/${item.id}`).once('value').then(snapshot => {
+                    const imageData = snapshot.val();
+                    if (imageData && imageData.imageData) {
+                        thumbnailImg.src = imageData.imageData;
+                        thumbnailImg.style.display = 'block';
+                    }
+                }).catch(error => {
+                    console.log('No hay imagen guardada para este producto:', error);
+                });
+            }
 
             // Hacer toda la celda del nombre clickeable para filtrado
             const nombreCell = row.querySelector('.product-name-cell');
@@ -635,6 +656,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Mostrar el modal
         editItemModal.show();
+        
+        // Cargar imagen guardada si existe
+        loadProductImage();
     };
 
     // Listener para el botón de guardar cambios en el modal
@@ -663,6 +687,12 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         itemsRef.child(itemId).update(updatedData);
+        
+        // Si hay una imagen seleccionada en el popup, guardarla
+        const imageElement = document.getElementById('product-image-display');
+        if (imageElement && imageElement.src && !imageElement.src.includes('placeholder') && !imageElement.src.includes('data:image/svg+xml')) {
+            saveProductImage(itemId, imageElement.src);
+        }
 
         editItemModal.hide();
     });
@@ -804,9 +834,29 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         // Guardar el nuevo item en Firebase
-        itemsRef.push(newItem);
+        const newItemRef = itemsRef.push(newItem);
+        
+        // Si hay una imagen seleccionada, guardarla
+        const imageElement = document.getElementById('product-image-display');
+        if (imageElement && imageElement.src && !imageElement.src.includes('placeholder')) {
+            // Usar el ID del nuevo item para guardar la imagen
+            const itemId = newItemRef.key;
+            // La imagen ya está comprimida y en base64, solo necesitamos guardarla
+            saveProductImage(itemId, imageElement.src);
+        }
 
         form.reset(); // Limpiamos el formulario
+        
+        // Limpiar la imagen seleccionada
+        const imageDisplay = document.getElementById('product-image-display');
+        if (imageDisplay) {
+            imageDisplay.src = '';
+            imageDisplay.style.display = 'none';
+        }
+        const imagePlaceholder = document.getElementById('image-placeholder');
+        if (imagePlaceholder) {
+            imagePlaceholder.style.display = 'block';
+        }
         unitSelect.value = 'ud'; // Restablecer la unidad a 'ud'
         validateForm(); // Validar el formulario después de resetear
         addItemCard.style.display = 'none'; // Ocultar el formulario después de añadir
@@ -1207,21 +1257,112 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Imágenes añadidas al DOM');
     };
     
+    // Función para comprimir imagen a base64
+    const compressImageToBase64 = (imageUrl, maxWidth = 150, maxHeight = 100, quality = 0.8) => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Calcular dimensiones manteniendo proporción
+                let { width, height } = img;
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height = (height * maxWidth) / width;
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width = (width * maxHeight) / height;
+                        height = maxHeight;
+                    }
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                // Dibujar imagen redimensionada
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // Convertir a base64
+                const base64 = canvas.toDataURL('image/jpeg', quality);
+                resolve(base64);
+            };
+            
+            img.onerror = () => reject(new Error('Error cargando imagen'));
+            img.src = imageUrl;
+        });
+    };
+
     // Función para seleccionar una imagen
-    const selectImage = (imageUrl) => {
+    const selectImage = async (imageUrl) => {
         const placeholder = document.getElementById('image-placeholder');
         const selectedImage = document.getElementById('selected-image');
         
-        // Ocultar placeholder y mostrar imagen seleccionada
-        placeholder.style.display = 'none';
-        selectedImage.src = imageUrl;
-        selectedImage.style.display = 'block';
+        console.log('Comprimiendo y guardando imagen:', imageUrl);
+        
+        try {
+            // Comprimir imagen
+            const compressedBase64 = await compressImageToBase64(imageUrl);
+            
+            // Mostrar imagen inmediatamente
+            placeholder.style.display = 'none';
+            selectedImage.src = compressedBase64;
+            selectedImage.style.display = 'block';
+            
+            // Guardar en Firebase si tenemos el producto actual
+            if (currentEditingItem && currentEditingItem.id) {
+                await saveProductImage(currentEditingItem.id, compressedBase64);
+                console.log('Imagen guardada en Firebase');
+                
+                // Actualizar el producto en el array local
+                currentEditingItem.image = compressedBase64;
+            }
+            
+        } catch (error) {
+            console.error('Error procesando imagen:', error);
+            // Mostrar imagen original si falla la compresión
+            placeholder.style.display = 'none';
+            selectedImage.src = imageUrl;
+            selectedImage.style.display = 'block';
+        }
         
         // Cerrar el carrusel
         closeImageSearch();
+    };
+
+    // Función para guardar imagen en Firebase
+    const saveProductImage = async (productId, imageBase64) => {
+        try {
+            const database = firebase.database();
+            await database.ref(`items/${productId}/image`).set(imageBase64);
+            console.log('Imagen guardada en Firebase para producto:', productId);
+        } catch (error) {
+            console.error('Error guardando imagen en Firebase:', error);
+            throw error;
+        }
+    };
+
+    // Función para cargar imagen guardada del producto
+    const loadProductImage = (product) => {
+        const placeholder = document.getElementById('image-placeholder');
+        const selectedImage = document.getElementById('selected-image');
         
-        // Aquí se podría guardar la imagen seleccionada en Firebase si es necesario
-        console.log('Imagen seleccionada:', imageUrl);
+        if (product && product.image) {
+            // Mostrar imagen guardada
+            placeholder.style.display = 'none';
+            selectedImage.src = product.image;
+            selectedImage.style.display = 'block';
+            console.log('Imagen cargada desde Firebase');
+        } else {
+            // Mostrar placeholder
+            placeholder.style.display = 'flex';
+            selectedImage.style.display = 'none';
+            console.log('Mostrando placeholder - sin imagen guardada');
+        }
     };
     
     // Función para cerrar la búsqueda de imágenes
