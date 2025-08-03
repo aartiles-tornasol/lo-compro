@@ -295,6 +295,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Event listeners para búsqueda de imágenes
+    const addImageSearchListeners = () => {
+        const placeholder = document.getElementById('image-placeholder');
+        const selectedImage = document.getElementById('selected-image');
+        
+        if (placeholder) {
+            placeholder.addEventListener('click', () => {
+                console.log('Click en placeholder - iniciando búsqueda');
+                if (typeof window.searchProductImages === 'function') {
+                    window.searchProductImages();
+                } else {
+                    console.error('Función window.searchProductImages no encontrada');
+                }
+            });
+        }
+        
+        if (selectedImage) {
+            selectedImage.addEventListener('click', () => {
+                console.log('Click en imagen seleccionada - iniciando búsqueda');
+                if (typeof window.searchProductImages === 'function') {
+                    window.searchProductImages();
+                } else {
+                    console.error('Función window.searchProductImages no encontrada');
+                }
+            });
+        }
+    };
+
+    // Llamar la función para agregar los listeners
+    // (Se llama al final después de definir todas las funciones)
+
     // Función para calcular el precio por unidad
     const calculatePricePerUnit = (price, quantity, unit) => {
         if (price === null || quantity === null || quantity === 0) {
@@ -1190,5 +1221,8 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Proyecto Firebase:', firebaseConfig?.projectId || 'No disponible');
     console.log('Auth domain:', firebaseConfig?.authDomain || 'No disponible');
     console.log('Firebase y FirebaseUI inicializados');
+    
+    // Agregar event listeners para búsqueda de imágenes después de que todo esté inicializado
+    addImageSearchListeners();
 
 });
