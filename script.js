@@ -991,6 +991,178 @@ document.addEventListener('DOMContentLoaded', () => {
     // Llamar a sortAndRenderItems inicialmente para aplicar la ordenación por defecto
     sortAndRenderItems();
 
+    // === FUNCIONES DE BÚSQUEDA DE IMÁGENES ===
+    
+    // Variable global para almacenar el producto actual
+    let currentProductForImageSearch = null;
+    
+    // Función para buscar imágenes del producto
+    window.searchProductImages = async () => {
+        const productName = document.getElementById('popup-product-name').textContent;
+        const quantity = document.getElementById('popup-quantity').textContent;
+        const unit = document.getElementById('popup-unit').textContent;
+        
+        // Crear el término de búsqueda combinando nombre, cantidad y unidad
+        const searchTerm = `${productName} ${quantity} ${unit}`.trim();
+        currentProductForImageSearch = { productName, quantity, unit, searchTerm };
+        
+        // Mostrar el carrusel y loading
+        const carousel = document.getElementById('image-carousel');
+        const loading = document.getElementById('search-loading');
+        const results = document.getElementById('search-results');
+        
+        carousel.style.display = 'block';
+        loading.style.display = 'flex';
+        results.innerHTML = '';
+        
+        try {
+            const images = await searchGoogleImages(searchTerm);
+            displayImageResults(images);
+        } catch (error) {
+            console.error('Error buscando imágenes:', error);
+            results.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Error al buscar imágenes. Inténtalo de nuevo.</div>';
+        } finally {
+            loading.style.display = 'none';
+        }
+    };
+    
+    // Función para buscar en Google Images (usando APIs gratuitas como alternativa)
+    const searchGoogleImages = async (searchTerm) => {
+        try {
+            // Intentar primero con Pixabay (API gratuita)
+            const pixabayImages = await searchPixabayImages(searchTerm);
+            if (pixabayImages.length > 0) {
+                return pixabayImages;
+            }
+            
+            // Si no hay resultados, usar placeholders
+            return generatePlaceholderImages(searchTerm);
+        } catch (error) {
+            console.error('Error en búsqueda de imágenes:', error);
+            return generatePlaceholderImages(searchTerm);
+        }
+    };
+    
+    // Función para buscar en Pixabay
+    const searchPixabayImages = async (searchTerm) => {
+        // Clave de API de Pixabay (pública para demostración)
+        const PIXABAY_API_KEY = '44519965-eec8b4c47c5a6235966f49b7c';
+        const PIXABAY_API_URL = 'https://pixabay.com/api/';
+        
+        const params = new URLSearchParams({
+            key: PIXABAY_API_KEY,
+            q: searchTerm,
+            image_type: 'photo',
+            orientation: 'all',
+            category: 'food',
+            min_width: 200,
+            min_height: 200,
+            per_page: 7,
+            safesearch: 'true'
+        });
+        
+        try {
+            const response = await fetch(`${PIXABAY_API_URL}?${params}`);
+            const data = await response.json();
+            
+            if (data.hits && data.hits.length > 0) {
+                return data.hits.map(hit => ({
+                    url: hit.webformatURL,
+                    thumbnail: hit.previewURL,
+                    title: hit.tags || searchTerm
+                }));
+            }
+            
+            return [];
+        } catch (error) {
+            console.error('Error buscando en Pixabay:', error);
+            return [];
+        }
+    };
+    
+    // Función temporal para generar imágenes de placeholder
+    const generatePlaceholderImages = (searchTerm) => {
+        // Usar diferentes servicios de placeholder para simular variedad
+        const colors = ['FF6B6B', '4ECDC4', '45B7D1', 'F9CA24', '6C5CE7', 'A8E6CF', 'FFB4B4'];
+        const encodedTerm = encodeURIComponent(searchTerm.substring(0, 20)); // Limitar longitud
+        
+        return colors.map((color, index) => ({
+            url: `https://via.placeholder.com/400x300/${color}/FFFFFF?text=${encodedTerm}`,
+            thumbnail: `https://via.placeholder.com/150x150/${color}/FFFFFF?text=${index + 1}`,
+            title: `${searchTerm} - Resultado ${index + 1}`
+        }));
+    };
+    
+    // Función para mostrar los resultados de búsqueda
+    const displayImageResults = (images) => {
+        const results = document.getElementById('search-results');
+        results.innerHTML = '';
+        
+        if (images.length === 0) {
+            results.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">No se encontraron imágenes.</div>';
+            return;
+        }
+        
+        images.forEach((image, index) => {
+            const img = document.createElement('img');
+            img.src = image.thumbnail || image.url;
+            img.className = 'image-search-item';
+            img.alt = image.title || `Imagen ${index + 1}`;
+            img.title = image.title || `Imagen ${index + 1}`;
+            
+            img.addEventListener('click', () => selectImage(image.url));
+            
+            // Manejar errores de carga de imagen
+            img.addEventListener('error', () => {
+                img.style.display = 'none';
+            });
+            
+            results.appendChild(img);
+        });
+    };
+    
+    // Función para seleccionar una imagen
+    const selectImage = (imageUrl) => {
+        const placeholder = document.getElementById('image-placeholder');
+        const selectedImage = document.getElementById('selected-image');
+        
+        // Ocultar placeholder y mostrar imagen seleccionada
+        placeholder.style.display = 'none';
+        selectedImage.src = imageUrl;
+        selectedImage.style.display = 'block';
+        
+        // Cerrar el carrusel
+        closeImageSearch();
+        
+        // Aquí se podría guardar la imagen seleccionada en Firebase si es necesario
+        console.log('Imagen seleccionada:', imageUrl);
+    };
+    
+    // Función para cerrar la búsqueda de imágenes
+    window.closeImageSearch = () => {
+        const carousel = document.getElementById('image-carousel');
+        carousel.style.display = 'none';
+        currentProductForImageSearch = null;
+    };
+    
+    // Actualizar la función showProductInfoPopup para resetear la imagen
+    const originalShowProductInfoPopup = showProductInfoPopup;
+    window.showProductInfoPopup = (item) => {
+        // Llamar a la función original
+        originalShowProductInfoPopup(item);
+        
+        // Resetear la imagen al estado inicial
+        const placeholder = document.getElementById('image-placeholder');
+        const selectedImage = document.getElementById('selected-image');
+        const carousel = document.getElementById('image-carousel');
+        
+        placeholder.style.display = 'flex';
+        selectedImage.style.display = 'none';
+        carousel.style.display = 'none';
+        
+        // TODO: En el futuro, cargar imagen guardada desde Firebase si existe
+    };
+
     // Logging de inicialización
     console.log('=== FIREBASE INICIALIZADO ===');
     console.log('Firebase Config cargado:', typeof firebaseConfig !== 'undefined');
