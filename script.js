@@ -1133,11 +1133,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const generatePlaceholderImages = (searchTerm) => {
         // Usar diferentes servicios de placeholder para simular variedad
         const colors = ['FF6B6B', '4ECDC4', '45B7D1', 'F9CA24', '6C5CE7', 'A8E6CF', 'FFB4B4'];
-        const encodedTerm = encodeURIComponent(searchTerm.substring(0, 20)); // Limitar longitud
+        const encodedTerm = encodeURIComponent('Producto');
         
         return colors.map((color, index) => ({
-            url: `https://via.placeholder.com/400x300/${color}/FFFFFF?text=${encodedTerm}`,
-            thumbnail: `https://via.placeholder.com/150x150/${color}/FFFFFF?text=${index + 1}`,
+            url: `https://placehold.co/400x300/${color}/FFFFFF/png?text=Imagen+${index + 1}`,
+            thumbnail: `https://placehold.co/120x80/${color}/FFFFFF/png?text=${index + 1}`,
             title: `${searchTerm} - Resultado ${index + 1}`
         }));
     };

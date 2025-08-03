@@ -374,16 +374,19 @@
 
 .image-search-results {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     max-height: 400px;
-    overflow-y: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
     padding: 15px;
     gap: 10px;
+    white-space: nowrap;
 }
 
 .image-search-item {
-    width: 100%;
+    width: 120px;
     height: 80px;
+    flex-shrink: 0;
     border-radius: 8px;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;

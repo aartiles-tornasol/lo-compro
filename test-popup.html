@@ -99,16 +99,19 @@
         
         .image-search-results {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             max-height: 400px;
-            overflow-y: auto;
+            overflow-x: auto;
+            overflow-y: hidden;
             padding: 15px;
             gap: 10px;
+            white-space: nowrap;
         }
         
         .image-search-item {
-            width: 100%;
+            width: 120px;
             height: 80px;
+            flex-shrink: 0;
             border-radius: 8px;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
@@ -182,28 +185,48 @@
             const images = generatePlaceholderImages(searchTerm);
             console.log('Imágenes generadas:', images.length);
             
+            // Debug temporal - mostrar que está funcionando
+            if (images.length === 0) {
+                results.innerHTML = '<div style="text-align: center; padding: 20px; color: red;">ERROR: No se generaron imágenes</div>';
+                return;
+            }
+            
             displayImageResults(images);
         }
         
         function generatePlaceholderImages(searchTerm) {
             const colors = ['FF6B6B', '4ECDC4', '45B7D1', 'F9CA24', '6C5CE7', 'A8E6CF', 'FFB4B4'];
-            const encodedTerm = encodeURIComponent(searchTerm.substring(0, 15));
+            const encodedTerm = encodeURIComponent('Producto');
             
             return colors.map((color, index) => ({
-                url: `https://via.placeholder.com/400x300/${color}/FFFFFF?text=${encodedTerm}`,
-                thumbnail: `https://via.placeholder.com/400x300/${color}/FFFFFF?text=${index + 1}`,
+                url: `https://placehold.co/400x300/${color}/FFFFFF/png?text=Imagen+${index + 1}`,
+                thumbnail: `https://placehold.co/120x80/${color}/FFFFFF/png?text=${index + 1}`,
                 title: `${searchTerm} - Resultado ${index + 1}`
             }));
         }
         
         function displayImageResults(images) {
+            console.log('=== INICIO displayImageResults ===');
             console.log('Mostrando resultados:', images.length);
+            console.log('Primeras 2 imágenes:', images.slice(0, 2));
+            
             const results = document.getElementById('search-results');
+            
+            if (!results) {
+                console.error('ERROR: Elemento search-results no encontrado');
+                return;
+            }
+            
+            // Añadir mensaje temporal de debug
+            results.innerHTML = '<div style="text-align: center; padding: 10px; background: yellow;">Procesando imágenes...</div>';
             
             if (images.length === 0) {
                 results.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">No se encontraron imágenes.</div>';
                 return;
             }
+            
+            // Limpiar el mensaje de debug
+            results.innerHTML = '';
             
             images.forEach((image, index) => {
                 console.log(`Creando imagen ${index + 1}:`, image.thumbnail);
