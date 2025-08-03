@@ -146,10 +146,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const popupPrice = document.getElementById('popup-price');
     const popupDate = document.getElementById('popup-date');
     const popupSupermarket = document.getElementById('popup-supermarket');
-    const popupColorBar = document.getElementById('popup-color-bar');
     const popupPricePerUnit = document.getElementById('popup-price-per-unit');
     const popupAveragePrice = document.getElementById('popup-average-price');
-    const popupUnitLabels = document.getElementById('popup-unit-labels');
+    const popupUnitLabel1 = document.getElementById('popup-unit-label-1');
+    const popupUnitLabel2 = document.getElementById('popup-unit-label-2');
 
     // Establecer 'ud' como valor por defecto para la unidad
     unitSelect.value = 'ud';
@@ -231,30 +231,32 @@ document.addEventListener('DOMContentLoaded', () => {
         popupDate.textContent = formatDisplayDate(item.fecha);
         popupSupermarket.textContent = item.supermercado;
         
-        // Mostrar las unidades por encima del cuadro (como en las cabeceras de la tabla)
+        // Configurar las etiquetas de unidades
         const cleanUnit = (item.unidadPrecioPorUnidad || '').replace('€/', '');
         if (cleanUnit) {
-            popupUnitLabels.innerHTML = `<span>€/${cleanUnit}</span><span>€⊘/${cleanUnit}</span>`;
+            popupUnitLabel1.textContent = `€/${cleanUnit}`;
+            popupUnitLabel2.textContent = `€⊘/${cleanUnit}`;
         } else {
-            popupUnitLabels.innerHTML = '';
+            popupUnitLabel1.textContent = '';
+            popupUnitLabel2.textContent = '';
         }
         
-        // Rellenar precios por unidad (solo números, sin unidades)
+        // Rellenar precios por unidad
         if (item.precioPorUnidad) {
-            popupPricePerUnit.textContent = ` ${formatPrice(item.precioPorUnidad)}`;
+            popupPricePerUnit.textContent = formatPrice(item.precioPorUnidad);
         } else {
             popupPricePerUnit.textContent = '';
         }
         
         if (item.precioMedio) {
-            popupAveragePrice.textContent = ` ${formatPrice(item.precioMedio)}`;
+            popupAveragePrice.textContent = formatPrice(item.precioMedio);
         } else {
             popupAveragePrice.textContent = '';
         }
         
-        // Aplicar el color del supermercado a la barra lateral
-        Object.values(supermarketColorClasses).forEach(cls => popupColorBar.classList.remove(cls));
-        popupColorBar.classList.add(supermarketColorClasses[item.supermercado] || '');
+        // Aplicar el color del supermercado como etiqueta
+        Object.values(supermarketColorClasses).forEach(cls => popupSupermarket.classList.remove(cls));
+        popupSupermarket.classList.add(supermarketColorClasses[item.supermercado] || '');
         
         // Mostrar el popup
         productInfoPopup.style.display = 'flex';

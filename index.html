@@ -231,23 +231,51 @@
     <div id="product-info-popup" class="product-info-popup" style="display: none;">
         <div class="product-info-content">
             <button class="product-info-close" id="close-product-info">&times;</button>
+            
+            <!-- Título del producto posicionado arriba -->
+            <h3 class="product-info-title" id="popup-product-name"></h3>
+            
             <div class="product-info-body">
-                <div class="product-info-color-bar" id="popup-color-bar"></div>
-                <div class="product-info-details">
-                    <h3 class="product-info-title" id="popup-product-name"></h3>
-                    <div class="product-info-units">
-                        <span class="unit-label" id="popup-unit-labels"></span>
+                <!-- Sección de imagen/placeholder -->
+                <div class="product-info-image-section">
+                    <div class="product-info-image-placeholder">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                            <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
+                            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </div>
-                    <div class="product-info-purchase">
-                        <span class="product-info-quantity" id="popup-quantity"></span>
-                        <span class="product-info-unit" id="popup-unit"></span>
-                        <span class="product-info-price" id="popup-price"></span>
-                        <span class="product-info-unit-price" id="popup-price-per-unit"></span>
-                        <span class="product-info-average-price" id="popup-average-price"></span>
+                </div>
+                
+                <!-- Sección de contenido -->
+                <div class="product-info-content-section">
+                    <div class="product-info-details">
+                        <!-- El título se movió arriba -->
+                        
+                        <!-- Contenido principal: cantidad y precio -->
+                        <div class="product-info-main-content">
+                            <span class="product-info-quantity" id="popup-quantity"></span>
+                            <span class="product-info-unit" id="popup-unit"></span>
+                            <span class="product-info-price" id="popup-price"></span>
+                        </div>
+                        
+                        <!-- Fila de precios por unidad -->
+                        <div class="product-info-prices-row">
+                            <div class="product-info-price-item">
+                                <div class="product-info-price-label" id="popup-unit-label-1"></div>
+                                <div class="product-info-price-value" id="popup-price-per-unit"></div>
+                            </div>
+                            <div class="product-info-price-item">
+                                <div class="product-info-price-label" id="popup-unit-label-2"></div>
+                                <div class="product-info-price-value" id="popup-average-price"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="product-info-metadata">
-                        <div class="product-info-date" id="popup-date"></div>
+                    
+                    <!-- Footer con fecha y supermercado -->
+                    <div class="product-info-footer">
                         <div class="product-info-supermarket" id="popup-supermarket"></div>
+                        <div class="product-info-date" id="popup-date"></div>
                     </div>
                 </div>
             </div>
