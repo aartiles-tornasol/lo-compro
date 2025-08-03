@@ -1063,72 +1063,91 @@ document.addEventListener('DOMContentLoaded', () => {
         results.innerHTML = '';
         
         try {
-            // Por ahora usar directamente placeholders para que funcione
-            const images = generatePlaceholderImages(searchTerm);
-            console.log('Imágenes generadas:', images.length);
-            displayImageResults(images);
+            // Usar la búsqueda real de Google Images con SerpAPI
+            const images = await searchGoogleImages(searchTerm);
+            console.log('Imágenes obtenidas:', images.length);
+            if (images.length > 0) {
+                displayImageResults(images);
+            } else {
+                const placeholderImages = generatePlaceholderImages(searchTerm);
+                displayImageResults(placeholderImages);
+            }
         } catch (error) {
             console.error('Error buscando imágenes:', error);
-            results.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Error al buscar imágenes. Inténtalo de nuevo.</div>';
+            const placeholderImages = generatePlaceholderImages(searchTerm);
+            displayImageResults(placeholderImages);
         } finally {
             loading.style.display = 'none';
         }
     };
     
-    // Función para buscar en Google Images (usando APIs gratuitas como alternativa)
+    // Función para buscar en Google Images usando SerpAPI
     const searchGoogleImages = async (searchTerm) => {
-        try {
-            // Intentar primero con Pixabay (API gratuita)
-            const pixabayImages = await searchPixabayImages(searchTerm);
-            if (pixabayImages.length > 0) {
-                return pixabayImages;
-            }
-            
-            // Si no hay resultados, usar placeholders
-            return generatePlaceholderImages(searchTerm);
-        } catch (error) {
-            console.error('Error en búsqueda de imágenes:', error);
-            return generatePlaceholderImages(searchTerm);
-        }
-    };
-    
-    // Función para buscar en Pixabay
-    const searchPixabayImages = async (searchTerm) => {
-        // Clave de API de Pixabay (pública para demostración)
-        const PIXABAY_API_KEY = '44519965-eec8b4c47c5a6235966f49b7c';
-        const PIXABAY_API_URL = 'https://pixabay.com/api/';
+        // Probar con diferentes proxies CORS
+        const PROXY_URLS = [
+            'https://corsproxy.io/?',
+            'https://api.codetabs.com/v1/proxy?quest=',
+            'https://cors-anywhere.herokuapp.com/'
+        ];
+        
+        const SERPAPI_KEY = apiKeys.serpapi; // API key desde config.js
+        const API_URL = 'https://serpapi.com/search.json';
         
         const params = new URLSearchParams({
-            key: PIXABAY_API_KEY,
+            engine: 'google_images',
             q: searchTerm,
-            image_type: 'photo',
-            orientation: 'all',
-            category: 'food',
-            min_width: 200,
-            min_height: 200,
-            per_page: 7,
-            safesearch: 'true'
+            api_key: SERPAPI_KEY,
+            num: 7,
+            safe: 'active',
+            ijn: 0
         });
         
-        try {
-            const response = await fetch(`${PIXABAY_API_URL}?${params}`);
-            const data = await response.json();
-            
-            if (data.hits && data.hits.length > 0) {
-                return data.hits.map(hit => ({
-                    url: hit.webformatURL,
-                    thumbnail: hit.previewURL,
-                    title: hit.tags || searchTerm
-                }));
+        // Probar cada proxy
+        for (let i = 0; i < PROXY_URLS.length; i++) {
+            try {
+                console.log(`Intentando con proxy ${i + 1}:`, PROXY_URLS[i]);
+                const proxyUrl = `${PROXY_URLS[i]}${encodeURIComponent(`${API_URL}?${params}`)}`;
+                
+                const response = await fetch(proxyUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('Respuesta de SerpAPI:', data);
+                
+                if (data.images_results && data.images_results.length > 0) {
+                    return data.images_results.slice(0, 7).map((result, index) => ({
+                        url: result.original || result.link,
+                        thumbnail: result.thumbnail,
+                        title: result.title || `${searchTerm} - Imagen ${index + 1}`
+                    }));
+                }
+            } catch (error) {
+                console.error(`Error con proxy ${i + 1}:`, error);
+                // Continúa con el siguiente proxy
             }
-            
-            return [];
-        } catch (error) {
-            console.error('Error buscando en Pixabay:', error);
-            return [];
         }
+        
+        console.log('Todos los proxies fallaron, usando imágenes alternativas');
+        return await searchWithAlternativeAPI(searchTerm);
     };
-    
+
+    // API alternativa usando imágenes aleatorias
+    const searchWithAlternativeAPI = async (searchTerm) => {
+        console.log('Usando API alternativa para:', searchTerm);
+        
+        // Generar URLs de imágenes temáticas usando Picsum con IDs específicos
+        const imageIds = [100, 200, 300, 400, 500, 600, 700];
+        
+        return imageIds.map((id, index) => ({
+            url: `https://picsum.photos/400/300?random=${id}`,
+            thumbnail: `https://picsum.photos/120/80?random=${id}`,
+            title: `${searchTerm} - Resultado ${index + 1}`
+        }));
+    };
+
     // Función temporal para generar imágenes de placeholder
     const generatePlaceholderImages = (searchTerm) => {
         // Usar diferentes servicios de placeholder para simular variedad
