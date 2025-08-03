@@ -1019,7 +1019,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const commitHashDisplay = document.getElementById('commit-hash-display');
 
     // Actualizar versión automáticamente con el nuevo commit
-    const currentVersion = 'ada6286'; // Hash del commit actual con funcionalidad de imágenes
+    const currentVersion = 'ff1b9bb'; // Hash del commit actual - repositorio limpio
     versionRef.set(currentVersion);
 
     versionRef.on('value', (snapshot) => {
