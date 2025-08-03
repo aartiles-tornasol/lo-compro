@@ -258,6 +258,15 @@ document.addEventListener('DOMContentLoaded', () => {
         Object.values(supermarketColorClasses).forEach(cls => popupSupermarket.classList.remove(cls));
         popupSupermarket.classList.add(supermarketColorClasses[item.supermercado] || '');
         
+        // Resetear la imagen al estado inicial
+        const placeholder = document.getElementById('image-placeholder');
+        const selectedImage = document.getElementById('selected-image');
+        const carousel = document.getElementById('image-carousel');
+        
+        if (placeholder) placeholder.style.display = 'flex';
+        if (selectedImage) selectedImage.style.display = 'none';
+        if (carousel) carousel.style.display = 'none';
+        
         // Mostrar el popup
         productInfoPopup.style.display = 'flex';
         document.body.style.overflow = 'hidden'; // Prevenir scroll del fondo
@@ -1006,17 +1015,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const searchTerm = `${productName} ${quantity} ${unit}`.trim();
         currentProductForImageSearch = { productName, quantity, unit, searchTerm };
         
+        console.log('Buscando imágenes para:', searchTerm);
+        
         // Mostrar el carrusel y loading
         const carousel = document.getElementById('image-carousel');
         const loading = document.getElementById('search-loading');
         const results = document.getElementById('search-results');
+        
+        if (!carousel || !loading || !results) {
+            console.error('No se encontraron elementos del DOM para el carrusel');
+            return;
+        }
         
         carousel.style.display = 'block';
         loading.style.display = 'flex';
         results.innerHTML = '';
         
         try {
-            const images = await searchGoogleImages(searchTerm);
+            // Por ahora usar directamente placeholders para que funcione
+            const images = generatePlaceholderImages(searchTerm);
+            console.log('Imágenes generadas:', images.length);
             displayImageResults(images);
         } catch (error) {
             console.error('Error buscando imágenes:', error);
@@ -1095,7 +1113,14 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Función para mostrar los resultados de búsqueda
     const displayImageResults = (images) => {
+        console.log('Mostrando resultados de imágenes:', images.length);
         const results = document.getElementById('search-results');
+        
+        if (!results) {
+            console.error('Elemento search-results no encontrado');
+            return;
+        }
+        
         results.innerHTML = '';
         
         if (images.length === 0) {
@@ -1104,21 +1129,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         images.forEach((image, index) => {
+            console.log(`Creando imagen ${index + 1}:`, image.thumbnail || image.url);
             const img = document.createElement('img');
             img.src = image.thumbnail || image.url;
             img.className = 'image-search-item';
             img.alt = image.title || `Imagen ${index + 1}`;
             img.title = image.title || `Imagen ${index + 1}`;
             
-            img.addEventListener('click', () => selectImage(image.url));
+            img.addEventListener('click', () => {
+                console.log('Imagen seleccionada:', image.url);
+                selectImage(image.url);
+            });
             
             // Manejar errores de carga de imagen
-            img.addEventListener('error', () => {
+            img.addEventListener('error', (e) => {
+                console.error('Error cargando imagen:', e.target.src);
                 img.style.display = 'none';
+            });
+            
+            img.addEventListener('load', () => {
+                console.log('Imagen cargada correctamente:', img.src);
             });
             
             results.appendChild(img);
         });
+        
+        console.log('Imágenes añadidas al DOM');
     };
     
     // Función para seleccionar una imagen
@@ -1140,27 +1176,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Función para cerrar la búsqueda de imágenes
     window.closeImageSearch = () => {
+        console.log('Cerrando búsqueda de imágenes');
         const carousel = document.getElementById('image-carousel');
-        carousel.style.display = 'none';
+        if (carousel) {
+            carousel.style.display = 'none';
+        }
         currentProductForImageSearch = null;
-    };
-    
-    // Actualizar la función showProductInfoPopup para resetear la imagen
-    const originalShowProductInfoPopup = showProductInfoPopup;
-    window.showProductInfoPopup = (item) => {
-        // Llamar a la función original
-        originalShowProductInfoPopup(item);
-        
-        // Resetear la imagen al estado inicial
-        const placeholder = document.getElementById('image-placeholder');
-        const selectedImage = document.getElementById('selected-image');
-        const carousel = document.getElementById('image-carousel');
-        
-        placeholder.style.display = 'flex';
-        selectedImage.style.display = 'none';
-        carousel.style.display = 'none';
-        
-        // TODO: En el futuro, cargar imagen guardada desde Firebase si existe
     };
 
     // Logging de inicialización
