@@ -226,6 +226,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para mostrar el popup de información del producto
     const showProductInfoPopup = (item) => {
+        console.log('📱 Abriendo popup para producto:', item.producto, 'ID:', item.id);
+        
+        // Establecer el producto actual para las operaciones de imagen
+        currentEditingItem = item;
+        console.log('✅ currentEditingItem establecido:', currentEditingItem.id);
         // Rellenar el contenido del popup
         popupProductName.textContent = item.producto;
         popupQuantity.textContent = item.cantidad;
@@ -270,6 +275,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedImage) selectedImage.style.display = 'none';
         if (carousel) carousel.style.display = 'none';
         
+        // Cargar imagen existente si la tiene
+        loadProductImage(item);
+        
         // Mostrar el popup
         productInfoPopup.style.display = 'flex';
         document.body.style.overflow = 'hidden'; // Prevenir scroll del fondo
@@ -277,8 +285,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para ocultar el popup de información del producto
     const hideProductInfoPopup = () => {
+        console.log('🚪 Cerrando popup de información');
         productInfoPopup.style.display = 'none';
         document.body.style.overflow = ''; // Restaurar scroll del fondo
+        
+        // Limpiar el producto actual
+        currentEditingItem = null;
+        console.log('🧹 currentEditingItem limpiado');
     };
 
     // Event listeners para cerrar el popup
