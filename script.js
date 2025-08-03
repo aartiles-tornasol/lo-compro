@@ -1018,6 +1018,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const versionRef = database.ref('config/versionHash');
     const commitHashDisplay = document.getElementById('commit-hash-display');
 
+    // Actualizar versión automáticamente con el nuevo commit
+    const currentVersion = 'ada6286'; // Hash del commit actual con funcionalidad de imágenes
+    versionRef.set(currentVersion);
+
     versionRef.on('value', (snapshot) => {
         const commitHash = snapshot.val();
         if (commitHash && commitHashDisplay) {
