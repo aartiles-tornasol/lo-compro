@@ -405,10 +405,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const thumbnailImg = document.getElementById(`thumbnail-${item.id}`);
             if (thumbnailImg) {
                 // Buscar imagen guardada para este producto
-                firebase.database().ref(`productImages/${item.id}`).once('value').then(snapshot => {
+                firebase.database().ref(`items/${item.id}/image`).once('value').then(snapshot => {
                     const imageData = snapshot.val();
-                    if (imageData && imageData.imageData) {
-                        thumbnailImg.src = imageData.imageData;
+                    if (imageData) {
+                        thumbnailImg.src = imageData;
                         thumbnailImg.style.display = 'block';
                     }
                 }).catch(error => {
@@ -1367,23 +1367,16 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Obteniendo referencia a Firebase database...');
             const database = firebase.database();
             
-            console.log('Preparando datos para guardar...');
-            const dataToSave = {
-                imageData: imageBase64,
-                timestamp: new Date().toISOString(),
-                testField: 'Esta es una prueba'
-            };
-            
-            console.log('Guardando en ruta:', `productImages/${productId}`);
-            await database.ref(`productImages/${productId}`).set(dataToSave);
+            console.log('Guardando imagen en ruta:', `items/${productId}/image`);
+            await database.ref(`items/${productId}/image`).set(imageBase64);
             
             console.log('✅ ÉXITO: Imagen guardada en Firebase para producto:', productId);
             
             // Verificar que se guardó
             console.log('Verificando que se guardó...');
-            const verification = await database.ref(`productImages/${productId}`).once('value');
-            const savedData = verification.val();
-            console.log('Datos verificados en Firebase:', savedData ? 'Datos encontrados' : 'No se encontraron datos');
+            const verification = await database.ref(`items/${productId}/image`).once('value');
+            const savedImage = verification.val();
+            console.log('Imagen verificada en Firebase:', savedImage ? 'Imagen encontrada' : 'No se encontró imagen');
             
         } catch (error) {
             console.error('❌ ERROR guardando imagen en Firebase:', error);
@@ -1428,18 +1421,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         try {
+            console.log('Cargando imagen para producto:', product.id);
             const database = firebase.database();
-            const snapshot = await database.ref(`productImages/${product.id}`).once('value');
+            const snapshot = await database.ref(`items/${product.id}/image`).once('value');
             const imageData = snapshot.val();
             
-            if (imageData && imageData.imageData) {
+            if (imageData) {
                 // Mostrar imagen guardada
                 if (placeholder) placeholder.style.display = 'none';
                 if (selectedImage) {
-                    selectedImage.src = imageData.imageData;
+                    selectedImage.src = imageData;
                     selectedImage.style.display = 'block';
                 }
-                console.log('Imagen cargada desde Firebase para producto:', product.id);
+                console.log('✅ Imagen cargada desde Firebase para producto:', product.id);
             } else {
                 // Mostrar placeholder si no hay imagen
                 if (placeholder) placeholder.style.display = 'flex';
