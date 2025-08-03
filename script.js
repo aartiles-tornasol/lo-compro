@@ -1349,16 +1349,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para guardar imagen en Firebase
     const saveProductImage = async (productId, imageBase64) => {
+        console.log('=== INICIO saveProductImage ===');
+        console.log('ProductId recibido:', productId);
+        console.log('ImageBase64 recibido (primeros 50 chars):', imageBase64 ? imageBase64.substring(0, 50) + '...' : 'null/undefined');
+        
+        if (!productId) {
+            console.error('ERROR: No se proporcionó productId');
+            return;
+        }
+        
+        if (!imageBase64) {
+            console.error('ERROR: No se proporcionó imageBase64');
+            return;
+        }
+        
         try {
+            console.log('Obteniendo referencia a Firebase database...');
             const database = firebase.database();
-            await database.ref(`productImages/${productId}`).set({
+            
+            console.log('Preparando datos para guardar...');
+            const dataToSave = {
                 imageData: imageBase64,
-                timestamp: new Date().toISOString()
-            });
-            console.log('Imagen guardada en Firebase para producto:', productId);
+                timestamp: new Date().toISOString(),
+                testField: 'Esta es una prueba'
+            };
+            
+            console.log('Guardando en ruta:', `productImages/${productId}`);
+            await database.ref(`productImages/${productId}`).set(dataToSave);
+            
+            console.log('✅ ÉXITO: Imagen guardada en Firebase para producto:', productId);
+            
+            // Verificar que se guardó
+            console.log('Verificando que se guardó...');
+            const verification = await database.ref(`productImages/${productId}`).once('value');
+            const savedData = verification.val();
+            console.log('Datos verificados en Firebase:', savedData ? 'Datos encontrados' : 'No se encontraron datos');
+            
         } catch (error) {
-            console.error('Error guardando imagen en Firebase:', error);
+            console.error('❌ ERROR guardando imagen en Firebase:', error);
+            console.error('Error details:', error.message);
             throw error;
+        }
+        
+        console.log('=== FIN saveProductImage ===');
+    };
+    
+    // FUNCIÓN DE PRUEBA - TEMPORAL
+    window.testSaveImage = async () => {
+        console.log('🧪 Iniciando prueba de guardado de imagen...');
+        
+        // Imagen de prueba pequeña en base64 (1x1 pixel rojo)
+        const testImageBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+        const testProductId = 'test-' + Date.now();
+        
+        console.log('Usando productId de prueba:', testProductId);
+        
+        try {
+            await saveProductImage(testProductId, testImageBase64);
+            console.log('✅ Prueba completada exitosamente');
+            alert('Prueba de guardado completada. Revisa la consola y Firebase.');
+        } catch (error) {
+            console.error('❌ Error en la prueba:', error);
+            alert('Error en la prueba: ' + error.message);
         }
     };
 
