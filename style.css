@@ -273,6 +273,11 @@
     overflow: hidden;
 }
 
+.product-info-image-section.has-image {
+    border: none;
+    background-color: transparent;
+}
+
 .product-info-image-placeholder {
     font-size: 2.5rem;
     color: #6c757d;

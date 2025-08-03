@@ -270,10 +270,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const placeholder = document.getElementById('image-placeholder');
         const selectedImage = document.getElementById('selected-image');
         const carousel = document.getElementById('image-carousel');
+        const imageSection = document.getElementById('image-section');
         
         if (placeholder) placeholder.style.display = 'flex';
         if (selectedImage) selectedImage.style.display = 'none';
         if (carousel) carousel.style.display = 'none';
+        if (imageSection) imageSection.classList.remove('has-image');
         
         // Cargar imagen existente si la tiene
         loadProductImage(item);
@@ -403,7 +405,6 @@ document.addEventListener('DOMContentLoaded', () => {
             row.innerHTML = `
                 <td class="product-name-cell">
                     <div class="d-flex align-items-center">
-                        <img id="thumbnail-${item.id}" class="product-thumbnail me-2" style="width: 30px; height: 20px; object-fit: cover; border-radius: 3px; display: none;" />
                         <div class="product-row-color-indicator ${supermarketColorClasses[item.supermercado] || ''}"></div>
                         <span class="product-name">${item.producto}</span>
                     </div>
@@ -413,21 +414,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td class="text-end price-cell">${formatPrice(item.precioMedio)} ${cleanUnit}</td>
             `;
             itemList.appendChild(row);
-            
-            // Cargar imagen del producto si existe
-            const thumbnailImg = document.getElementById(`thumbnail-${item.id}`);
-            if (thumbnailImg) {
-                // Buscar imagen guardada para este producto
-                firebase.database().ref(`items/${item.id}/image`).once('value').then(snapshot => {
-                    const imageData = snapshot.val();
-                    if (imageData) {
-                        thumbnailImg.src = imageData;
-                        thumbnailImg.style.display = 'block';
-                    }
-                }).catch(error => {
-                    console.log('No hay imagen guardada para este producto:', error);
-                });
-            }
 
             // Hacer toda la celda del nombre clickeable para filtrado
             const nombreCell = row.querySelector('.product-name-cell');
@@ -871,13 +857,18 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Limpiar la imagen seleccionada
         const imageDisplay = document.getElementById('selected-image');
+        const imagePlaceholder = document.getElementById('image-placeholder');
+        const imageSection = document.getElementById('image-section');
+        
         if (imageDisplay) {
             imageDisplay.src = '';
             imageDisplay.style.display = 'none';
         }
-        const imagePlaceholder = document.getElementById('image-placeholder');
         if (imagePlaceholder) {
             imagePlaceholder.style.display = 'block';
+        }
+        if (imageSection) {
+            imageSection.classList.remove('has-image');
         }
         unitSelect.value = 'ud'; // Restablecer la unidad a 'ud'
         validateForm(); // Validar el formulario después de resetear
@@ -1279,8 +1270,8 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Imágenes añadidas al DOM');
     };
     
-    // Función para comprimir imagen a base64
-    const compressImageToBase64 = (imageUrl, maxWidth = 150, maxHeight = 100, quality = 0.8) => {
+    // Función para comprimir imagen a base64 con umbral inteligente
+    const compressImageToBase64 = (imageUrl, maxWidth = 300, maxHeight = 200, quality = 0.85) => {
         return new Promise((resolve, reject) => {
             const img = new Image();
             img.crossOrigin = 'anonymous';
@@ -1289,8 +1280,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
                 
-                // Calcular dimensiones manteniendo proporción
+                // Obtener dimensiones originales
                 let { width, height } = img;
+                console.log(`📐 Dimensiones originales: ${width}x${height}`);
+                
+                // Umbral: solo comprimir si es mayor a 400x300 píxeles
+                const COMPRESS_THRESHOLD_WIDTH = 400;
+                const COMPRESS_THRESHOLD_HEIGHT = 300;
+                
+                let needsCompression = width > COMPRESS_THRESHOLD_WIDTH || height > COMPRESS_THRESHOLD_HEIGHT;
+                
+                if (!needsCompression) {
+                    console.log('📏 Imagen pequeña, no necesita compresión - usando original');
+                    // Para imágenes pequeñas, convertir sin redimensionar
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0);
+                    const base64 = canvas.toDataURL('image/jpeg', 0.95); // Mayor calidad para imágenes pequeñas
+                    resolve(base64);
+                    return;
+                }
+                
+                console.log('🗜️ Imagen grande, aplicando compresión...');
+                
+                // Calcular dimensiones manteniendo proporción
                 if (width > height) {
                     if (width > maxWidth) {
                         height = (height * maxWidth) / width;
@@ -1302,6 +1315,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         height = maxHeight;
                     }
                 }
+                
+                console.log(`📐 Dimensiones comprimidas: ${width}x${height}`);
                 
                 canvas.width = width;
                 canvas.height = height;
@@ -1345,9 +1360,11 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('✅ Imagen comprimida exitosamente (tamaño en chars):', compressedBase64.length);
             
             // Mostrar imagen inmediatamente
+            const imageSection = document.getElementById('image-section');
             placeholder.style.display = 'none';
             selectedImage.src = compressedBase64;
             selectedImage.style.display = 'block';
+            if (imageSection) imageSection.classList.add('has-image');
             console.log('✅ Imagen mostrada en UI');
             
             // Guardar en Firebase solo si tenemos el producto actual (edición)
@@ -1443,11 +1460,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadProductImage = async (product) => {
         const placeholder = document.getElementById('image-placeholder');
         const selectedImage = document.getElementById('selected-image');
+        const imageSection = document.getElementById('image-section');
         
         if (!product || !product.id) {
             // Mostrar placeholder si no hay producto
             if (placeholder) placeholder.style.display = 'flex';
             if (selectedImage) selectedImage.style.display = 'none';
+            if (imageSection) imageSection.classList.remove('has-image');
             console.log('Mostrando placeholder - no hay producto');
             return;
         }
@@ -1465,11 +1484,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     selectedImage.src = imageData;
                     selectedImage.style.display = 'block';
                 }
+                if (imageSection) imageSection.classList.add('has-image');
                 console.log('✅ Imagen cargada desde Firebase para producto:', product.id);
             } else {
                 // Mostrar placeholder si no hay imagen
                 if (placeholder) placeholder.style.display = 'flex';
                 if (selectedImage) selectedImage.style.display = 'none';
+                if (imageSection) imageSection.classList.remove('has-image');
                 console.log('Mostrando placeholder - sin imagen guardada para producto:', product.id);
             }
         } catch (error) {
@@ -1477,6 +1498,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Mostrar placeholder en caso de error
             if (placeholder) placeholder.style.display = 'flex';
             if (selectedImage) selectedImage.style.display = 'none';
+            if (imageSection) imageSection.classList.remove('has-image');
         }
     };
     
