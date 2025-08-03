@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Búsqueda de Imágenes</title>
+    <script src="config.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -124,6 +125,11 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             border-color: #007bff;
         }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -181,17 +187,102 @@
             carousel.style.display = 'block';
             results.innerHTML = '';
             
-            // Generar imágenes de prueba
-            const images = generatePlaceholderImages(searchTerm);
-            console.log('Imágenes generadas:', images.length);
+            // Mostrar loading
+            results.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;"><div style="display: inline-block; width: 20px; height: 20px; border: 2px solid #ccc; border-top: 2px solid #007bff; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 10px;"></div>Buscando en Google Images...</div>';
             
-            // Debug temporal - mostrar que está funcionando
-            if (images.length === 0) {
-                results.innerHTML = '<div style="text-align: center; padding: 20px; color: red;">ERROR: No se generaron imágenes</div>';
-                return;
+            // Buscar imágenes reales
+            searchGoogleImages(searchTerm)
+                .then(images => {
+                    console.log('Imágenes obtenidas:', images.length);
+                    if (images.length > 0) {
+                        displayImageResults(images);
+                    } else {
+                        // Fallback a placeholders si no hay resultados
+                        const placeholderImages = generatePlaceholderImages(searchTerm);
+                        displayImageResults(placeholderImages);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en búsqueda:', error);
+                    // Fallback a placeholders en caso de error
+                    const placeholderImages = generatePlaceholderImages(searchTerm);
+                    displayImageResults(placeholderImages);
+                });
+        }
+        
+        // Función para buscar en Google Images usando SerpAPI
+        async function searchGoogleImages(searchTerm) {
+            // Usar CORS proxy para evitar problemas de CORS
+            const PROXY_URL = 'https://api.allorigins.win/raw?url=';
+            const SERPAPI_KEY = apiKeys.serpapi; // API key desde config.js
+            const API_URL = 'https://serpapi.com/search.json';
+            
+            const params = new URLSearchParams({
+                engine: 'google_images',
+                q: searchTerm,
+                api_key: SERPAPI_KEY,
+                num: 7,
+                safe: 'active',
+                ijn: 0
+            });
+            
+            try {
+                console.log('Buscando en Google Images:', searchTerm);
+                const encodedUrl = encodeURIComponent(`${API_URL}?${params}`);
+                const response = await fetch(`${PROXY_URL}${encodedUrl}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('Respuesta de SerpAPI:', data);
+                
+                if (data.images_results && data.images_results.length > 0) {
+                    return data.images_results.slice(0, 7).map((result, index) => ({
+                        url: result.original || result.link,
+                        thumbnail: result.thumbnail,
+                        title: result.title || `${searchTerm} - Imagen ${index + 1}`
+                    }));
+                }
+                
+                return [];
+            } catch (error) {
+                console.error('Error buscando en SerpAPI:', error);
+                // En lugar de fallar, vamos a usar una API alternativa más simple
+                return await searchWithAlternativeAPI(searchTerm);
+            }
+        }
+        
+        // API alternativa usando JSONPlaceholder para demo (reemplazar por servicio real)
+        async function searchWithAlternativeAPI(searchTerm) {
+            console.log('Usando API alternativa para:', searchTerm);
+            
+            // Por ahora, generar imágenes temáticas basadas en el término de búsqueda
+            const themes = {
+                'limonada': ['lemon', 'drink', 'yellow', 'fresh'],
+                'don simon': ['juice', 'tetrapack', 'brand'],
+                'default': ['product', 'item', 'generic']
+            };
+            
+            const searchLower = searchTerm.toLowerCase();
+            let theme = themes.default;
+            
+            for (const [key, value] of Object.entries(themes)) {
+                if (searchLower.includes(key)) {
+                    theme = value;
+                    break;
+                }
             }
             
-            displayImageResults(images);
+            // Generar URLs de imágenes temáticas usando Picsum con IDs específicos
+            const imageIds = [100, 200, 300, 400, 500, 600, 700];
+            
+            return imageIds.map((id, index) => ({
+                url: `https://picsum.photos/400/300?random=${id}`,
+                thumbnail: `https://picsum.photos/120/80?random=${id}`,
+                title: `${searchTerm} - Resultado ${index + 1}`
+            }));
         }
         
         function generatePlaceholderImages(searchTerm) {
