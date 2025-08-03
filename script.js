@@ -1308,35 +1308,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para seleccionar una imagen
     const selectImage = async (imageUrl) => {
+        console.log('🖼️ === INICIO selectImage ===');
+        console.log('URL de imagen recibida:', imageUrl);
+        
         const placeholder = document.getElementById('image-placeholder');
         const selectedImage = document.getElementById('selected-image');
         
-        console.log('Comprimiendo y guardando imagen:', imageUrl);
+        console.log('Elementos DOM:', {
+            placeholder: placeholder ? 'Encontrado' : 'NO ENCONTRADO',
+            selectedImage: selectedImage ? 'Encontrado' : 'NO ENCONTRADO'
+        });
+        
+        console.log('Estado de currentEditingItem:', {
+            exists: !!currentEditingItem,
+            id: currentEditingItem?.id || 'Sin ID',
+            producto: currentEditingItem?.producto || 'Sin nombre'
+        });
         
         try {
+            console.log('Iniciando compresión de imagen...');
             // Comprimir imagen
             const compressedBase64 = await compressImageToBase64(imageUrl);
+            console.log('✅ Imagen comprimida exitosamente (tamaño en chars):', compressedBase64.length);
             
             // Mostrar imagen inmediatamente
             placeholder.style.display = 'none';
             selectedImage.src = compressedBase64;
             selectedImage.style.display = 'block';
+            console.log('✅ Imagen mostrada en UI');
             
             // Guardar en Firebase solo si tenemos el producto actual (edición)
             if (currentEditingItem && currentEditingItem.id) {
+                console.log('📝 Producto en edición detectado - guardando en Firebase...');
                 await saveProductImage(currentEditingItem.id, compressedBase64);
-                console.log('Imagen guardada en Firebase para producto existente:', currentEditingItem.id);
+                console.log('✅ Imagen guardada en Firebase para producto existente:', currentEditingItem.id);
                 
                 // Actualizar el producto en el array local
                 currentEditingItem.image = compressedBase64;
+                console.log('✅ Producto local actualizado con imagen');
             } else {
                 // Para productos nuevos, solo guardamos la imagen temporalmente en el DOM
                 // Se guardará cuando se cree el producto
-                console.log('Imagen seleccionada para producto nuevo - se guardará al crear el producto');
+                console.log('📋 Producto nuevo detectado - imagen se guardará al crear el producto');
             }
             
         } catch (error) {
-            console.error('Error procesando imagen:', error);
+            console.error('❌ Error procesando imagen:', error);
             // Mostrar imagen original si falla la compresión
             placeholder.style.display = 'none';
             selectedImage.src = imageUrl;
@@ -1344,7 +1361,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // Cerrar el carrusel
+        console.log('🚪 Cerrando carrusel de imágenes');
         closeImageSearch();
+        console.log('🖼️ === FIN selectImage ===');
     };
 
     // Función para guardar imagen en Firebase
