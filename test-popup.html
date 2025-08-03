@@ -212,8 +212,13 @@
         
         // Función para buscar en Google Images usando SerpAPI
         async function searchGoogleImages(searchTerm) {
-            // Usar CORS proxy para evitar problemas de CORS
-            const PROXY_URL = 'https://api.allorigins.win/raw?url=';
+            // Probar con diferentes proxies CORS
+            const PROXY_URLS = [
+                'https://corsproxy.io/?',
+                'https://api.codetabs.com/v1/proxy?quest=',
+                'https://cors-anywhere.herokuapp.com/'
+            ];
+            
             const SERPAPI_KEY = apiKeys.serpapi; // API key desde config.js
             const API_URL = 'https://serpapi.com/search.json';
             
@@ -226,32 +231,36 @@
                 ijn: 0
             });
             
-            try {
-                console.log('Buscando en Google Images:', searchTerm);
-                const encodedUrl = encodeURIComponent(`${API_URL}?${params}`);
-                const response = await fetch(`${PROXY_URL}${encodedUrl}`);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+            // Probar cada proxy
+            for (let i = 0; i < PROXY_URLS.length; i++) {
+                try {
+                    console.log(`Intentando con proxy ${i + 1}:`, PROXY_URLS[i]);
+                    const proxyUrl = `${PROXY_URLS[i]}${encodeURIComponent(`${API_URL}?${params}`)}`;
+                    
+                    const response = await fetch(proxyUrl);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    console.log('Respuesta de SerpAPI:', data);
+                    
+                    if (data.images_results && data.images_results.length > 0) {
+                        return data.images_results.slice(0, 7).map((result, index) => ({
+                            url: result.original || result.link,
+                            thumbnail: result.thumbnail,
+                            title: result.title || `${searchTerm} - Imagen ${index + 1}`
+                        }));
+                    }
+                } catch (error) {
+                    console.error(`Error con proxy ${i + 1}:`, error);
+                    // Continúa con el siguiente proxy
                 }
-                
-                const data = await response.json();
-                console.log('Respuesta de SerpAPI:', data);
-                
-                if (data.images_results && data.images_results.length > 0) {
-                    return data.images_results.slice(0, 7).map((result, index) => ({
-                        url: result.original || result.link,
-                        thumbnail: result.thumbnail,
-                        title: result.title || `${searchTerm} - Imagen ${index + 1}`
-                    }));
-                }
-                
-                return [];
-            } catch (error) {
-                console.error('Error buscando en SerpAPI:', error);
-                // En lugar de fallar, vamos a usar una API alternativa más simple
-                return await searchWithAlternativeAPI(searchTerm);
             }
+            
+            console.log('Todos los proxies fallaron, usando API alternativa');
+            return await searchWithAlternativeAPI(searchTerm);
         }
         
         // API alternativa usando JSONPlaceholder para demo (reemplazar por servicio real)
