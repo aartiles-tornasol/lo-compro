@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const database = firebase.database();
     const itemsRef = database.ref('items');
 
+    // Variable para el producto actualmente en edición
+    let currentEditingItem = null;
+
     // Inicializar FirebaseUI
     const ui = new firebaseui.auth.AuthUI(auth);
     const uiConfig = {
@@ -643,6 +646,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const populateFormForEdit = (itemId) => {
         const itemToEdit = allItems.find(item => item.id === itemId);
         if (!itemToEdit) return;
+        
+        // Establecer el producto actual para la edición
+        currentEditingItem = itemToEdit;
 
         // Rellenar los campos del formulario del modal
         document.getElementById('edit-modal-item-id').value = itemId;
@@ -658,7 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
         editItemModal.show();
         
         // Cargar imagen guardada si existe
-        loadProductImage();
+        loadProductImage(itemToEdit);
     };
 
     // Listener para el botón de guardar cambios en el modal
@@ -689,12 +695,15 @@ document.addEventListener('DOMContentLoaded', () => {
         itemsRef.child(itemId).update(updatedData);
         
         // Si hay una imagen seleccionada en el popup, guardarla
-        const imageElement = document.getElementById('product-image-display');
+        const imageElement = document.getElementById('selected-image');
         if (imageElement && imageElement.src && !imageElement.src.includes('placeholder') && !imageElement.src.includes('data:image/svg+xml')) {
             saveProductImage(itemId, imageElement.src);
         }
 
         editItemModal.hide();
+        
+        // Limpiar el producto en edición
+        currentEditingItem = null;
     });
 
     const deleteConfirmModal = new bootstrap.Modal(document.getElementById('delete-confirm-modal'));
@@ -837,8 +846,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const newItemRef = itemsRef.push(newItem);
         
         // Si hay una imagen seleccionada, guardarla
-        const imageElement = document.getElementById('product-image-display');
-        if (imageElement && imageElement.src && !imageElement.src.includes('placeholder')) {
+        const imageElement = document.getElementById('selected-image');
+        if (imageElement && imageElement.src && !imageElement.src.includes('placeholder') && !imageElement.src.includes('data:image/svg+xml')) {
             // Usar el ID del nuevo item para guardar la imagen
             const itemId = newItemRef.key;
             // La imagen ya está comprimida y en base64, solo necesitamos guardarla
@@ -848,7 +857,7 @@ document.addEventListener('DOMContentLoaded', () => {
         form.reset(); // Limpiamos el formulario
         
         // Limpiar la imagen seleccionada
-        const imageDisplay = document.getElementById('product-image-display');
+        const imageDisplay = document.getElementById('selected-image');
         if (imageDisplay) {
             imageDisplay.src = '';
             imageDisplay.style.display = 'none';
@@ -1313,13 +1322,17 @@ document.addEventListener('DOMContentLoaded', () => {
             selectedImage.src = compressedBase64;
             selectedImage.style.display = 'block';
             
-            // Guardar en Firebase si tenemos el producto actual
+            // Guardar en Firebase solo si tenemos el producto actual (edición)
             if (currentEditingItem && currentEditingItem.id) {
                 await saveProductImage(currentEditingItem.id, compressedBase64);
-                console.log('Imagen guardada en Firebase');
+                console.log('Imagen guardada en Firebase para producto existente:', currentEditingItem.id);
                 
                 // Actualizar el producto en el array local
                 currentEditingItem.image = compressedBase64;
+            } else {
+                // Para productos nuevos, solo guardamos la imagen temporalmente en el DOM
+                // Se guardará cuando se cree el producto
+                console.log('Imagen seleccionada para producto nuevo - se guardará al crear el producto');
             }
             
         } catch (error) {
@@ -1338,7 +1351,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveProductImage = async (productId, imageBase64) => {
         try {
             const database = firebase.database();
-            await database.ref(`items/${productId}/image`).set(imageBase64);
+            await database.ref(`productImages/${productId}`).set({
+                imageData: imageBase64,
+                timestamp: new Date().toISOString()
+            });
             console.log('Imagen guardada en Firebase para producto:', productId);
         } catch (error) {
             console.error('Error guardando imagen en Firebase:', error);
@@ -1347,21 +1363,42 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Función para cargar imagen guardada del producto
-    const loadProductImage = (product) => {
+    const loadProductImage = async (product) => {
         const placeholder = document.getElementById('image-placeholder');
         const selectedImage = document.getElementById('selected-image');
         
-        if (product && product.image) {
-            // Mostrar imagen guardada
-            placeholder.style.display = 'none';
-            selectedImage.src = product.image;
-            selectedImage.style.display = 'block';
-            console.log('Imagen cargada desde Firebase');
-        } else {
-            // Mostrar placeholder
-            placeholder.style.display = 'flex';
-            selectedImage.style.display = 'none';
-            console.log('Mostrando placeholder - sin imagen guardada');
+        if (!product || !product.id) {
+            // Mostrar placeholder si no hay producto
+            if (placeholder) placeholder.style.display = 'flex';
+            if (selectedImage) selectedImage.style.display = 'none';
+            console.log('Mostrando placeholder - no hay producto');
+            return;
+        }
+        
+        try {
+            const database = firebase.database();
+            const snapshot = await database.ref(`productImages/${product.id}`).once('value');
+            const imageData = snapshot.val();
+            
+            if (imageData && imageData.imageData) {
+                // Mostrar imagen guardada
+                if (placeholder) placeholder.style.display = 'none';
+                if (selectedImage) {
+                    selectedImage.src = imageData.imageData;
+                    selectedImage.style.display = 'block';
+                }
+                console.log('Imagen cargada desde Firebase para producto:', product.id);
+            } else {
+                // Mostrar placeholder si no hay imagen
+                if (placeholder) placeholder.style.display = 'flex';
+                if (selectedImage) selectedImage.style.display = 'none';
+                console.log('Mostrando placeholder - sin imagen guardada para producto:', product.id);
+            }
+        } catch (error) {
+            console.error('Error cargando imagen desde Firebase:', error);
+            // Mostrar placeholder en caso de error
+            if (placeholder) placeholder.style.display = 'flex';
+            if (selectedImage) selectedImage.style.display = 'none';
         }
     };
     
