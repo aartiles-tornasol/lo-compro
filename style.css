@@ -64,10 +64,17 @@
 .product-row-color-indicator {
     display: inline-block;
     width: 8px;
-    height: 100%; /* Ocupa toda la altura de la celda */
-    min-height: 2.5rem; /* Asegura una altura mínima */
+    height: 2.5rem;
+    min-height: 2.5rem;
     margin-right: 0.75rem;
-    vertical-align: middle;
+    vertical-align: top;
+    flex-shrink: 0;
+    border-radius: 1px;
+    /* Fuerza la renderización en iOS */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    /* Asegura que siempre tenga un color visible */
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 /* Resaltar columna de precio por unidad */
@@ -78,13 +85,34 @@
 }
 
 /* Colores de supermercado para el indicador */
-.color-mercadona { background-color: #008000; }
-.color-hiperdino { background-color: #FFD700; }
-.color-alcampo { background-color: #FF0000; }
-.color-lidl { background-color: #0000FF; }
-.color-spar { background-color: #808080; }
-.color-primor { background-color: #8A2BE2; }
-.color-druni { background-color: #00CED1; }
+.color-mercadona { 
+    background-color: #008000 !important; 
+    border-color: #006600 !important;
+}
+.color-hiperdino { 
+    background-color: #FFD700 !important; 
+    border-color: #ccac00 !important;
+}
+.color-alcampo { 
+    background-color: #FF0000 !important; 
+    border-color: #cc0000 !important;
+}
+.color-lidl { 
+    background-color: #0000FF !important; 
+    border-color: #0000cc !important;
+}
+.color-spar { 
+    background-color: #808080 !important; 
+    border-color: #666666 !important;
+}
+.color-primor { 
+    background-color: #8A2BE2 !important; 
+    border-color: #6a1fb5 !important;
+}
+.color-druni { 
+    background-color: #00CED1 !important; 
+    border-color: #00a5a8 !important;
+}
 
 /* Estilos para el botón flotante (FAB) */
 .fab-button {
@@ -595,5 +623,16 @@
     .image-search-item {
         width: 120px;
         height: 85px;
+    }
+    
+    /* Corrección específica para iOS - indicadores de color */
+    .product-row-color-indicator {
+        width: 6px;
+        height: 2.2rem;
+        min-height: 2.2rem;
+        margin-right: 0.5rem;
+        /* Fuerza la renderización en dispositivos móviles */
+        will-change: transform;
+        backface-visibility: hidden;
     }
 }
