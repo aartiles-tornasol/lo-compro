@@ -1145,16 +1145,37 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     // Función para buscar en Google Images usando SerpAPI
+    // Función para obtener API keys desde Firebase Database (seguro)
+    const getApiKey = async (keyName) => {
+        try {
+            const database = firebase.database();
+            const snapshot = await database.ref(`config/apiKeys/${keyName}`).once('value');
+            const apiKey = snapshot.val();
+            
+            if (!apiKey) {
+                throw new Error(`API key '${keyName}' no encontrada en Firebase Database`);
+            }
+            
+            return apiKey;
+        } catch (error) {
+            console.error(`Error obteniendo API key '${keyName}':`, error);
+            throw new Error(`No se pudo obtener la API key: ${error.message}`);
+        }
+    };
+
     const searchGoogleImages = async (searchTerm) => {
-        // Probar con diferentes proxies CORS
-        const PROXY_URLS = [
-            'https://corsproxy.io/?',
-            'https://api.codetabs.com/v1/proxy?quest=',
-            'https://cors-anywhere.herokuapp.com/'
-        ];
-        
-        const SERPAPI_KEY = apiKeys.serpapi; // API key desde config.js
-        const API_URL = 'https://serpapi.com/search.json';
+        try {
+            // Obtener API key de forma segura desde Firebase Database
+            const SERPAPI_KEY = await getApiKey('serpapi');
+            
+            // Probar con diferentes proxies CORS
+            const PROXY_URLS = [
+                'https://corsproxy.io/?',
+                'https://api.codetabs.com/v1/proxy?quest=',
+                'https://cors-anywhere.herokuapp.com/'
+            ];
+            
+            const API_URL = 'https://serpapi.com/search.json';
         
         const params = new URLSearchParams({
             engine: 'google_images',
@@ -1195,6 +1216,13 @@ document.addEventListener('DOMContentLoaded', () => {
         
         console.log('Todos los proxies fallaron, usando imágenes alternativas');
         return await searchWithAlternativeAPI(searchTerm);
+        
+        } catch (error) {
+            console.error('Error obteniendo API key para búsqueda de imágenes:', error);
+            // Si falla obtener la API key, usar API alternativa
+            console.log('Usando API alternativa debido a error con API key');
+            return await searchWithAlternativeAPI(searchTerm);
+        }
     };
 
     // API alternativa usando imágenes aleatorias
