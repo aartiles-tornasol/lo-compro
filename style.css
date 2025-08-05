@@ -75,6 +75,12 @@
     transform: translateZ(0);
     /* Asegura que siempre tenga un color visible */
     border: 1px solid rgba(0, 0, 0, 0.1);
+    /* Optimizaciones específicas para Chrome en iOS */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    position: relative;
+    /* Fuerza el layout en Chrome iOS */
+    contain: layout style paint;
 }
 
 /* Resaltar columna de precio por unidad */
@@ -634,5 +640,51 @@
         /* Fuerza la renderización en dispositivos móviles */
         will-change: transform;
         backface-visibility: hidden;
+    }
+}
+
+/* Reglas específicas para Chrome en iOS */
+@supports (-webkit-touch-callout: none) {
+    .product-row-color-indicator {
+        /* Chrome en iOS necesita estas propiedades adicionales */
+        -webkit-appearance: none;
+        appearance: none;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        /* Asegura que el elemento sea visible */
+        opacity: 1 !important;
+        visibility: visible !important;
+        /* Fuerza el repaint */
+        will-change: auto;
+    }
+    
+    /* Asegura que los colores se apliquen correctamente en Chrome iOS */
+    .color-mercadona { 
+        background: #008000 !important; 
+        background-color: #008000 !important;
+    }
+    .color-hiperdino { 
+        background: #FFD700 !important; 
+        background-color: #FFD700 !important;
+    }
+    .color-alcampo { 
+        background: #FF0000 !important; 
+        background-color: #FF0000 !important;
+    }
+    .color-lidl { 
+        background: #0000FF !important; 
+        background-color: #0000FF !important;
+    }
+    .color-spar { 
+        background: #808080 !important; 
+        background-color: #808080 !important;
+    }
+    .color-primor { 
+        background: #8A2BE2 !important; 
+        background-color: #8A2BE2 !important;
+    }
+    .color-druni { 
+        background: #00CED1 !important; 
+        background-color: #00CED1 !important;
     }
 }
