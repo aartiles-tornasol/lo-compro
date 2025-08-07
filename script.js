@@ -1276,10 +1276,14 @@ document.addEventListener('DOMContentLoaded', () => {
             img.className = 'image-search-item';
             img.alt = image.title || `Imagen ${index + 1}`;
             img.title = image.title || `Imagen ${index + 1}`;
+            // Guardar la URL original como data attribute
+            img.dataset.originalUrl = image.url;
             
             img.addEventListener('click', () => {
-                console.log('Imagen seleccionada:', image.url);
-                selectImage(image.url);
+                // Usar el thumbnail que ya funciona en lugar de la URL original que tiene CORS
+                const imageUrlToUse = image.thumbnail || image.url;
+                console.log('Imagen seleccionada (usando thumbnail):', imageUrlToUse);
+                selectImage(imageUrlToUse);
             });
             
             // Manejar errores de carga de imagen
@@ -1301,10 +1305,36 @@ document.addEventListener('DOMContentLoaded', () => {
     // Función para comprimir imagen a base64 con umbral inteligente
     const compressImageToBase64 = (imageUrl, maxWidth = 300, maxHeight = 200, quality = 0.85) => {
         return new Promise((resolve, reject) => {
+            // Intentar usar proxy CORS para descargar la imagen limpiamente
+            console.log('🌐 Usando proxy CORS para descargar imagen...');
+            
             const img = new Image();
+            
+            // Usar proxy CORS específico que maneja mejor las imágenes
+            const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(imageUrl)}`;
             img.crossOrigin = 'anonymous';
             
             img.onload = () => {
+                processImage(img);
+            };
+            
+            img.onerror = () => {
+                console.log('� Proxy falló, intentando con imagen directa...');
+                // Fallback: intentar imagen directa
+                const imgDirect = new Image();
+                imgDirect.crossOrigin = 'anonymous';
+                
+                imgDirect.onload = () => {
+                    processImage(imgDirect);
+                };
+                
+                imgDirect.onerror = () => reject(new Error('Error cargando imagen'));
+                imgDirect.src = imageUrl;
+            };
+            
+            img.src = proxyUrl;
+            
+            function processImage(img) {
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
                 
@@ -1355,7 +1385,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Convertir a base64
                 const base64 = canvas.toDataURL('image/jpeg', quality);
                 resolve(base64);
-            };
+            }
             
             img.onerror = () => reject(new Error('Error cargando imagen'));
             img.src = imageUrl;
